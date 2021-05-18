@@ -1,7 +1,7 @@
 import React from "react";
-import { request } from "utils/api";
+import { request } from "../utils/request";
 import { Message } from "semantic-ui-react";
-import { hasDifferentParams } from "utils/visualizations";
+import { hasDifferentParams } from "../utils/visualization";
 
 export default class Cardinality extends React.Component {
   state = {

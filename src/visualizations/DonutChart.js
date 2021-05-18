@@ -1,113 +1,136 @@
-import React, { PureComponent } from "react";
-import { AutoSizer } from "react-virtualized";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import React from "react";
+import PropTypes from "prop-types";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { startCase } from "lodash";
-import { numberWithCommas } from "utils/formatting";
-import { defaultColors } from "utils/visualizations";
+import { numberWithCommas } from "../utils/formatting";
+import { defaultColors } from "../utils/visualization";
 import { Message, Divider } from "semantic-ui-react";
 
-export default class DonutChart extends PureComponent {
-  render() {
-    const {
-      data,
-      keyField,
-      keyFormatter,
-      valueField,
-      limit,
-      percent,
-      precision,
-      labels = {},
-    } = this.props;
-    let trimmedData = data;
-    if (limit) {
-      const other = { key: "Other", count: 0, value: 0 };
-      data.slice(limit - 1).forEach((item) => {
-        other.count += item.count;
-        other.value += item.value;
-      });
-      trimmedData = data.slice(0, limit - 1);
-      if (data.length > limit) {
-        trimmedData.push(other);
-      }
-    }
-    let total = 0;
-    data.forEach((item) => {
-      total += item[valueField || "count"];
+/**
+ * Primary UI component for user interaction
+ */
+export const DonutChart = ({
+  data,
+  keyField,
+  keyFormatter,
+  valueField,
+  limit,
+  percent,
+  precision,
+  labels = {},
+  colors,
+  colorFn,
+}) => {
+  let trimmedData = data;
+  if (limit) {
+    const other = { key: "Other", count: 0, value: 0 };
+    data.slice(limit - 1).forEach((item) => {
+      other.count += item.count;
+      other.value += item.value;
     });
-    const colors = this.props.colors || defaultColors;
-    const colorFn = this.props.colorFn;
-    const defaultKeyFormatter = (item) => {
-      const key = keyField || "key";
-      const label = item[key].toString();
-      if (label.length <= 3) {
-        return label.toUpperCase();
-      }
-      return labels[key] || startCase(label.toLowerCase());
-    };
+    trimmedData = data.slice(0, limit - 1);
+    if (data.length > limit) {
+      trimmedData.push(other);
+    }
+  }
 
-    const noData = !data || !data.length;
+  let total = 0;
+  data.forEach((item) => {
+    total += item[valueField || "count"];
+  });
+
+  const defaultKeyFormatter = (item) => {
+    const key = keyField || "key";
+    const label = item[key].toString();
+    if (label.length <= 3) {
+      return label.toUpperCase();
+    }
+    return labels[key] || startCase(label.toLowerCase());
+  };
+
+  const height = 400;
+
+  if (!data || !data.length) {
     return (
-      <AutoSizer disableHeight>
-        {({ width }) => {
-          if (!width) {
-            return <div />;
-          }
-          const height = 400;
-          if (noData) {
-            return (
-              <div style={{ width: `${width}px` }}>
-                <Divider hidden />
-                <Message
-                  style={{ textAlign: "center" }}
-                  content="No data available for this time period"
-                />
-              </div>
-            );
-          }
-          return (
-            <PieChart width={width} height={height} data={trimmedData}>
-              <Pie
-                data={trimmedData}
-                cx={Math.round(width / 2)}
-                cy={Math.round(height / 2) - 20}
-                innerRadius={Math.round(height * 0.2)}
-                outerRadius={Math.round(height * 0.36)}
-                fill="#8884d8"
-                paddingAngle={5}
-                nameKey={keyFormatter || defaultKeyFormatter}
-                dataKey={valueField || "count"}
-              >
-                {trimmedData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      colorFn
-                        ? colorFn(entry, index)
-                        : colors[index % colors.length]
-                    }
-                  />
-                ))}
-              </Pie>
-              <Legend />
-              <Tooltip
-                formatter={(value) => {
-                  if (percent) {
-                    if (precision) {
-                      return `${
-                        Math.round((value / total) * (10 * precision) * 100) /
-                        (10 * precision)
-                      }%`;
-                    } else {
-                      return `${Math.round((value / total) * 100)}%`;
-                    }
-                  }
-                  return numberWithCommas(value);
-                }}
-              />
-            </PieChart>
-          );
-        }}
-      </AutoSizer>
+      <ResponsiveContainer height={height}>
+        <div>
+          <Divider hidden />
+          <Message
+            style={{ textAlign: "center" }}
+            content="No data available for this time period"
+          />
+        </div>
+      </ResponsiveContainer>
     );
   }
-}
+
+  return (
+    <ResponsiveContainer height={height}>
+      <PieChart data={trimmedData}>
+        <Pie
+          data={trimmedData}
+          innerRadius={Math.round(height * 0.2)}
+          outerRadius={Math.round(height * 0.36)}
+          fill="#8884d8"
+          paddingAngle={5}
+          nameKey={keyFormatter || defaultKeyFormatter}
+          dataKey={valueField || "count"}
+        >
+          {trimmedData.map((entry, index) => (
+            <Cell
+              key={`cell-${index}`}
+              fill={
+                colorFn ? colorFn(entry, index) : colors[index % colors.length]
+              }
+            />
+          ))}
+        </Pie>
+        <Legend />
+        <Tooltip
+          formatter={(value) => {
+            if (percent) {
+              if (precision) {
+                return `${
+                  Math.round((value / total) * (10 * precision) * 100) /
+                  (10 * precision)
+                }%`;
+              } else {
+                return `${Math.round((value / total) * 100)}%`;
+              }
+            }
+            return numberWithCommas(value);
+          }}
+        />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+};
+
+DonutChart.propTypes = {
+  /**
+   * Is this the principal call to action on the page?
+   */
+  data: PropTypes.array,
+  /**
+   * What background color to use
+   */
+  keyField: PropTypes.string,
+
+  /**
+   * Labels
+   */
+  labels: PropTypes.object,
+  colors: PropTypes.arrayOf(PropTypes.string),
+};
+
+DonutChart.defaultProps = {
+  data: [],
+  colors: defaultColors,
+};

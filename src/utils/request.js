@@ -1,12 +1,28 @@
-import { API_URL } from "utils/env";
-import { ApiError, ApiParseError } from "./errors";
-import { getToken } from "./token";
+class CustomError extends Error {
+  get name() {
+    return this.constructor.name;
+  }
+}
+
+class ApiError extends CustomError {
+  constructor(message, status, details) {
+    super(message);
+    this.status = status;
+    this.details = details;
+  }
+}
+
+class ApiParseError extends CustomError {
+  constructor() {
+    super("Bad JSON response from API");
+  }
+}
 
 export default async function request(options) {
-  const { method = "GET", path, files, params } = options;
+  const { method = "GET", path, files, params, baseUrl } = options;
   let { body } = options;
 
-  const token = options.token || getToken();
+  const token = options.token;
 
   const headers = Object.assign(
     {
@@ -18,7 +34,7 @@ export default async function request(options) {
     options.headers
   );
 
-  const url = new URL(path, API_URL);
+  const url = new URL(path, baseUrl);
   url.search = new URLSearchParams(params);
 
   if (files) {

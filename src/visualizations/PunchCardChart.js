@@ -1,5 +1,15 @@
-import React, { Component } from "react";
-import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip } from "recharts";
+import React from "react";
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  ZAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+import PropTypes from "prop-types";
 
 const data01 = [
   { hour: "12a", index: 1, value: 170 },
@@ -69,43 +79,38 @@ const parseDomain = () => [
   ),
 ];
 
-export default class PunchCardChart extends Component {
-  renderTooltip = (props) => {
-    const { active, payload } = props;
-
-    if (active && payload && payload.length) {
-      const data = payload[0] && payload[0].payload;
-
-      return (
-        <div
-          style={{
-            backgroundColor: "#fff",
-            border: "1px solid #999",
-            margin: 0,
-            padding: 10,
-          }}
-        >
-          <p>{data.hour}</p>
-          <p>
-            <span>value: </span>
-            {data.value}
-          </p>
-        </div>
-      );
-    }
-
-    return null;
-  };
-
-  render() {
-    const domain = parseDomain();
-    const range = [16, 225];
+function renderTooltip({ active, payload }) {
+  if (active && payload && payload.length) {
+    const data = payload[0] && payload[0].payload;
 
     return (
-      <div>
+      <div
+        style={{
+          backgroundColor: "#fff",
+          border: "1px solid #999",
+          margin: 0,
+          padding: 10,
+        }}
+      >
+        <p>{data.hour}</p>
+        <p>
+          <span>value: </span>
+          {data.value}
+        </p>
+      </div>
+    );
+  }
+  return null;
+}
+
+export const PunchCardChart = () => {
+  const domain = parseDomain();
+  const range = [16, 225];
+
+  return (
+    <div style={{ width: "100%" }}>
+      <ResponsiveContainer height={60}>
         <ScatterChart
-          width={800}
-          height={60}
           margin={{
             top: 10,
             right: 0,
@@ -135,11 +140,13 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data01} fill="#8884d8" />
         </ScatterChart>
+      </ResponsiveContainer>
 
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -172,11 +179,12 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data02} fill="#8884d8" />
         </ScatterChart>
-
+      </ResponsiveContainer>
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -209,11 +217,12 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data01} fill="#8884d8" />
         </ScatterChart>
-
+      </ResponsiveContainer>
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -246,11 +255,12 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data02} fill="#8884d8" />
         </ScatterChart>
-
+      </ResponsiveContainer>
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -283,11 +293,12 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data01} fill="#8884d8" />
         </ScatterChart>
-
+      </ResponsiveContainer>
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -320,11 +331,12 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data02} fill="#8884d8" />
         </ScatterChart>
-
+      </ResponsiveContainer>
+      <ResponsiveContainer height={60}>
         <ScatterChart
           width={800}
           height={60}
@@ -356,11 +368,22 @@ export default class PunchCardChart extends Component {
           <Tooltip
             cursor={{ strokeDasharray: "3 3" }}
             wrapperStyle={{ zIndex: 100 }}
-            content={this.renderTooltip}
+            content={renderTooltip}
           />
           <Scatter data={data01} fill="#8884d8" />
         </ScatterChart>
-      </div>
-    );
-  }
-}
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+PunchCardChart.propTypes = {
+  /**
+   * Is this the principal call to action on the page?
+   */
+  data: PropTypes.array,
+};
+
+PunchCardChart.defaultProps = {
+  data: [],
+};

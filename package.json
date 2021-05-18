@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -35,8 +36,17 @@
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "babel-loader": "^8.2.2",
+    "eslint": "^7.26.0",
     "eslint-plugin-bedrock": "^1.0.2",
+    "prettier": "^2.3.0",
+    "prettier-eslint": "^12.0.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "semantic-ui-react": "^2.0.3"
+  },
+  "dependencies": {
+    "moment": "^2.29.1",
+    "recharts": "^2.0.9",
+    "semantic-ui-css": "^2.4.1"
   }
 }
