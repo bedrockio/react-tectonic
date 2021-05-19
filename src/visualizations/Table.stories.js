@@ -24,5 +24,13 @@ const Template = (args) => <Table {...args} />;
 export const WithData = Template.bind({});
 WithData.args = { data };
 
+export const WithLittleData = Template.bind({});
+WithLittleData.args = {
+  data: [
+    { key: "Amsterdam", value: 806 },
+    { key: "Rotterdam", value: 389 },
+  ],
+};
+
 export const WithoutData = Template.bind({});
 WithoutData.args = { data: [] };

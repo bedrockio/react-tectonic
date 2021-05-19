@@ -1,8 +1,8 @@
 import React from "react";
 
-const Context = React.createContext({});
+const TechonicContext = React.createContext({});
 
-const Provider = ({ children, url, token }) => {
+const TechonicProvider = ({ children, url, token }) => {
   const values = React.useMemo(() => {
     return {
       url,
@@ -10,15 +10,21 @@ const Provider = ({ children, url, token }) => {
     };
   }, [token, url]);
 
-  return <Context.Provider value={values}>{children}</Context.Provider>;
+  return (
+    <TechonicContext.Provider value={values}>
+      {children}
+    </TechonicContext.Provider>
+  );
 };
 
-const useContext = () => {
-  const context = React.useContext(Context);
+const useTechonicContext = () => {
+  const context = React.useContext(TechonicContext);
   if (context === undefined) {
-    throw new Error("useContext must be used within a Provider Context");
+    throw new Error(
+      "useTechonicContext must be used within a Techonic Context"
+    );
   }
   return context;
 };
 
-export { Provider, useContext };
+export { TechonicProvider, useTechonicContext };

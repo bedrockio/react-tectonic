@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Message, Table as SemanticTable } from "semantic-ui-react";
 import { numberWithCommas } from "../utils/formatting";
 import { startCase } from "lodash";
+import { Message, ChartContainer } from "../components";
 
 export const Table = ({
   keyField,
@@ -15,15 +15,6 @@ export const Table = ({
   collapsing,
   labels = {},
 }) => {
-  const noData = !data || !data.length;
-  if (noData) {
-    return (
-      <Message
-        style={{ textAlign: "center" }}
-        content="No data available for this time period"
-      />
-    );
-  }
   const defaultKeyFormatter = (item) => {
     const key = keyField || "key";
     const label = item[key];
@@ -33,35 +24,48 @@ export const Table = ({
     return labels[key] || startCase(label.toLowerCase());
   };
 
+  const noData = !data || !data.length;
+
   return (
-    <SemanticTable celled basic="very" collapsing={collapsing}>
-      <SemanticTable.Header>
-        <SemanticTable.Row>
-          <SemanticTable.HeaderCell width={10}>
-            {keyName || "Name"}
-          </SemanticTable.HeaderCell>
-          <SemanticTable.HeaderCell>
-            {valueFieldName || "Value"}
-          </SemanticTable.HeaderCell>
-        </SemanticTable.Row>
-      </SemanticTable.Header>
-      <SemanticTable.Body>
-        {data.map((item) => {
-          return (
-            <SemanticTable.Row key={item.key}>
-              <SemanticTable.Cell>
-                {keyFormatter ? keyFormatter(item) : defaultKeyFormatter(item)}
-              </SemanticTable.Cell>
-              <SemanticTable.Cell>
-                {valueFieldFormatter
-                  ? valueFieldFormatter(item[valueField || "value"])
-                  : numberWithCommas(Math.round(item[valueField || "value"]))}
-              </SemanticTable.Cell>
-            </SemanticTable.Row>
-          );
-        })}
-      </SemanticTable.Body>
-    </SemanticTable>
+    <ChartContainer height={400}>
+      {noData && (
+        <Message floating center>
+          No data available for this time period
+        </Message>
+      )}
+
+      <table
+        width={"100%"}
+        className="techonic table"
+        celled
+        collapsing={collapsing}
+      >
+        <thead>
+          <tr>
+            <th style={{ width: "62.5%" }}>{keyName || "Name"}</th>
+            <th>{valueFieldName || "Value"}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => {
+            return (
+              <tr key={item.key}>
+                <td>
+                  {keyFormatter
+                    ? keyFormatter(item)
+                    : defaultKeyFormatter(item)}
+                </td>
+                <td>
+                  {valueFieldFormatter
+                    ? valueFieldFormatter(item[valueField || "value"])
+                    : numberWithCommas(Math.round(item[valueField || "value"]))}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </ChartContainer>
   );
 };
 

@@ -1,8 +1,9 @@
 import moment from "moment";
 
 export const formatterForDataCadence = (data) => {
-  if (!data || !data.length || !data[1]) 
-    return (unixTime) => moment(unixTime).format("MM/DD");
+  if (!data || !data.length || !data[1]) {
+    return () => "No Data";
+  }
   const delta = data[1].timestamp - data[0].timestamp;
   const range = data[data.length - 1].timestamp - data[0].timestamp;
   if (range > 356 * 24 * 3600 * 1000) {

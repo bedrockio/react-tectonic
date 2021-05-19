@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
+import { Message, ChartContainer } from "../components";
 import {
   AreaChart,
   LineChart,
@@ -76,11 +77,13 @@ export const MultiSeriesChart = ({
     ChartGraph = Bar;
   }
 
-  console.log(variant);
-
   const fusedData = fuse(data, valueField);
   const finalColors = colors || defaultColors;
-  const tickFormatter = formatterForDataCadence(data[0]);
+
+  const tickFormatter = formatterForDataCadence(
+    data[0] || { timestamp: new Date() }
+  );
+
   let noData = true;
   data.forEach((series) => {
     if (series && series.length) {
@@ -91,60 +94,67 @@ export const MultiSeriesChart = ({
   ///XXX todo deal with no data
 
   return (
-    <ResponsiveContainer height={400}>
-      <Chart
-        data={fusedData}
-        margin={{
-          top: 5,
-          right: 20,
-          left: 10,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid vertical={false} stroke="#EEF0F4" />
-        <XAxis
-          dataKey="timestamp"
-          name="Time"
-          tickFormatter={tickFormatter}
-          tick={{ fill: "#6C767B", fontSize: "13" }}
-          tickLine={{ stroke: "#6C767B" }}
-          axisLine={{ stroke: "#6C767B" }}
-          tickMargin={8}
-        />
-        <YAxis
-          tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
-          tick={{ fill: "#6C767B", fontSize: "13" }}
-          tickLine={{ fill: "#6C767B" }}
-          tickMargin={8}
-        />
-        {legend && <Legend iconType="circle" />}
-        {data.map((data, index) => {
-          const color = finalColors[index % finalColors.length];
-          return (
-            <ChartGraph
-              type="monotone"
-              key={`${index}-value`}
-              dataKey={`${index}-value`}
-              name={valueFieldNames ? valueFieldNames[index] : "Value"}
-              stroke={color}
-              fill={["area", "bar"].includes(variant) ? color : undefined}
-              fillOpacity={1}
-              opacity={1}
-              activeDot={disableDot ? { r: 0 } : { r: 6 }}
-              stackId={stacked ? "1" : undefined}
-            />
-          );
-        })}
-        {variant !== "bar" && (
-          <Tooltip
-            formatter={valueFieldFormatter || defaultValueFieldFormatter}
-            labelFormatter={(unixTime) =>
-              moment(unixTime).format("YY/MM/DD LT")
-            }
+    <ChartContainer>
+      {noData && (
+        <Message floating center>
+          No data available for this time period
+        </Message>
+      )}
+      <ResponsiveContainer height={400}>
+        <Chart
+          data={fusedData}
+          margin={{
+            top: 5,
+            right: 20,
+            left: 10,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid vertical={false} stroke="#EEF0F4" />
+          <XAxis
+            dataKey="timestamp"
+            name="Time"
+            tickFormatter={tickFormatter}
+            tick={{ fill: "#6C767B", fontSize: "13" }}
+            tickLine={{ stroke: "#6C767B" }}
+            axisLine={{ stroke: "#6C767B" }}
+            tickMargin={8}
           />
-        )}
-      </Chart>
-    </ResponsiveContainer>
+          <YAxis
+            tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
+            tick={{ fill: "#6C767B", fontSize: "13" }}
+            tickLine={{ fill: "#6C767B" }}
+            tickMargin={8}
+          />
+          {legend && <Legend iconType="circle" />}
+          {data.map((data, index) => {
+            const color = finalColors[index % finalColors.length];
+            return (
+              <ChartGraph
+                type="monotone"
+                key={`${index}-value`}
+                dataKey={`${index}-value`}
+                name={valueFieldNames ? valueFieldNames[index] : "Value"}
+                stroke={color}
+                fill={["area", "bar"].includes(variant) ? color : undefined}
+                fillOpacity={1}
+                opacity={1}
+                activeDot={disableDot ? { r: 0 } : { r: 6 }}
+                stackId={stacked ? "1" : undefined}
+              />
+            );
+          })}
+          {variant !== "bar" && (
+            <Tooltip
+              formatter={valueFieldFormatter || defaultValueFieldFormatter}
+              labelFormatter={(unixTime) =>
+                moment(unixTime).format("YY/MM/DD LT")
+              }
+            />
+          )}
+        </Chart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 };
 

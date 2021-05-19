@@ -1,0 +1,108 @@
+body {
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.techonic.chart {
+  position: relative;
+  padding: 1em;
+}
+
+/*** Message ***/
+
+.techonic.message {
+  font-size: 1em;
+  position: relative;
+  min-height: 1em;
+  margin: 1em 0;
+  background: #f8f8f9;
+  padding: 1em 1.5em;
+  line-height: 1.4285em;
+  color: rgba(0, 0, 0, 0.87);
+  transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease,
+    box-shadow 0.1s ease;
+  border-radius: 0.28571429rem;
+  box-shadow: 0 0 0 1px rgb(34 36 38 / 22%) inset, 0 0 0 0 transparent;
+}
+
+.techonic.message.center {
+  text-align: center;
+  top: calc(50% - 1em);
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.techonic.message.floating {
+  position: absolute;
+  z-index: 10;
+}
+
+/*** Message End ***/
+
+/*** Table ***/
+
+.techonic.table {
+  text-align: left;
+  color: rgba(0, 0, 0, 0.87);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.techonic.table thead th {
+  cursor: auto;
+  text-align: inherit;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 0.92857143em 0.78571429em;
+  vertical-align: inherit;
+  font-weight: 700;
+  text-transform: none;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.techonic.table thead tr:first-child th {
+  padding-top: 0;
+}
+
+.techonic.table td:first-child,
+.techonic.table th:first-child {
+  padding-left: 0;
+}
+
+.techonic.table tr td:first-child,
+.techonic.table tr th:first-child {
+  border-left: none;
+}
+
+.techonic.table tr td,
+.techonic.table tr th {
+  border-left: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.techonic.table th {
+  background: 0 0;
+  border-left: none;
+}
+
+.techonic.table tr:first-child td {
+  border-top: none;
+}
+
+.techonic.table tr td:first-child,
+.techonic.table tr th:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.techonic.table tr td {
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.techonic.table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.techonic.table td {
+  padding: 0.78571429em 0.78571429em;
+  text-align: inherit;
+}
+
+/*** Table End ***/

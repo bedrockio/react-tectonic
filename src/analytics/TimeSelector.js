@@ -1,6 +1,6 @@
 import React from "react";
 import { request } from "../utils/request";
-import { Message, Menu, Segment, Dropdown, Icon } from "semantic-ui-react";
+import { Message, Menu, Segment, Dropdown } from "semantic-ui-react";
 
 const validIntervals = ["1w", "1d", "1h", "15m", "5m", "1m"];
 

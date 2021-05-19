@@ -8,10 +8,11 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+
 import { startCase } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors } from "../utils/visualization";
-import { Message, Divider } from "semantic-ui-react";
+import { Message, ChartContainer } from "../components";
 
 /**
  * Primary UI component for user interaction
@@ -57,59 +58,60 @@ export const DonutChart = ({
 
   const height = 400;
 
-  if (!data || !data.length) {
-    return (
-      <ResponsiveContainer height={height}>
-        <div>
-          <Divider hidden />
-          <Message
-            style={{ textAlign: "center" }}
-            content="No data available for this time period"
-          />
-        </div>
-      </ResponsiveContainer>
-    );
+  const noData = !trimmedData.length;
+  if (noData) {
+    trimmedData = [{ key: "No Data", count: 1, value: 0 }];
   }
 
   return (
-    <ResponsiveContainer height={height}>
-      <PieChart data={trimmedData}>
-        <Pie
-          data={trimmedData}
-          innerRadius={Math.round(height * 0.2)}
-          outerRadius={Math.round(height * 0.36)}
-          fill="#8884d8"
-          paddingAngle={5}
-          nameKey={keyFormatter || defaultKeyFormatter}
-          dataKey={valueField || "count"}
-        >
-          {trimmedData.map((entry, index) => (
-            <Cell
-              key={`cell-${index}`}
-              fill={
-                colorFn ? colorFn(entry, index) : colors[index % colors.length]
+    <ChartContainer>
+      {noData && (
+        <Message floating center>
+          No data available for this time period
+        </Message>
+      )}
+      <ResponsiveContainer height={height}>
+        <PieChart data={trimmedData}>
+          <Pie
+            data={trimmedData}
+            innerRadius={Math.round(height * 0.2)}
+            outerRadius={Math.round(height * 0.36)}
+            fill="#8884d8"
+            paddingAngle={5}
+            nameKey={keyFormatter || defaultKeyFormatter}
+            dataKey={valueField || "count"}
+          >
+            {trimmedData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={
+                  colorFn
+                    ? colorFn(entry, index)
+                    : colors[index % colors.length]
+                }
+              />
+            ))}
+          </Pie>
+
+          <Legend />
+          <Tooltip
+            formatter={(value) => {
+              if (percent) {
+                if (precision) {
+                  return `${
+                    Math.round((value / total) * (10 * precision) * 100) /
+                    (10 * precision)
+                  }%`;
+                } else {
+                  return `${Math.round((value / total) * 100)}%`;
+                }
               }
-            />
-          ))}
-        </Pie>
-        <Legend />
-        <Tooltip
-          formatter={(value) => {
-            if (percent) {
-              if (precision) {
-                return `${
-                  Math.round((value / total) * (10 * precision) * 100) /
-                  (10 * precision)
-                }%`;
-              } else {
-                return `${Math.round((value / total) * 100)}%`;
-              }
-            }
-            return numberWithCommas(value);
-          }}
-        />
-      </PieChart>
-    </ResponsiveContainer>
+              return numberWithCommas(value);
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 };
 
