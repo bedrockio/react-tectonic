@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
 import { Message, ChartContainer } from "../components";
+
 import {
   AreaChart,
   LineChart,
@@ -65,6 +66,7 @@ export const MultiSeriesChart = ({
   stacked,
   colors,
   disableDot,
+  status,
 }) => {
   let Chart = LineChart;
   let ChartGraph = Line;
@@ -95,11 +97,22 @@ export const MultiSeriesChart = ({
 
   return (
     <ChartContainer>
-      {noData && (
+      {status.success && noData && (
         <Message floating center>
           No data available for this time period
         </Message>
       )}
+      {status.loading && (
+        <Message floating center>
+          Loading...
+        </Message>
+      )}
+      {status.error && (
+        <Message floating center error>
+          {status.error.message}
+        </Message>
+      )}
+
       <ResponsiveContainer height={400}>
         <Chart
           data={fusedData}
@@ -159,10 +172,11 @@ export const MultiSeriesChart = ({
 };
 
 MultiSeriesChart.propTypes = {
+  status: PropTypes.object,
   /**
    * Is this the principal call to action on the page?
    */
-  data: PropTypes.array,
+  data: PropTypes.arrayOf(PropTypes.array),
   /**
    * Color of the line or bar
    */
@@ -173,6 +187,7 @@ MultiSeriesChart.propTypes = {
 
 MultiSeriesChart.defaultProps = {
   data: [],
+  status: { success: true },
   color: defaultColors[0],
   variant: "line",
 };

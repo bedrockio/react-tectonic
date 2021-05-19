@@ -1,4 +1,4 @@
-import "semantic-ui-css/semantic.min.css";
+// import "semantic-ui-css/semantic.min.css";
 import "../src/styles.css";
 
 export const parameters = {

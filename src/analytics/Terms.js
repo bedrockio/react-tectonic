@@ -1,66 +1,63 @@
 import React from "react";
 import { request } from "../utils/request";
-import { Message } from "../components/Message";
-import { hasDifferentParams } from "../utils/visualization";
+import { useTechonicContext } from "../context";
 
-export default class Terms extends React.Component {
-  state = {
-    data: null,
-    loading: true,
-    error: null,
-  };
+export const Terms = ({
+  index,
+  aggField,
+  aggFieldOrder,
+  field,
+  operation,
+  filter,
+  includeTopHit,
+  referenceFetch,
+  termsSize,
+  children,
+}) => {
+  const { baseUrl, token } = useTechonicContext();
+  const [data, setData] = React.useState({});
+  const [status, setStatus] = React.useState({ loading: true });
 
-  componentDidMount() {
-    this.fetch();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (hasDifferentParams(prevProps, this.props)) {
-      this.fetch(this.props);
+  async function fetchData() {
+    setStatus({ loading: true });
+    try {
+      const data = await request({
+        method: "POST",
+        path: "/1/analytics/terms",
+        baseUrl,
+        token,
+        body: {
+          index,
+          aggField,
+          aggFieldOrder,
+          field,
+          operation,
+          filter,
+          includeTopHit,
+          referenceFetch,
+          termsSize,
+        },
+      });
+      setData(data);
+      setStatus({ success: true });
+    } catch (error) {
+      setStatus({ error });
     }
   }
 
-  fetch() {
-    const {
-      index,
-      aggField,
-      aggFieldOrder,
-      field,
-      operation,
-      filter,
-      includeTopHit,
-      referenceFetch,
-      termsSize,
-    } = this.props;
-    const body = {
-      index,
-      aggField,
-      aggFieldOrder,
-      field,
-      operation,
-      filter,
-      includeTopHit,
-      referenceFetch,
-      termsSize,
-    };
+  React.useEffect(() => {
+    fetchData();
+  }, [
+    index,
+    aggField,
+    aggFieldOrder,
+    field,
+    operation,
+    filter,
+    includeTopHit,
+    referenceFetch,
+    termsSize,
+  ]);
 
-    request({
-      method: "POST",
-      path: "/1/analytics/terms",
-      body,
-    })
-      .then((data) => {
-        this.setState({ data, error: null, loading: false });
-      })
-      .catch((error) => {
-        this.setState({ error, loading: false });
-      });
-  }
-
-  render() {
-    const { loading, error, data } = this.state;
-    if (loading) return <p>loading</p>;
-    if (error) return <Message error content={error.message} />;
-    return this.props.children(data);
-  }
-}
+  return children({ data, status });
+};

@@ -23,6 +23,7 @@ import moment from "moment";
 import { defaultColors } from "../utils/visualization";
 
 export const SeriesChart = ({
+  status,
   data,
   valueField,
   valueFieldName,
@@ -51,9 +52,19 @@ export const SeriesChart = ({
 
   return (
     <ChartContainer>
-      {noData && (
+      {status.success && noData && (
         <Message floating center>
           No data available for this time period
+        </Message>
+      )}
+      {status.loading && (
+        <Message floating center>
+          Loading...
+        </Message>
+      )}
+      {status.error && (
+        <Message floating center error>
+          {status.error.message}
         </Message>
       )}
       <ResponsiveContainer height={400}>
@@ -116,6 +127,7 @@ export const SeriesChart = ({
 };
 
 SeriesChart.propTypes = {
+  status: PropTypes.object,
   /**
    * Is this the principal call to action on the page?
    */
@@ -130,6 +142,7 @@ SeriesChart.propTypes = {
 
 SeriesChart.defaultProps = {
   data: [],
+  status: { success: true },
   color: defaultColors[0],
   variant: "line",
 };

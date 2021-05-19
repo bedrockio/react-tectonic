@@ -5,6 +5,7 @@ import { startCase } from "lodash";
 import { Message, ChartContainer } from "../components";
 
 export const Table = ({
+  status,
   keyField,
   keyName,
   valueField,
@@ -28,18 +29,23 @@ export const Table = ({
 
   return (
     <ChartContainer height={400}>
-      {noData && (
+      {status.success && noData && (
         <Message floating center>
           No data available for this time period
         </Message>
       )}
+      {status.loading && (
+        <Message floating center>
+          Loading...
+        </Message>
+      )}
+      {status.error && (
+        <Message floating center error>
+          {status.error.message}
+        </Message>
+      )}
 
-      <table
-        width={"100%"}
-        className="techonic table"
-        celled
-        collapsing={collapsing}
-      >
+      <table width={"100%"} className="techonic table">
         <thead>
           <tr>
             <th style={{ width: "62.5%" }}>{keyName || "Name"}</th>
@@ -70,6 +76,7 @@ export const Table = ({
 };
 
 Table.propTypes = {
+  status: PropTypes.object,
   /**
    * Is this the principal call to action on the page?
    */
@@ -77,5 +84,6 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
+  status: { success: true },
   data: [],
 };

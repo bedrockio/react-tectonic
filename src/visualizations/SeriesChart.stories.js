@@ -59,13 +59,24 @@ export default {
         type: "radio",
       },
     },
+    status: {
+      mapping: {
+        loading: { loading: true },
+        success: { success: true },
+        error: { error: new Error("Oops something went wrong") },
+      },
+      options: ["loading", "success", "error"],
+      control: {
+        type: "select",
+      },
+    },
   },
 };
 
 const Template = (args) => <SeriesChart {...args} />;
 
 export const WithData = Template.bind({});
-WithData.args = { data };
+WithData.args = { data, status: "success" };
 
 export const WithoutData = Template.bind({});
-WithoutData.args = { data: [] };
+WithoutData.args = { data: [], status: "success" };

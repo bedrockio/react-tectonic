@@ -1,52 +1,47 @@
 import React from "react";
 import { request } from "../utils/request";
-import { Message } from "../components/Message";
-import { hasDifferentParams } from "../utils/visualization";
+import { useTechonicContext } from "../context";
 
-export default class TimeSeries extends React.Component {
-  state = {
-    data: null,
-    loading: true,
-    error: null,
-  };
+export const TimeSeries = ({
+  index,
+  operation,
+  interval,
+  field,
+  dateField,
+  filter,
+  children,
+}) => {
+  const { baseUrl, token } = useTechonicContext();
+  const [data, setData] = React.useState({});
+  const [status, setStatus] = React.useState({ loading: true });
 
-  componentDidMount() {
-    this.fetch(this.props);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (hasDifferentParams(prevProps, this.props)) {
-      this.fetch(this.props);
+  async function fetchData() {
+    setStatus({ loading: true });
+    try {
+      const data = await request({
+        method: "POST",
+        path: "/1/analytics/time-series",
+        baseUrl,
+        token,
+        body: {
+          index,
+          operation,
+          interval,
+          field,
+          dateField,
+          filter,
+        },
+      });
+      setData(data);
+      setStatus({ success: true });
+    } catch (error) {
+      setStatus({ error });
     }
   }
 
-  fetch({ interval, filter }) {
-    const { index, operation, field, dateField } = this.props;
-    const body = {
-      index,
-      operation,
-      interval,
-      field,
-      dateField,
-      filter,
-    };
-    request({
-      method: "POST",
-      path: "/1/analytics/time-series",
-      body,
-    })
-      .then((data) => {
-        this.setState({ data, error: null, loading: false });
-      })
-      .catch((error) => {
-        this.setState({ error, loading: false });
-      });
-  }
+  React.useEffect(() => {
+    fetchData();
+  }, [index, operation, interval, field, dateField, filter]);
 
-  render() {
-    const { loading, error, data } = this.state;
-    if (loading) return <p>loading</p>;
-    if (error) return <Message error content={error.message} />;
-    return this.props.children(data);
-  }
-}
+  return children({ data, status });
+};

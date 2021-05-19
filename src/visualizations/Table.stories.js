@@ -17,12 +17,25 @@ const data = [
 export default {
   title: "Visualizations/Table",
   component: Table,
+  argTypes: {
+    status: {
+      mapping: {
+        loading: { loading: true },
+        success: { success: true },
+        error: { error: new Error("Oops something went wrong") },
+      },
+      options: ["loading", "success", "error"],
+      control: {
+        type: "select",
+      },
+    },
+  },
 };
 
 const Template = (args) => <Table {...args} />;
 
 export const WithData = Template.bind({});
-WithData.args = { data };
+WithData.args = { data, status: "success" };
 
 export const WithLittleData = Template.bind({});
 WithLittleData.args = {
@@ -30,7 +43,8 @@ WithLittleData.args = {
     { key: "Amsterdam", value: 806 },
     { key: "Rotterdam", value: 389 },
   ],
+  status: "success",
 };
 
 export const WithoutData = Template.bind({});
-WithoutData.args = { data: [] };
+WithoutData.args = { data: [], status: "success" };

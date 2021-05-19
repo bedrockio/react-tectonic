@@ -5,6 +5,19 @@ import { PunchCardChart } from "./PunchCardChart";
 export default {
   title: "Visualizations/PunchCardChart",
   component: PunchCardChart,
+  argTypes: {
+    status: {
+      mapping: {
+        loading: { loading: true },
+        success: { success: true },
+        error: { error: new Error("Oops something went wrong") },
+      },
+      options: ["loading", "success", "error"],
+      control: {
+        type: "select",
+      },
+    },
+  },
 };
 
 export const PunchCardChartWithData = PunchCardChart.bind({});

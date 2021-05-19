@@ -2,13 +2,13 @@ import React from "react";
 
 const TechonicContext = React.createContext({});
 
-const TechonicProvider = ({ children, url, token }) => {
+const TechonicProvider = ({ children, baseUrl, token }) => {
   const values = React.useMemo(() => {
     return {
-      url,
+      baseUrl,
       token,
     };
-  }, [token, url]);
+  }, [token, baseUrl]);
 
   return (
     <TechonicContext.Provider value={values}>

@@ -27,6 +27,3 @@ export const defaultColors = [
   "#a333c8",
   "#6435c9",
 ];
-
-export const index = "enriched-events";
-export const interval = "1m";

@@ -106,13 +106,24 @@ export default {
         type: "radio",
       },
     },
+    status: {
+      mapping: {
+        loading: { loading: true },
+        success: { success: true },
+        error: { error: new Error("Oops something went wrong") },
+      },
+      options: ["loading", "success", "error"],
+      control: {
+        type: "select",
+      },
+    },
   },
 };
 
 const Template = (args) => <MultiSeriesChart {...args} />;
 
 export const WithData = Template.bind({});
-WithData.args = { data: [data1, data2] };
+WithData.args = { data: [data1, data2], status: "success" };
 
 export const WithoutData = Template.bind({});
-WithoutData.args = { data: [] };
+WithoutData.args = { data: [], status: "success" };

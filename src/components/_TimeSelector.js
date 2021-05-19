@@ -123,6 +123,7 @@ export default class TimeSelector extends React.Component {
     const { loading, error, data, min, max, interval } = this.state;
     if (error) return <Message error content={error.message} />;
     if (loading || !data) return <p>Loading...</p>;
+
     return (
       <div>
         <Menu attached="top">

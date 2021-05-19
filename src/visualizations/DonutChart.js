@@ -18,6 +18,7 @@ import { Message, ChartContainer } from "../components";
  * Primary UI component for user interaction
  */
 export const DonutChart = ({
+  status,
   data,
   keyField,
   keyFormatter,
@@ -65,11 +66,22 @@ export const DonutChart = ({
 
   return (
     <ChartContainer>
-      {noData && (
+      {status.success && noData && (
         <Message floating center>
           No data available for this time period
         </Message>
       )}
+      {status.loading && (
+        <Message floating center>
+          Loading...
+        </Message>
+      )}
+      {status.error && (
+        <Message floating center error>
+          {status.error.message}
+        </Message>
+      )}
+
       <ResponsiveContainer height={height}>
         <PieChart data={trimmedData}>
           <Pie
@@ -116,6 +128,7 @@ export const DonutChart = ({
 };
 
 DonutChart.propTypes = {
+  status: PropTypes.object,
   /**
    * Is this the principal call to action on the page?
    */
@@ -133,6 +146,7 @@ DonutChart.propTypes = {
 };
 
 DonutChart.defaultProps = {
+  status: { success: true },
   data: [],
   colors: defaultColors,
 };
