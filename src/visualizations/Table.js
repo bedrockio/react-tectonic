@@ -13,7 +13,6 @@ export const Table = ({
   data,
   keyFormatter,
   valueFieldFormatter,
-  collapsing,
   labels = {},
 }) => {
   const defaultKeyFormatter = (item) => {
