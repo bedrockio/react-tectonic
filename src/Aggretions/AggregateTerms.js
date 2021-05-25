@@ -1,8 +1,8 @@
 import React from "react";
 import { request } from "../utils/request";
-import { useTechonicContext } from "../context";
+import { useTectonicContext } from "../components/TectonicProvider";
 
-export const Terms = ({
+export const AggregateTerms = ({
   index,
   aggField,
   aggFieldOrder,
@@ -14,7 +14,7 @@ export const Terms = ({
   termsSize,
   children,
 }) => {
-  const { baseUrl, token } = useTechonicContext();
+  const { baseUrl, token } = useTectonicContext();
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
 

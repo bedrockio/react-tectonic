@@ -18,8 +18,14 @@ class ApiParseError extends CustomError {
   }
 }
 
-export default async function request(options) {
-  const { method = "GET", path, files, params, baseUrl } = options;
+export const request = async (options) => {
+  const {
+    method = "GET",
+    path,
+    files,
+    params,
+    baseUrl = "http://0.0.0.0:3300",
+  } = options;
   let { body } = options;
 
   const token = options.token;
@@ -34,7 +40,9 @@ export default async function request(options) {
     options.headers
   );
 
+  console.log(path, baseUrl);
   const url = new URL(path, baseUrl);
+
   url.search = new URLSearchParams(params);
 
   if (files) {
@@ -84,4 +92,4 @@ export default async function request(options) {
   } catch (err) {
     throw new ApiParseError();
   }
-}
+};

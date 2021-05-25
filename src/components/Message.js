@@ -1,13 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const Message = ({ children, floating, center }) => {
-  const classes = [
-    "techonic",
-    "message",
-    center && "center",
-    floating && "floating",
-  ].filter(Boolean);
+export const Message = ({ children, error }) => {
+  const classes = ["techonic", "message", error && "error"].filter(Boolean);
   return (
     <div className={classes.join(" ")}>
       <div className="content">{children}</div>

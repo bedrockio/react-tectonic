@@ -21,15 +21,16 @@
   },
   "homepage": "https://github.com/bedrockio/react-tectonic#readme",
   "peerDependencies": {
+    "lodash": ">=4",
     "react": ">=16 <18",
-    "react-dom": ">=16 <18",
-    "lodash": ">=4"
+    "react-dom": ">=16 <18"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.0",
     "@babel/eslint-parser": "^7.14.2",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
     "@storybook/addon-actions": "^6.2.9",
@@ -41,8 +42,8 @@
     "eslint-plugin-bedrock": "^1.0.2",
     "prettier": "^2.3.0",
     "prettier-eslint": "^12.0.0",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "dependencies": {
     "moment": "^2.29.1",

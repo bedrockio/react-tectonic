@@ -1,17 +1,20 @@
 import React from "react";
 import { request } from "../utils/request";
-import { useTechonicContext } from "../context";
+import { useTectonicContext } from "../components/TectonicProvider";
 
-export const TimeSeries = ({
+export const AggregateTerms = ({
   index,
-  operation,
-  interval,
+  aggField,
+  aggFieldOrder,
   field,
-  dateField,
+  operation,
   filter,
+  includeTopHit,
+  referenceFetch,
+  termsSize,
   children,
 }) => {
-  const { baseUrl, token } = useTechonicContext();
+  const { baseUrl, token } = useTectonicContext();
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
 
@@ -20,16 +23,19 @@ export const TimeSeries = ({
     try {
       const data = await request({
         method: "POST",
-        path: "/1/analytics/time-series",
+        path: "/1/analytics/terms",
         baseUrl,
         token,
         body: {
           index,
-          operation,
-          interval,
+          aggField,
+          aggFieldOrder,
           field,
-          dateField,
+          operation,
           filter,
+          includeTopHit,
+          referenceFetch,
+          termsSize,
         },
       });
       setData(data);
@@ -41,7 +47,17 @@ export const TimeSeries = ({
 
   React.useEffect(() => {
     fetchData();
-  }, [index, operation, interval, field, dateField, filter]);
+  }, [
+    index,
+    aggField,
+    aggFieldOrder,
+    field,
+    operation,
+    filter,
+    includeTopHit,
+    referenceFetch,
+    termsSize,
+  ]);
 
   return children({ data, status });
 };

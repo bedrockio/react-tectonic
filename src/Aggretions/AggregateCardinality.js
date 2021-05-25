@@ -1,9 +1,9 @@
 import React from "react";
 import { request } from "../utils/request";
-import { useTechonicContext } from "../context";
+import { useTectonicContext } from "../components/TectonicProvider";
 
-export const Stats = ({ index, fields, filter, children }) => {
-  const { baseUrl, token } = useTechonicContext();
+export const AggregateCardinality = ({ index, fields, filter, children }) => {
+  const { baseUrl, token } = useTectonicContext();
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
 
@@ -12,7 +12,7 @@ export const Stats = ({ index, fields, filter, children }) => {
     try {
       const data = await request({
         method: "POST",
-        path: "/1/analytics/stats",
+        path: "/1/analytics/cardinality",
         baseUrl,
         token,
         body: {

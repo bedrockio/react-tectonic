@@ -29,20 +29,10 @@ export const Table = ({
   return (
     <ChartContainer height={400}>
       {status.success && noData && (
-        <Message floating center>
-          No data available for this time period
-        </Message>
+        <Message>No data available for this time period</Message>
       )}
-      {status.loading && (
-        <Message floating center>
-          Loading...
-        </Message>
-      )}
-      {status.error && (
-        <Message floating center error>
-          {status.error.message}
-        </Message>
-      )}
+      {status.loading && <Message>Loading...</Message>}
+      {status.error && <Message error>{status.error.message}</Message>}
 
       <table width={"100%"} className="techonic table">
         <thead>
