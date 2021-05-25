@@ -23,18 +23,20 @@ export default {
 const Template = (args) => <DonutChart {...args} />;
 
 export const DonutChartWithData = Template.bind({});
-
 DonutChartWithData.args = {
   data: [
-    { key: "Every Day Skin Routine", count: 2424, value: 3718100 },
-    { key: "Runway to Real Life", count: 924, value: 1416600 },
+    { key: "Cocktail", count: 2372, value: 0 },
+    { key: "Liquor", count: 1078, value: 0 },
+    { key: "Wine", count: 619, value: 0 },
+    { key: "Food", count: 540, value: 0 },
+    { key: "Beverage", count: 354, value: 0 },
+    { key: "Beer", count: 294, value: 0 },
   ],
   status: "success",
 };
 
 export const WithoutData = Template.bind({});
-
-DonutChartWithData.args = {
+WithoutData.args = {
   data: [],
   status: "success",
 };

@@ -40,7 +40,6 @@ export const request = async (options) => {
     options.headers
   );
 
-  console.log(path, baseUrl);
   const url = new URL(path, baseUrl);
 
   url.search = new URLSearchParams(params);

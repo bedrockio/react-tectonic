@@ -12,13 +12,13 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
     console.error("Token not provided");
   }
 
-  const [data, setData] = React.useState({});
+  const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
 
   async function fetchData() {
     setStatus({ loading: true });
     try {
-      const data = Promise.all(
+      const data = await Promise.all(
         requests.map((requestBody) =>
           request({
             method: "POST",
@@ -42,7 +42,13 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
     fetchData();
   }, [requests, type]);
 
-  return children({ data, status });
+  if (typeof children === "function") {
+    return children({ data, status });
+  }
+
+  return React.Children.map(children, (child) =>
+    React.cloneElement(child, { data, status })
+  );
 };
 
 Aggregate.propTypes = {

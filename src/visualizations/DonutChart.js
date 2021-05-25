@@ -108,6 +108,7 @@ export const DonutChart = ({
                   return `${Math.round((value / total) * 100)}%`;
                 }
               }
+
               return numberWithCommas(value);
             }}
           />

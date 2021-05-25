@@ -3,3 +3,4 @@ src
 .babelrc
 .editorconfig
 .eslintrc.js
+*.stories.js
