@@ -73,7 +73,7 @@ export const DonutChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
 
       <ResponsiveContainer height={height}>
-        <PieChart data={trimmedData}>
+        <PieChart data={trimmedData} key={status.success}>
           <Pie
             data={trimmedData}
             innerRadius={Math.round(height * 0.2)}
@@ -96,22 +96,24 @@ export const DonutChart = ({
           </Pie>
 
           <Legend />
-          <Tooltip
-            formatter={(value) => {
-              if (percent) {
-                if (precision) {
-                  return `${
-                    Math.round((value / total) * (10 * precision) * 100) /
-                    (10 * precision)
-                  }%`;
-                } else {
-                  return `${Math.round((value / total) * 100)}%`;
+          {!noData && (
+            <Tooltip
+              formatter={(value) => {
+                if (percent) {
+                  if (precision) {
+                    return `${
+                      Math.round((value / total) * (10 * precision) * 100) /
+                      (10 * precision)
+                    }%`;
+                  } else {
+                    return `${Math.round((value / total) * 100)}%`;
+                  }
                 }
-              }
 
-              return numberWithCommas(value);
-            }}
-          />
+                return numberWithCommas(value);
+              }}
+            />
+          )}
         </PieChart>
       </ResponsiveContainer>
     </ChartContainer>

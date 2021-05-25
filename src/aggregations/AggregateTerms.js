@@ -3,7 +3,16 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
-export const AggregateTerms = ({ baseUrl, token, children, ...args }) => {
+export const AggregateTerms = ({
+  baseUrl,
+  token,
+  children,
+  index,
+  aggField,
+  field,
+  operation,
+  termsSize,
+}) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
@@ -24,7 +33,13 @@ export const AggregateTerms = ({ baseUrl, token, children, ...args }) => {
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: args,
+        body: {
+          index,
+          aggField,
+          field,
+          operation,
+          termsSize,
+        },
       });
       setData(data);
       setStatus({ success: true });
@@ -37,7 +52,7 @@ export const AggregateTerms = ({ baseUrl, token, children, ...args }) => {
     if (token) {
       fetchData();
     }
-  }, []);
+  }, [index, aggField, field, operation, termsSize]);
 
   if (typeof children === "function") {
     return children({ data, status });

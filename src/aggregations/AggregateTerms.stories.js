@@ -2,6 +2,7 @@ import React from "react";
 
 import { AggregateTerms } from "./AggregateTerms";
 import { Table } from "../visualizations/Table";
+import { DonutChart } from "../visualizations/DonutChart";
 import { TectonicProvider } from "../../.storybook/decorators";
 
 export default {
@@ -39,3 +40,11 @@ export const AsFunction = TemplateAsFunction.bind({});
 AsFunction.args = defaultArgs;
 
 export const WithError = TemplateAsFunction.bind({});
+
+const TemplateDonut = (args) => (
+  <AggregateTerms {...args}>
+    <DonutChart />
+  </AggregateTerms>
+);
+export const AsDonut = TemplateDonut.bind({});
+AsDonut.args = defaultArgs;

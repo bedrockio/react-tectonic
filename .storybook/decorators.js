@@ -60,8 +60,6 @@ export const TectonicProvider = ({ children }) => {
     );
   }
 
-  console.log(token);
-
   return React.Children.map(children, (child) => {
     return React.cloneElement(child, { token, baseUrl });
   });

@@ -59,6 +59,7 @@ export const SeriesChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
       <ResponsiveContainer height={400}>
         <Chart
+          key={status.success} //ensure that destroy the chat as we have d
           data={data}
           margin={{
             top: 5,

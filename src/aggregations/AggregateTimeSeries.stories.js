@@ -33,7 +33,7 @@ const TemplateAsFunction = (args) => (
         <SeriesChart
           data={data}
           status={status}
-          variant="bar"
+          variant="line"
           valueField="count"
         />
       );
