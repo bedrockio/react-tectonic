@@ -8,6 +8,10 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
 
+  if (!token) {
+    console.error("Token not provided");
+  }
+
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
 
@@ -44,6 +48,6 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
 Aggregate.propTypes = {
   type: PropTypes.string.isRequired,
   requests: PropTypes.arrayOf(PropTypes.object),
-  token: PropTypes.string.isRequired,
-  baseUrl: PropTypes.string.isRequired,
+  token: PropTypes.string,
+  baseUrl: PropTypes.string,
 };

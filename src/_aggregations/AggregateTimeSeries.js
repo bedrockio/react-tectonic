@@ -1,8 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateTimeSeries = ({
+  baseUrl,
+  token,
   index,
   operation,
   interval,
@@ -11,8 +14,15 @@ export const AggregateTimeSeries = ({
   filter,
   children,
 }) => {
-  const { baseUrl, token } = useTectonicContext();
-  const [data, setData] = React.useState({});
+  let context = useTectonicContext();
+  if (!baseUrl) baseUrl = context.baseUrl;
+  if (!token) token = context.token;
+
+  if (!token) {
+    console.error("Token not provided");
+  }
+
+  const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
 
   async function fetchData() {
@@ -43,5 +53,16 @@ export const AggregateTimeSeries = ({
     fetchData();
   }, [index, operation, interval, field, dateField, filter]);
 
-  return children({ data, status });
+  if (typeof children === "function") {
+    return children({ data, status });
+  }
+
+  return React.Children.map(children, (child) =>
+    React.cloneElement(child, { data, status })
+  );
+};
+
+AggregateTimeSeries.propTypes = {
+  token: PropTypes.string,
+  baseUrl: PropTypes.string,
 };

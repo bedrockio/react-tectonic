@@ -3,40 +3,28 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
-export const AggregateTimeSeries = ({
-  baseUrl,
-  token,
-  index,
-  operation,
-  interval,
-  field,
-  dateField,
-  filter,
-  children,
-}) => {
+export const AggregateTerms = ({ baseUrl, token, children, ...args }) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
+
+  if (!token) {
+    console.error("Token not provided");
+  }
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
 
   async function fetchData() {
     setStatus({ loading: true });
+
     try {
       const data = await request({
         method: "POST",
-        path: "/1/analytics/time-series",
+        path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: {
-          index,
-          operation,
-          interval,
-          field,
-          dateField,
-          filter,
-        },
+        body: args,
       });
       setData(data);
       setStatus({ success: true });
@@ -46,8 +34,10 @@ export const AggregateTimeSeries = ({
   }
 
   React.useEffect(() => {
-    fetchData();
-  }, [index, operation, interval, field, dateField, filter]);
+    if (token) {
+      fetchData();
+    }
+  }, []);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -58,7 +48,7 @@ export const AggregateTimeSeries = ({
   );
 };
 
-AggregateTimeSeries.propTypes = {
-  token: PropTypes.string.isRequired,
-  baseUrl: PropTypes.string.isRequired,
+AggregateTerms.propTypes = {
+  token: PropTypes.string,
+  baseUrl: PropTypes.string,
 };

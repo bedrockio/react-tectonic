@@ -8,7 +8,7 @@
     "start": "start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "BABEL_ENV=esm babel src/ -d lib/"
+    "build": "rm -rf lib && BABEL_ENV=esm babel src/ -d lib/"
   },
   "repository": {
     "type": "git",
