@@ -19,7 +19,7 @@ const Template = (args) => (
 
 export const Regular = Template.bind({});
 const defaultArgs = {
-  index: "bar-purchases",
+  collection: "bar-purchases",
   aggField: "event.server.name",
   field: "event.consumption.price",
   operation: "sum",
@@ -40,6 +40,10 @@ export const AsFunction = TemplateAsFunction.bind({});
 AsFunction.args = defaultArgs;
 
 export const WithError = TemplateAsFunction.bind({});
+WithError.args = {
+  ...defaultArgs,
+  badAttribute: 1123,
+};
 
 const TemplateDonut = (args) => (
   <AggregateTerms {...args}>

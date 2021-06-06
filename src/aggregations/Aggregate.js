@@ -39,8 +39,12 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
   }
 
   React.useEffect(() => {
-    fetchData();
-  }, [requests, type]);
+    if (token) {
+      fetchData();
+    } else {
+      setStatus({ error: new Error("Token not provided") });
+    }
+  }, [token, baseUrl, requests, type]);
 
   if (typeof children === "function") {
     return children({ data, status });

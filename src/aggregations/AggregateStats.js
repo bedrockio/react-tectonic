@@ -1,24 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
+import { AggregateFilter } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateStats = ({
   baseUrl,
   token,
   cardinality,
-  index,
-  fields,
-  filter,
   children,
+  ...params
 }) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
-
-  if (!token) {
-    console.error("Token not provided");
-  }
 
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
@@ -31,11 +26,7 @@ export const AggregateStats = ({
         path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
         baseUrl,
         token,
-        body: {
-          index,
-          fields,
-          filter,
-        },
+        body: params,
       });
       setData(data);
       setStatus({ success: true });
@@ -45,8 +36,12 @@ export const AggregateStats = ({
   }
 
   React.useEffect(() => {
-    fetchData();
-  }, [index, fields, filter, cardinality]);
+    if (token) {
+      fetchData();
+    } else {
+      setStatus({ error: new Error("Token not provided") });
+    }
+  }, [token, baseUrl, cardinality, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -60,4 +55,8 @@ export const AggregateStats = ({
 AggregateStats.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
+  cardinality: PropTypes.bool,
+  collection: PropTypes.string.isRequired,
+  fields: PropTypes.arrayOf(PropTypes.string),
+  filters: AggregateFilter,
 };

@@ -10,7 +10,7 @@ export default {
 };
 
 const defaultArgs = {
-  index: "bar-purchases",
+  collection: "bar-purchases",
   fields: ["event.consumption.price"],
 };
 
@@ -38,3 +38,7 @@ CardinalityAsFunction.args = {
 };
 
 export const WithError = TemplateAsFunction.bind({});
+WithError.args = {
+  ...defaultArgs,
+  badAttribute: 123132,
+};

@@ -18,7 +18,7 @@ const Template = (args) => (
 
 export const Regular = Template.bind({});
 const defaultArgs = {
-  index: "bar-purchases",
+  collection: "bar-purchases",
   operation: "count",
   interval: "1d",
   dateField: "event.orderedAt",
@@ -45,3 +45,7 @@ export const AsFunction = TemplateAsFunction.bind({});
 AsFunction.args = defaultArgs;
 
 export const WithError = TemplateAsFunction.bind({});
+WithError.args = {
+  ...defaultArgs,
+  badAttribute: 12313,
+};

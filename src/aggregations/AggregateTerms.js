@@ -1,25 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { AggregateFilter } from "../utils/propTypes";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
-export const AggregateTerms = ({
-  baseUrl,
-  token,
-  children,
-  index,
-  aggField,
-  field,
-  operation,
-  termsSize,
-}) => {
+export const AggregateTerms = ({ baseUrl, token, children, ...params }) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
-
-  if (!token) {
-    console.error("Token not provided");
-  }
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -33,13 +21,7 @@ export const AggregateTerms = ({
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: {
-          index,
-          aggField,
-          field,
-          operation,
-          termsSize,
-        },
+        body: params,
       });
       setData(data);
       setStatus({ success: true });
@@ -51,8 +33,10 @@ export const AggregateTerms = ({
   React.useEffect(() => {
     if (token) {
       fetchData();
+    } else {
+      setStatus({ error: new Error("Token not provided") });
     }
-  }, [index, aggField, field, operation, termsSize]);
+  }, [token, baseUrl, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -66,4 +50,13 @@ export const AggregateTerms = ({
 AggregateTerms.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
+  filters: AggregateFilter,
+  collection: PropTypes.string.isRequired,
+  aggField: PropTypes.string.isRequired,
+  aggFieldOrder: PropTypes.oneOf(["desc", "asc"]),
+  field: PropTypes.string,
+  operation: PropTypes.string,
+  includeTopHit: PropTypes.bool,
+  referenceFetch: PropTypes.object,
+  termsSize: PropTypes.number,
 };
