@@ -3,12 +3,17 @@ import React from "react";
 const TectonicContext = React.createContext({});
 
 const TectonicProvider = ({ children, baseUrl, token }) => {
+  const [token, setToken] = React.useState(token);
+  const [baseUrl, setBaseUrl] = React.useState(baseUrl);
+
   const values = React.useMemo(() => {
     return {
       baseUrl,
       token,
+      setToken,
+      setBaseUrl,
     };
-  }, [token, baseUrl]);
+  }, [token, baseUrl, setToken, setBaseUrl]);
 
   return (
     <TectonicContext.Provider value={values}>
