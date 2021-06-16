@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { numberWithCommas } from "../utils/formatting";
-import { formatterForDataCadence } from "../utils/_visualization";
+import { formatterForDataCadence } from "../utils/visualization";
 import { Message, ChartContainer } from "../components";
 
 import {
