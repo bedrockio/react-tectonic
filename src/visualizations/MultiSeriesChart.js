@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
-import { formatterForDataCadence } from "../utils/visualization";
+import { formatterForDataCadence } from "../utils/_visualization";
 import { Message, ChartContainer } from "../components";
 
 import {
@@ -19,8 +19,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import moment from "moment";
-import { defaultColors } from "../utils/visualization";
+import { defaultColors } from "../utils/_visualization";
 
 const fuse = (series, valueField) => {
   const byTs = {};
@@ -150,9 +149,7 @@ export const MultiSeriesChart = ({
           {variant !== "bar" && (
             <Tooltip
               formatter={valueFieldFormatter || defaultValueFieldFormatter}
-              labelFormatter={(unixTime) =>
-                moment(unixTime).format("YY/MM/DD LT")
-              }
+              labelFormatter={(unixTime) => new Date(unixTime).toLocaleString()}
             />
           )}
         </Chart>

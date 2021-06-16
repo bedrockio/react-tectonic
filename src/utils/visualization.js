@@ -1,17 +1,32 @@
-import moment from "moment";
+const ONE_HOUR = 1000 * 60 * 60;
 
-export const formatterForDataCadence = (data) => {
-  if (!data || !data.length || !data[1]) {
+export const formatterForDataCadence = (data = []) => {
+  if (!data[1]) {
     return () => "No Data";
   }
+
   const delta = data[1].timestamp - data[0].timestamp;
   const range = data[data.length - 1].timestamp - data[0].timestamp;
-  if (range > 356 * 24 * 3600 * 1000) {
-    return (unixTime) => moment(unixTime).format("YYYY/MM/DD");
-  } else if (delta > 5 * 3600 * 1000) {
-    return (unixTime) => moment(unixTime).format("MM/DD");
+
+  if (range > 356 * 24 * ONE_HOUR) {
+    const formatter = Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+    });
+    return (unixTime) => formatter.format(unixTime);
+  } else if (delta > 5 * ONE_HOUR) {
+    const formatter = Intl.DateTimeFormat("en-US", {
+      month: "numeric",
+      day: "numeric",
+    });
+    return (unixTime) => formatter.format(unixTime);
   } else {
-    return (unixTime) => moment(unixTime).format("LT");
+    const formatter = Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+    });
+    return (unixTime) => formatter.format(unixTime);
   }
 };
 
