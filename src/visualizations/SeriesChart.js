@@ -19,7 +19,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { defaultColors } from "../utils/_visualization";
+import { defaultColors } from "../utils/visualization";
 
 export const SeriesChart = ({
   status,
