@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const ChartContainer = ({ children, height }) => {
-  const classes = ["techonic", "chart"].filter(Boolean);
+export const ChartContainer = ({ children, height, classNames }) => {
+  const classes = ["tnic-chart", classNames].filter(Boolean);
   return (
     <div style={{ height: `${height}px` }} className={classes.join(" ")}>
       {children}

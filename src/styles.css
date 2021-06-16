@@ -2,14 +2,14 @@ body {
   font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 
-.techonic.chart {
+.tnic-chart {
   position: relative;
   padding: 1em;
 }
 
 /*** Message ***/
 
-.techonic.message {
+.tnic-message {
   font-size: 1em;
   position: relative;
   min-height: 1em;
@@ -30,7 +30,7 @@ body {
   z-index: 10;
 }
 
-.techonic.message.error {
+.tnic-message--error {
   background-color: #fff6f6;
   color: #9f3a38;
   box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
@@ -40,14 +40,14 @@ body {
 
 /*** Table ***/
 
-.techonic.table {
+.tnic-table {
   text-align: left;
   color: rgba(0, 0, 0, 0.87);
   border-collapse: separate;
   border-spacing: 0;
 }
 
-.techonic.table thead th {
+.tnic-table thead th {
   cursor: auto;
   text-align: inherit;
   color: rgba(0, 0, 0, 0.87);
@@ -58,49 +58,49 @@ body {
   border-bottom: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.techonic.table thead tr:first-child th {
+.tnic-table thead tr:first-child th {
   padding-top: 0;
 }
 
-.techonic.table td:first-child,
-.techonic.table th:first-child {
+.tnic-table td:first-child,
+.tnic-table th:first-child {
   padding-left: 0;
 }
 
-.techonic.table tr td:first-child,
-.techonic.table tr th:first-child {
+.tnic-table tr td:first-child,
+.tnic-table tr th:first-child {
   border-left: none;
 }
 
-.techonic.table tr td,
-.techonic.table tr th {
+.tnic-table tr td,
+.tnic-table tr th {
   border-left: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.techonic.table th {
+.tnic-table th {
   background: 0 0;
   border-left: none;
 }
 
-.techonic.table tr:first-child td {
+.tnic-table tr:first-child td {
   border-top: none;
 }
 
-.techonic.table tr td:first-child,
-.techonic.table tr th:first-child {
+.tnic-table tr td:first-child,
+.tnic-table tr th:first-child {
   padding-left: 0;
   border-left: none;
 }
 
-.techonic.table tr td {
+.tnic-table tr td {
   border-top: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.techonic.table tbody tr {
+.tnic-table tbody tr {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.techonic.table td {
+.tnic-table td {
   padding: 0.78571429em 0.78571429em;
   text-align: inherit;
 }

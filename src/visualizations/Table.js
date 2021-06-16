@@ -34,7 +34,7 @@ export const Table = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <table width={"100%"} className="techonic table">
+      <table width={"100%"} className="tnic-table">
         <thead>
           <tr>
             <th style={{ width: "62.5%" }}>{keyName || "Name"}</th>

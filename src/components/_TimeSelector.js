@@ -1,6 +1,6 @@
 import React from "react";
 import { request } from "../utils/request";
-import { Message, Menu, Segment, Dropdown } from "semantic-ui-react";
+import { Message, Dropdown } from "semantic-ui-react";
 
 const validIntervals = ["1w", "1d", "1h", "15m", "5m", "1m"];
 
@@ -125,44 +125,21 @@ export default class TimeSelector extends React.Component {
     if (loading || !data) return <p>Loading...</p>;
 
     return (
-      <div>
-        <Menu attached="top">
-          <Menu.Menu position="right">
-            <Dropdown
-              item
-              text={`Resolution: ${formatInterval(interval)}`}
-              simple
-            >
-              <Dropdown.Menu>
-                {validIntervals.map((validInterval) => {
-                  return (
-                    <Dropdown.Item
-                      key={validInterval}
-                      content={formatInterval(validInterval)}
-                      active={interval === validInterval}
-                      disabled={!intervalIsAllowed(min, max, validInterval)}
-                      onClick={() => this.setInterval(validInterval)}
-                    />
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </Menu.Menu>
-        </Menu>
-        <Segment attached="bottom">
-          {this.props.children({
-            filter: {
-              range: {
-                timestamp: {
-                  gte: min,
-                  lte: max,
-                },
-              },
-            },
-            interval,
+      <Dropdown item text={`Resolution: ${formatInterval(interval)}`} simple>
+        <Dropdown.Menu>
+          {validIntervals.map((validInterval) => {
+            return (
+              <Dropdown.Item
+                key={validInterval}
+                content={formatInterval(validInterval)}
+                active={interval === validInterval}
+                disabled={!intervalIsAllowed(min, max, validInterval)}
+                onClick={() => this.setInterval(validInterval)}
+              />
+            );
           })}
-        </Segment>
-      </div>
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 }
