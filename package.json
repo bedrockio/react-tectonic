@@ -26,7 +26,8 @@
     "lodash": ">=4",
     "react": ">=16 <18",
     "react-day-picker": "7.*",
-    "react-dom": ">=16 <18"
+    "react-dom": ">=16 <18",
+    "date-fns": "^2.10.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
@@ -41,6 +42,7 @@
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "babel-loader": "^8.2.2",
+    "date-fns": "^2.22.1",
     "eslint": "^7.26.0",
     "eslint-plugin-bedrock": "^1.0.7",
     "jest": "^27.0.4",

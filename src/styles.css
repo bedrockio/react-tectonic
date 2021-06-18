@@ -106,3 +106,135 @@ body {
 }
 
 /*** Table End ***/
+
+/*** TimeRange ***/
+
+.tnic-timeRP {
+  position: relative;
+}
+
+.tnic-timeRP input {
+  border: 1px solid #e0e0e0;
+  width: 34px;
+  height: 24px;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 5px;
+  margin-left: 5px;
+  box-sizing: border-box;
+}
+
+.tnic-timeRP .tnic-timeOption:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.tnic-timeRP .tnic-timeOption:hover .tnic-hovertext {
+  visibility: visible;
+}
+
+/*** Overlay ***/
+
+.tnic-overlay {
+  position: absolute;
+  box-shadow: 0px 2px 3px 0px rgb(60 64 67 / 30%),
+    0px 6px 10px 4px rgb(60 64 67 / 15%);
+  background-color: #fff;
+}
+
+/*** Icon ***/
+.tnic-icon {
+  background-repeat: no-repeat;
+  display: inline-block;
+  height: 24px;
+  width: 24px;
+
+  vertical-align: middle;
+}
+
+/*** Button ***/
+
+.tnic-button {
+  cursor: pointer;
+  display: inline-block;
+  outline: none;
+  border: none;
+  vertical-align: baseline;
+  background: #e0e1e2 none;
+  color: rgba(0, 0, 0, 0.6);
+  margin: 0 0.25em 0 0;
+  padding: 0.5em 1em;
+  text-transform: none;
+  text-shadow: none;
+  font-weight: bold;
+  line-height: 1em;
+  text-align: center;
+  border-radius: 0.28571429rem;
+  user-select: none;
+  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
+    box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.tnic-button--secondary {
+  background: none;
+  border: none;
+}
+
+.tnic-button--icon {
+  background: none;
+  border: none;
+  line-height: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.tnic-button--disabled {
+  cursor: default;
+  opacity: 0.45 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+/*** Options Item ***/
+
+.tnic-timeOption {
+  height: 50px;
+  padding: 0 18px 0 12px;
+  font-size: 14px;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+/*** Title ***/
+.tnic-title {
+  line-height: 22px;
+  font-weight: bold;
+  flex: 1;
+}
+
+/*** Header/Footer ***/
+.tnic-header,
+.tnic-footer {
+  display: flex;
+  height: 40px;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 12px;
+  align-items: center;
+}
+
+.tnic-footer {
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid #ccc;
+}
+
+/*** Other ***/
+
+.tnic-hovertext {
+  visibility: hidden;
+}

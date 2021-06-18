@@ -1,13 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { AggregateFilter } from "../utils/propTypes";
+import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
-export const AggregateTerms = ({ baseUrl, token, children, ...params }) => {
+export const AggregateTerms = ({
+  baseUrl,
+  token,
+  timeRange,
+  children,
+  ...params
+}) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
+  if (!timeRange) timeRange = context.timeRange;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -21,7 +28,10 @@ export const AggregateTerms = ({ baseUrl, token, children, ...params }) => {
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: params,
+        body: {
+          ...timeRange,
+          ...params,
+        },
       });
       setData(data);
       setStatus({ success: true });
@@ -50,7 +60,7 @@ export const AggregateTerms = ({ baseUrl, token, children, ...params }) => {
 AggregateTerms.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
-  filters: AggregateFilter,
+  filter: AggregateFilterType,
   collection: PropTypes.string.isRequired,
   aggField: PropTypes.string.isRequired,
   aggFieldOrder: PropTypes.oneOf(["desc", "asc"]),
@@ -59,4 +69,5 @@ AggregateTerms.propTypes = {
   includeTopHit: PropTypes.bool,
   referenceFetch: PropTypes.object,
   termsSize: PropTypes.number,
+  timeRange: TimeRangeType,
 };

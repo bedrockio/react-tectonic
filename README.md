@@ -17,3 +17,7 @@ import "react-day-picker/lib/style.css"; // required for the time picker
 ## Styling
 
 To style the component, use src/style.css as template and update it to fit the desired style. Then, just include it with your CSS files.
+
+## Date Math
+
+We are using https://date-fns.org (also required for the react-day-picker)

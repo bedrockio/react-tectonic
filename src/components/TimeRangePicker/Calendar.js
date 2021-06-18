@@ -64,6 +64,7 @@ export class Calendar extends React.Component {
     const modifiers = { start: from, end: enteredTo };
     const disabledDays = { before: this.state.from };
     const selectedDays = [from, { from, to: enteredTo }];
+
     return (
       <div>
         <DayPicker
@@ -76,19 +77,6 @@ export class Calendar extends React.Component {
           onDayClick={this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
         />
-        <div>
-          {!from && !to && "Please select the first day."}
-          {from && !to && "Please select the last day."}
-          {from &&
-            to &&
-            `Selected from ${from.toLocaleDateString()} to
-                ${to.toLocaleDateString()}`}{" "}
-          {from && to && (
-            <button className="link" onClick={this.handleResetClick}>
-              Reset
-            </button>
-          )}
-        </div>
       </div>
     );
   }

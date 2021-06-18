@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-export const AggregateFilter = PropTypes.shape({
+export const AggregateFilterType = PropTypes.shape({
   from: PropTypes.number,
   size: PropTypes.number,
   terms: PropTypes.arrayOf(PropTypes.object),
@@ -9,4 +9,15 @@ export const AggregateFilter = PropTypes.shape({
   exists: PropTypes.string,
   minTimestamp: PropTypes.number,
   q: PropTypes.string,
+});
+
+const timeField = PropTypes.oneOfType([
+  PropTypes.instanceOf(Date),
+  PropTypes.number,
+  PropTypes.string,
+]);
+
+export const TimeRangeType = PropTypes.shape({
+  from: timeField,
+  to: timeField,
 });

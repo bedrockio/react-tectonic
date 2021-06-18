@@ -1,18 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
-import { AggregateFilter } from "../utils/propTypes";
+import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateTimeSeries = ({
   baseUrl,
   token,
+  timeRange,
   children,
   ...params
 }) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
+  if (!timeRange) timeRange = context.timeRange;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -25,7 +27,10 @@ export const AggregateTimeSeries = ({
         path: "/1/analytics/time-series",
         baseUrl,
         token,
-        body: params,
+        body: {
+          ...timeRange,
+          ...params,
+        },
       });
       setData(data);
       setStatus({ success: true });
@@ -59,5 +64,6 @@ AggregateTimeSeries.propTypes = {
   field: PropTypes.string,
   interval: PropTypes.string,
   dateField: PropTypes.string,
-  filter: AggregateFilter,
+  filter: AggregateFilterType,
+  timeRange: TimeRangeType,
 };

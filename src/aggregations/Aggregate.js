@@ -2,15 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { TimeRangeType } from "../utils/propTypes";
 
-export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
+export const Aggregate = ({
+  timeRange,
+  baseUrl,
+  token,
+  requests,
+  type,
+  children,
+}) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
-
-  if (!token) {
-    console.error("Token not provided");
-  }
+  if (!timeRange) timeRange = context.timeRange;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -26,6 +31,7 @@ export const Aggregate = ({ baseUrl, token, requests, type, children }) => {
             baseUrl,
             token,
             body: {
+              ...timeRange,
               ...requestBody,
             },
           })
@@ -60,4 +66,5 @@ Aggregate.propTypes = {
   requests: PropTypes.arrayOf(PropTypes.object),
   token: PropTypes.string,
   baseUrl: PropTypes.string,
+  timeRange: TimeRangeType,
 };
