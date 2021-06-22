@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export const Button = ({ children, icon, disabled, secondary, ...props }) => {
   const className = [
@@ -14,3 +15,12 @@ export const Button = ({ children, icon, disabled, secondary, ...props }) => {
     </button>
   );
 };
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+  icon: PropTypes.bool,
+  disabled: PropTypes.bool,
+  secondary: PropTypes.bool,
+};
+
+Button.defaultProps = {};

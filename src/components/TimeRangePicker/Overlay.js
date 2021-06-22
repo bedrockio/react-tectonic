@@ -6,16 +6,18 @@ import { Button } from "../Button";
 import { TimeOptions } from "./TimeOptions";
 import { labelsToUnit } from "../../utils/dateMath";
 
-export const Overlay = ({ onChange, onClose, ...props }) => {
+export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   const [optionValue, setOptionValue] = React.useState();
   const [option, setOption] = React.useState();
   const [refreshKey, setRefreshKey] = React.useState();
 
-  const [timeOptions, setTimeOptions] = React.useState(props.timeOptions);
+  const [validTimeOptions, setValidTimeOptions] = React.useState(
+    props.timeOptions
+  );
 
   const handleReset = () => {
     setOption();
-    setTimeOptions([...props.timeOptions]);
+    setValidTimeOptions([...props.timeOptions]);
     setRefreshKey(Date.now());
   };
 
@@ -29,7 +31,7 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
         to: "now",
         from: `now-${optionValue}${labelsToUnit[option.unit]}`,
       });
-    } else if (option.type === "absolute") {
+    } else if (stats.isHistorical || option.type === "absolute") {
       onChange({
         ...option,
         label: `${option.from.toLocaleDateString()} - ${option.to.toLocaleDateString()}`,
@@ -40,7 +42,9 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
   return (
     <div className="tnic-overlay">
       <div className="tnic-header">
-        <div className="tnic-title">Select time range</div>
+        <div className="tnic-title">
+          Select time range [Last entry {stats.to?.toLocaleDateString()}]
+        </div>
         <div style={{ display: "flex", alignItems: "center" }}>
           <Button onClick={handleReset}>Reset</Button>
           <Button icon onClick={() => onClose()}>
@@ -56,18 +60,20 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
           flex: 1,
         }}
       >
-        <div style={{ width: "300px", borderTop: "1px solid #ccc" }}>
-          <TimeOptions
-            key={refreshKey}
-            timeOptions={timeOptions}
-            onSelect={(option, value) => {
-              setOptionValue(value);
-              setOption(option);
-            }}
-            active={option}
-          />
-        </div>
-        {option?.type === "absolute" && (
+        {!stats.isHistorical && (
+          <div style={{ width: "300px", borderTop: "1px solid #ccc" }}>
+            <TimeOptions
+              key={refreshKey}
+              timeOptions={validTimeOptions}
+              onSelect={(option, value) => {
+                setOptionValue(value);
+                setOption(option);
+              }}
+              active={option}
+            />
+          </div>
+        )}
+        {(stats.isHistorical || option?.type === "absolute") && (
           <div
             style={{
               float: "right",
@@ -76,6 +82,9 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
             }}
           >
             <Calendar
+              timeRange={timeRange}
+              minDate={stats.from}
+              maxDate={stats.isHistorical ? stats.to : undefined}
               onChange={(range) => {
                 setOption({
                   ...option,

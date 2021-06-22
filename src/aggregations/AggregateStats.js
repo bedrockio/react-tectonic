@@ -17,7 +17,6 @@ export const AggregateStats = ({
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
   if (!timeRange) timeRange = context.timeRange;
-  if (!dateField) dateField = context.dateField;
 
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
@@ -30,7 +29,7 @@ export const AggregateStats = ({
         path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(params, { dateField, ...timeRange }),
+        body: getAnalyticsRequestBody(params, timeRange, context),
       });
       setData(data);
       setStatus({ success: true });
@@ -40,12 +39,12 @@ export const AggregateStats = ({
   }
 
   React.useEffect(() => {
-    if (token) {
+    if (token && context.stats) {
       fetchData();
     } else {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, cardinality, ...Object.values(params)]);
+  }, [token, baseUrl, cardinality, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });

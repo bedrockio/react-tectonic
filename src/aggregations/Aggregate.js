@@ -30,7 +30,7 @@ export const Aggregate = ({
             path: `/1/analytics/${type}`,
             baseUrl,
             token,
-            body: getAnalyticsRequestBody(requestBody, timeRange),
+            body: getAnalyticsRequestBody(requestBody, timeRange, context),
           })
         )
       );

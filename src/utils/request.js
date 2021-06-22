@@ -93,17 +93,21 @@ export const request = async (options) => {
   }
 };
 
-export function getAnalyticsRequestBody(params, timeRange) {
+export function getAnalyticsRequestBody(params, timeRange, context) {
   if (!timeRange) {
-    return params;
+    return {
+      collection: context.collection,
+      ...params,
+    };
   }
 
   return {
+    collection: context.collection,
     ...params,
     filter: {
       ...params.filter,
       range: {
-        [timeRange.dateField]: {
+        [context.dateField]: {
           gte: timeRange.from,
           lt: timeRange.to,
           time_zone: timeRange.timeRange,

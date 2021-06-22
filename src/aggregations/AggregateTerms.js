@@ -28,7 +28,7 @@ export const AggregateTerms = ({
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(params, timeRange),
+        body: getAnalyticsRequestBody(params, timeRange, context),
       });
       setData(data);
       setStatus({ success: true });

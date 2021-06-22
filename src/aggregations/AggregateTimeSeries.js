@@ -27,7 +27,11 @@ export const AggregateTimeSeries = ({
         path: "/1/analytics/time-series",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(params, timeRange),
+        body: getAnalyticsRequestBody(
+          { ...params, dateField: context.dateField },
+          timeRange,
+          context
+        ),
       });
       setData(data);
       setStatus({ success: true });
@@ -37,12 +41,12 @@ export const AggregateTimeSeries = ({
   }
 
   React.useEffect(() => {
-    if (token) {
+    if (token && context.isReady) {
       fetchData();
-    } else {
+    } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, ...Object.values(params)]);
+  }, [token, baseUrl, context.isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });

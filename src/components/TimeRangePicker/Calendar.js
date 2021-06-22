@@ -17,26 +17,32 @@ function mergeRanges(range, timeRange) {
   };
 }
 
-export const Calendar = ({ numberOfMonths, onChange }) => {
+export const Calendar = ({
+  numberOfMonths,
+  onChange,
+  minDate,
+  maxDate,
+  timeRange,
+}) => {
   const [range, setRange] = React.useState({
-    from: new Date(Date.now() - 1000000000),
-    to: new Date(),
+    from: timeRange.from,
+    to: timeRange.to,
   });
 
-  const [timeRange, setTimeRange] = React.useState({
-    from: range.from.toLocaleTimeString(),
-    to: range.to.toLocaleTimeString(),
+  const [time, setTime] = React.useState({
+    from: "00:00:00",
+    to: "23:59:59",
   });
 
   const [isLocalTzChecked, setIsLocalTzChecked] = React.useState(true);
 
   React.useEffect(() => {
     if (range.to && range.from) {
-      onChange(mergeRanges(range, timeRange));
+      onChange(mergeRanges(range, time));
     } else {
       onChange(undefined);
     }
-  }, [range, timeRange]);
+  }, [range, time]);
 
   function handleDayClick(day) {
     setRange(DateUtils.addDayToRange(day, range));
@@ -53,6 +59,11 @@ export const Calendar = ({ numberOfMonths, onChange }) => {
         selectedDays={[from, { from, to }]}
         modifiers={modifiers}
         onDayClick={handleDayClick}
+        initialMonth={timeRange.from}
+        disabledDays={{
+          after: maxDate,
+          before: minDate,
+        }}
       />
 
       <div
@@ -73,24 +84,24 @@ export const Calendar = ({ numberOfMonths, onChange }) => {
           <div style={{ flex: 1 }}>
             From:
             <input
-              value={timeRange.from}
+              value={time.from}
               style={{ paddingLeft: "0.5em" }}
               className="tnic-input"
               type="time"
               onChange={(e) => {
-                setTimeRange({ ...timeRange, from: e.target.value });
+                setTime({ ...time, from: e.target.value });
               }}
             />
           </div>
           <div style={{ flex: 1 }}>
             To:
             <input
-              value={timeRange.to}
+              value={time.to}
               style={{ paddingLeft: "0.5em" }}
               className="tnic-input"
               type="time"
               onChange={(e) => {
-                setTimeRange({ ...timeRange, to: e.target.value });
+                setTime({ ...time, to: e.target.value });
               }}
             />
           </div>
@@ -108,9 +119,6 @@ export const Calendar = ({ numberOfMonths, onChange }) => {
               Use local timezone
               <input
                 checked={isLocalTzChecked}
-                style={{
-                  lineHeight: "25px",
-                }}
                 onChange={() => setIsLocalTzChecked(!isLocalTzChecked)}
                 type="checkbox"
               />

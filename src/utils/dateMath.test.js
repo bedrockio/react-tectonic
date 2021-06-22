@@ -14,7 +14,8 @@ describe("datemath", function () {
     });
     it("should convert now", function () {
       const dateTime = Date.now();
-      const milliseconds = convert("now");
+      const milliseconds = convert("now-1d/d");
+      console.log(milliseconds);
       expect(dateTime + milliseconds).toBe(dateTime);
     });
     it("should convert hours to milliseconds", function () {
