@@ -4,15 +4,14 @@ import { Calendar } from "./Calendar";
 import { IconClose } from "../Icons";
 import { Button } from "../Button";
 import { TimeOptions } from "./TimeOptions";
-
-import { sub } from "date-fns";
+import { labelsToUnit } from "../../utils/dateMath";
 
 export const Overlay = ({ onChange, onClose, ...props }) => {
   const [optionValue, setOptionValue] = React.useState();
   const [option, setOption] = React.useState();
   const [refreshKey, setRefreshKey] = React.useState();
 
-  const [timeOptions, setTimeOptions] = React.useState([...props.timeOptions]);
+  const [timeOptions, setTimeOptions] = React.useState(props.timeOptions);
 
   const handleReset = () => {
     setOption();
@@ -23,12 +22,17 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
   const handleOnApply = () => {
     onClose();
     if (option.type === "fixed") {
-      onChange(option);
-    } else if (option.type === "custom") {
+      onChange({ ...option });
+    } else if (option.type === "input") {
       onChange({
-        type: "custom",
-        unit: "hours",
-        default: 24,
+        label: `Last ${optionValue} ${option.unit}`,
+        to: "now",
+        from: `now-${optionValue}${labelsToUnit[option.unit]}`,
+      });
+    } else if (option.type === "absolute") {
+      onChange({
+        ...option,
+        label: `${option.from.toLocaleDateString()} - ${option.to.toLocaleDateString()}`,
       });
     }
   };
@@ -57,13 +61,13 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
             key={refreshKey}
             timeOptions={timeOptions}
             onSelect={(option, value) => {
-              setOption(option);
               setOptionValue(value);
+              setOption(option);
             }}
             active={option}
           />
         </div>
-        {option === "custom" && (
+        {option?.type === "absolute" && (
           <div
             style={{
               float: "right",
@@ -71,7 +75,14 @@ export const Overlay = ({ onChange, onClose, ...props }) => {
               borderLeft: "1px solid #ccc",
             }}
           >
-            <Calendar />
+            <Calendar
+              onChange={(range) => {
+                setOption({
+                  ...option,
+                  ...range,
+                });
+              }}
+            />
           </div>
         )}
       </div>

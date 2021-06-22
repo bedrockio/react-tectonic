@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { request } from "../utils/request";
+import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { TimeRangeType } from "../utils/propTypes";
 
@@ -30,10 +30,7 @@ export const Aggregate = ({
             path: `/1/analytics/${type}`,
             baseUrl,
             token,
-            body: {
-              ...timeRange,
-              ...requestBody,
-            },
+            body: getAnalyticsRequestBody(requestBody, timeRange),
           })
         )
       );

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { request } from "../utils/request";
+import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
 
@@ -10,12 +10,14 @@ export const AggregateStats = ({
   timeRange,
   cardinality,
   children,
+  dateField,
   ...params
 }) => {
   let context = useTectonicContext();
   if (!baseUrl) baseUrl = context.baseUrl;
   if (!token) token = context.token;
   if (!timeRange) timeRange = context.timeRange;
+  if (!dateField) dateField = context.dateField;
 
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
@@ -28,10 +30,7 @@ export const AggregateStats = ({
         path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
         baseUrl,
         token,
-        body: {
-          ...timeRange,
-          ...params,
-        },
+        body: getAnalyticsRequestBody(params, { dateField, ...timeRange }),
       });
       setData(data);
       setStatus({ success: true });

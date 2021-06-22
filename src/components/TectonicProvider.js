@@ -7,6 +7,7 @@ const TectonicProvider = ({ children, ...props }) => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
+  const [dateField, setDateField] = React.useState(props.dateField);
 
   const values = React.useMemo(() => {
     return {
@@ -16,8 +17,19 @@ const TectonicProvider = ({ children, ...props }) => {
       setBaseUrl,
       timeRange,
       setTimeRange,
+      dateField,
+      setDateField,
     };
-  }, [token, baseUrl, setToken, setBaseUrl, timeRange, setTimeRange]);
+  }, [
+    token,
+    baseUrl,
+    setToken,
+    setBaseUrl,
+    timeRange,
+    setTimeRange,
+    dateField,
+    setDateField,
+  ]);
 
   return (
     <TectonicContext.Provider value={values}>
@@ -28,8 +40,13 @@ const TectonicProvider = ({ children, ...props }) => {
 
 TectonicProvider.propTypes = {
   token: PropTypes.string,
+  dateField: PropTypes.string,
   baseUrl: PropTypes.bool,
   timeRange: PropTypes.shape({ from: PropTypes.any, to: PropTypes.any }),
+};
+
+TectonicProvider.defaultProps = {
+  dateField: "ingestedAt",
 };
 
 const useTectonicContext = () => {

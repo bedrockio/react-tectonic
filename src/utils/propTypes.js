@@ -18,6 +18,7 @@ const timeField = PropTypes.oneOfType([
 ]);
 
 export const TimeRangeType = PropTypes.shape({
-  from: timeField,
-  to: timeField,
+  from: timeField.isRequired,
+  to: timeField.isRequired,
+  timeZone: PropTypes.string,
 });

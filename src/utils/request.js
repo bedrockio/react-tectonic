@@ -92,3 +92,23 @@ export const request = async (options) => {
     throw new ApiParseError();
   }
 };
+
+export function getAnalyticsRequestBody(params, timeRange) {
+  if (!timeRange) {
+    return params;
+  }
+
+  return {
+    ...params,
+    filter: {
+      ...params.filter,
+      range: {
+        [timeRange.dateField]: {
+          gte: timeRange.from,
+          lt: timeRange.to,
+          time_zone: timeRange.timeRange,
+        },
+      },
+    },
+  };
+}

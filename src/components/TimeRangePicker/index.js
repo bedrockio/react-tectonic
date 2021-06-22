@@ -14,7 +14,6 @@ export const TimeRangePicker = ({
   const classes = ["tnic-timeRP", ...classNames].filter(Boolean);
   const [open, setOpen] = React.useState(false);
 
-
   return (
     <div className={classes.join(" ")}>
       {renderButton(timeRange?.label || "Select Time Range", () =>
@@ -43,7 +42,13 @@ TimeRangePicker.defaultProps = {
       type: "fixed",
       label: "Today",
       to: "now",
-      from: "now/d",
+      from: "now-1d/d",
+    },
+    {
+      type: "fixed",
+      label: "Yesterday",
+      to: "now-1d/d",
+      from: "now-2d/d",
     },
     {
       type: "fixed",
@@ -52,17 +57,17 @@ TimeRangePicker.defaultProps = {
       from: "now/w",
     },
     {
-      type: "custom",
+      type: "input",
       unit: "hours",
       default: 24,
     },
     {
-      type: "custom",
+      type: "input",
       unit: "days",
       default: 7,
     },
     {
-      type: "custom",
+      type: "input",
       unit: "months",
       default: 3,
     },

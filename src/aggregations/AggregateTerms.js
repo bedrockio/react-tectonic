@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
-import { request } from "../utils/request";
+import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateTerms = ({
@@ -28,10 +28,7 @@ export const AggregateTerms = ({
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: {
-          ...timeRange,
-          ...params,
-        },
+        body: getAnalyticsRequestBody(params, timeRange),
       });
       setData(data);
       setStatus({ success: true });

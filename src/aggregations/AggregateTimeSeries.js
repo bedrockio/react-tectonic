@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { request } from "../utils/request";
+import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
 
@@ -27,10 +27,7 @@ export const AggregateTimeSeries = ({
         path: "/1/analytics/time-series",
         baseUrl,
         token,
-        body: {
-          ...timeRange,
-          ...params,
-        },
+        body: getAnalyticsRequestBody(params, timeRange),
       });
       setData(data);
       setStatus({ success: true });

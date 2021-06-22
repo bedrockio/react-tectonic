@@ -19,9 +19,13 @@ export const TimeOptions = ({ active, timeOptions, onSelect }) => {
       ))}
 
       <div
-        style={active === "custom" ? activeStyle : {}}
-        className={["tnic-timeOption"].filter(Boolean)}
-        onClick={() => onSelect("custom")}
+        style={active?.type === "absolute" ? activeStyle : {}}
+        className={"tnic-timeOption"}
+        onClick={() =>
+          onSelect({
+            type: "absolute",
+          })
+        }
       >
         <span>
           <span style={{ marginRight: "1em" }}>

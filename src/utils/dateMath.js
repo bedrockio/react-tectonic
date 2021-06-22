@@ -30,3 +30,20 @@ export function convert(dms) {
   }
   return items.reduce(check, 0);
 }
+
+export const labelsToUnit = {
+  year: "y",
+  years: "y",
+  month: "M",
+  months: "M",
+  week: "w",
+  weeks: "w",
+  day: "d",
+  days: "d",
+  hour: "h",
+  hours: "h",
+  minute: "m",
+  minutes: "m",
+  second: "s",
+  seconds: "s",
+};

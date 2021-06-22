@@ -113,17 +113,6 @@ body {
   position: relative;
 }
 
-.tnic-timeRP input {
-  border: 1px solid #e0e0e0;
-  width: 34px;
-  height: 24px;
-  border-radius: 4px;
-  text-align: center;
-  margin-right: 5px;
-  margin-left: 5px;
-  box-sizing: border-box;
-}
-
 .tnic-timeRP .tnic-timeOption:hover {
   background: rgba(0, 0, 0, 0.1);
 }
@@ -149,6 +138,19 @@ body {
   width: 24px;
 
   vertical-align: middle;
+}
+
+/*** Input ***/
+
+.tnic-input {
+  border: 1px solid #e0e0e0;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 5px;
+  margin-left: 5px;
+  box-sizing: border-box;
 }
 
 /*** Button ***/
@@ -198,7 +200,7 @@ body {
 /*** Options Item ***/
 
 .tnic-timeOption {
-  height: 50px;
+  height: 48px;
   padding: 0 18px 0 12px;
   font-size: 14px;
   line-height: 22px;
@@ -206,6 +208,10 @@ body {
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
+}
+
+.tnic-timeOption .tnic-input {
+  width: 34px;
 }
 
 /*** Title ***/
@@ -237,4 +243,23 @@ body {
 
 .tnic-hovertext {
   visibility: hidden;
+}
+
+/*** DayPicker-Day ***/
+
+.tnic-dayPicker
+  .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #f0f8ff !important;
+  color: #4a90e2;
+}
+.tnic-dayPicker .DayPicker-Day {
+  border-radius: 0 !important;
+}
+.tnic-dayPicker .DayPicker-Day--start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.tnic-dayPicker .DayPicker-Day--end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
 }
