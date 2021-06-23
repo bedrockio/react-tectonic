@@ -1,6 +1,7 @@
 import React from "react";
 
 import DayPicker, { DateUtils } from "react-day-picker";
+import { toDate } from "../../utils/date";
 
 function setTime(date, timestring) {
   const [hours, minutes, seconds] = timestring.split(":");
@@ -17,6 +18,13 @@ function mergeRanges(range, timeRange) {
   };
 }
 
+function convertTimeRange(timeRange) {
+  return {
+    from: toDate(timeRange.from),
+    to: toDate(timeRange.to),
+  };
+}
+
 export const Calendar = ({
   numberOfMonths,
   onChange,
@@ -24,14 +32,11 @@ export const Calendar = ({
   maxDate,
   timeRange,
 }) => {
-  const [range, setRange] = React.useState({
-    from: timeRange.from,
-    to: timeRange.to,
-  });
+  const [range, setRange] = React.useState(convertTimeRange(timeRange));
 
   const [time, setTime] = React.useState({
     from: "00:00:00",
-    to: "23:59:59",
+    to: "24:00:00",
   });
 
   const [isLocalTzChecked, setIsLocalTzChecked] = React.useState(true);
@@ -59,7 +64,7 @@ export const Calendar = ({
         selectedDays={[from, { from, to }]}
         modifiers={modifiers}
         onDayClick={handleDayClick}
-        initialMonth={timeRange.from}
+        initialMonth={range.from}
         disabledDays={{
           after: maxDate,
           before: minDate,

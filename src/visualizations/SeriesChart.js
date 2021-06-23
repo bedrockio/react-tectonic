@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
 import { Message, ChartContainer } from "../components";
+import { useTectonicContext } from "../components/TectonicProvider";
 
 import {
   AreaChart,
@@ -30,8 +31,12 @@ export const SeriesChart = ({
   legend,
   variant,
   disableDot,
-  color = defaultColors[0],
+  color,
 }) => {
+  const ctx = useTectonicContext();
+
+  const _color = color || ctx?.theming?.primaryColor || defaultColors[0];
+
   let Chart = LineChart;
   let ChartGraph = Line;
 
@@ -92,15 +97,15 @@ export const SeriesChart = ({
             type="monotone"
             dataKey={valueField || "value"}
             name={valueFieldName || "Value"}
-            stroke={color}
+            stroke={_color}
             strokeWidth={2}
-            fill={["bar", "area"].includes(variant) ? color : undefined}
+            fill={["bar", "area"].includes(variant) ? _color : undefined}
             opacity={1}
             activeDot={
               disableDot ? { r: 0 } : { r: 6, strokeWidth: 2, fill: "#f5821f" }
             }
             dot={{
-              stroke: color,
+              stroke: _color,
               strokeWidth: 2,
               strokeOpacity: 1,
               r: 4,
@@ -131,6 +136,5 @@ SeriesChart.propTypes = {
 SeriesChart.defaultProps = {
   data: [],
   status: { success: true },
-  color: defaultColors[0],
   variant: "line",
 };

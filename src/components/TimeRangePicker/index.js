@@ -27,13 +27,17 @@ function getTimeRangeForLabel(timeRange = {}, timeOptions = []) {
 
 export const TimeRangePicker = ({
   renderButton,
-  onChange,
   classNames = [],
   timeOptions = [],
+  ...props
 }) => {
-  const { stats, timeRange, setTimeRange } = useTectonicContext();
+  const ctx = useTectonicContext();
+
   const classes = ["tnic-timeRP", ...classNames].filter(Boolean);
   const [open, setOpen] = React.useState(false);
+
+  const timeRange = props.timeRange ||
+    ctx.timeRange || { to: new Date(), from: new Date() };
 
   return (
     <div className={classes.join(" ")}>
@@ -42,13 +46,13 @@ export const TimeRangePicker = ({
       )}
       {open && (
         <Overlay
-          stats={stats}
+          stats={ctx.stats || {}}
           timeOptions={timeOptions}
           timeRange={timeRange}
           onClose={() => setOpen(false)}
-          onChange={(timeRange) => {
-            setTimeRange(timeRange);
-            onChange(timeRange);
+          onChange={(newTimeRange) => {
+            if (ctx.setTimeRange) ctx.setTimeRange(newTimeRange);
+            props.onChange(newTimeRange);
           }}
         />
       )}
@@ -70,8 +74,8 @@ TimeRangePicker.defaultProps = {
     {
       type: "fixed",
       label: "Yesterday",
-      to: "now-1d/d",
-      from: "now-2d/d",
+      to: "now-1h/d",
+      from: "now-1d/d",
     },
     {
       type: "fixed",

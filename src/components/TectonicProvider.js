@@ -16,10 +16,21 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
   const [stats, setStats] = React.useState({
     isHistorical: false,
   });
+  const [theming, setTheming] = React.useState(props.theming);
+
+  React.useEffect(() => {
+    let root = document.documentElement;
+    root.style.setProperty("--tnic-primary-color", theming.primaryColor);
+    root.style.setProperty("--tnic-secondary-color", theming.secondaryColor);
+  }, [props.theming]);
 
   const [isReady, setIsReady] = React.useState(false);
 
   async function fetchCollectionState() {
+    if (!token) {
+      return console.error("[TectonicProvider] No token provided");
+    }
+
     try {
       const data = await request({
         method: "POST",
@@ -56,6 +67,8 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
 
   const values = React.useMemo(() => {
     return {
+      theming,
+      setTheming,
       baseUrl,
       token,
       setToken,
@@ -84,6 +97,8 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
     setStats,
     stats,
     isReady,
+    theming,
+    setTheming,
   ]);
 
   return (
@@ -94,6 +109,10 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
 };
 
 TectonicProvider.propTypes = {
+  theming: PropTypes.shape({
+    primaryColor: PropTypes.string,
+    secondaryColor: PropTypes.string,
+  }),
   token: PropTypes.string,
   dateField: PropTypes.string,
   baseUrl: PropTypes.bool,
@@ -102,6 +121,10 @@ TectonicProvider.propTypes = {
 };
 
 TectonicProvider.defaultProps = {
+  theming: {
+    primaryColor: "#77a741",
+    secondaryColor: "#423629",
+  },
   dateField: "ingestedAt",
   getDefaultTimeRange: (minDate, maxDate, isHistorical) => {
     if (isHistorical) {

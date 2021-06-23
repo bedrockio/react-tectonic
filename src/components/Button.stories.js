@@ -13,6 +13,10 @@ const Template = (args) => <Button {...args}>Hello</Button>;
 
 export const Basic = (args) => <Template {...args} />;
 
+export const PrimaryButton = (args) => <Template {...args} primary />;
+
+export const DisabledButton = (args) => <Template {...args} disabled />;
+
 const IconTemplate = (args) => (
   <Button {...args}>
     <IconCalendar />
@@ -20,11 +24,3 @@ const IconTemplate = (args) => (
 );
 
 export const IconButton = (args) => <IconTemplate {...args} icon />;
-
-const WithProvider = (args) => (
-  <TectonicProvider primaryColor="#aaa">
-    <Button {...args}>Hello</Button>
-  </TectonicProvider>
-);
-
-export const WidthProvider = (args) => <WithProvider {...args} />;

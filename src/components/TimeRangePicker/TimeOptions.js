@@ -3,15 +3,11 @@ import { IconCalendar, IconChevronRight } from "../Icons";
 import { TimeOption } from "./TimeOption";
 
 export const TimeOptions = ({ active, timeOptions, onSelect }) => {
-  const activeStyle = {
-    background: "rgba(255, 165, 0, 0.73)",
-  };
-
   return (
     <div style={{ flex: 1 }}>
       {timeOptions.map((timeOption, index) => (
         <TimeOption
-          style={timeOption === active ? activeStyle : {}}
+          active={timeOption === active}
           key={index}
           onSelect={(value) => onSelect(timeOption, value)}
           {...timeOption}
@@ -19,8 +15,12 @@ export const TimeOptions = ({ active, timeOptions, onSelect }) => {
       ))}
 
       <div
-        style={active?.type === "absolute" ? activeStyle : {}}
-        className={"tnic-timeOption"}
+        className={[
+          "tnic-timeOption",
+          active?.type === "absolute" && "tnic-timeOption--active",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         onClick={() =>
           onSelect({
             type: "absolute",

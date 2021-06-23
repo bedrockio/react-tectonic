@@ -1,18 +1,21 @@
 import React from "react";
 
-export const TimeOption = ({ style = {}, onSelect, ...props }) => {
+export const TimeOption = ({ active, onSelect, ...props }) => {
   const [value, setValue] = React.useState(props.default);
   const inputRef = React.useRef(null);
   const { type, label, unit } = props;
 
   React.useEffect(() => {
-    onSelect(value);
+    if (props.default !== value) {
+      onSelect(value);
+    }
   }, [value]);
 
   return (
     <div
-      className="tnic-timeOption"
-      style={style}
+      className={["tnic-timeOption", active && "tnic-timeOption--active"]
+        .filter(Boolean)
+        .join(" ")}
       onClick={() => {
         inputRef.current?.focus();
         onSelect(value);

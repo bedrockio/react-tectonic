@@ -1,107 +1,178 @@
-const lookUp = {
-  s: 1000,
+import {
+  startOfSecond,
+  startOfMinute,
+  startOfHour,
+  startOfDay,
+  startOfWeek,
+  startOfMonth,
+  startOfYear,
+  endOfSecond,
+  endOfMinute,
+  endOfHour,
+  endOfDay,
+  endOfWeek,
+  endOfMonth,
+  endOfYear,
+  sub,
+  add,
+} from "date-fns";
+
+function startOrEndOf(start, date, unit) {
+  var outDate = new Date(Date.parse(date));
+  if (unit === "s") {
+    return start ? startOfSecond(outDate) : endOfSecond(outDate);
+  }
+  if (unit === "m") {
+    return start ? startOfMinute(outDate) : endOfMinute(outDate);
+  }
+  if (unit === "h") {
+    return start ? startOfHour(outDate) : endOfHour(outDate);
+  }
+  if (unit === "d") {
+    return start ? startOfDay(outDate) : endOfDay(outDate);
+  }
+  if (unit === "w") {
+    return start ? startOfWeek(outDate) : endOfWeek(outDate);
+  }
+  if (unit === "M") {
+    return start ? startOfMonth(outDate) : endOfMonth(outDate);
+  }
+  if (unit === "y") {
+    return start ? startOfYear(outDate) : endOfYear(outDate);
+  }
+}
+
+export const unitsMap = {
+  s: { weight: 1, name: "seconds" },
+  m: { weight: 2, name: "minutes" },
+  h: { weight: 3, name: "hours" },
+  d: { weight: 4, name: "days" },
+  w: { weight: 5, name: "weeks" },
+  M: { weight: 6, name: "months" },
+  y: { weight: 7, name: "years" },
 };
-lookUp.m = lookUp.s * 60;
-lookUp.h = lookUp.m * 60;
-lookUp.d = lookUp.h * 24;
-lookUp.w = lookUp.d * 7;
-lookUp.M = lookUp.d * 30;
-lookUp.y = lookUp.d * 365;
 
-const regexString = "(\\+|\\-)(\\d+)(" + Object.keys(lookUp).join("|") + ")";
-const regexGlobal = new RegExp(regexString, "g");
-const regexLocal = new RegExp(regexString);
+export const units = Object.keys(unitsMap).sort(
+  (a, b) => unitsMap[b].weight - unitsMap[a].weight
+);
 
-function check(count, item) {
-  var values = item.match(regexLocal);
-  if (!values || values.length === 0) {
-    return count;
+export const unitsDesc = [...units];
+export const unitsAsc = [...units].reverse();
+
+const isDate = (d) => Object.prototype.toString.call(d) === "[object Date]";
+const isValidDate = (d) => isDate(d) && !isNaN(d.valueOf());
+
+export function parse(input, options = {}) {
+  const text = input;
+  const { roundUp = false, forceNow = new Date() } = options;
+
+  if (!text) return undefined;
+  if (isDate(text)) return text;
+  if (forceNow !== undefined && !isValidDate(forceNow)) {
+    throw new Error("forceNow must be a valid Date");
   }
-  return count + (values[1] === "+" ? 1 : -1) * +values[2] * lookUp[values[3]];
+
+  let date;
+  let mathString = "";
+  let index;
+  let parseString;
+
+  if (text.substring(0, 3) === "now") {
+    date = new Date(forceNow);
+    mathString = text.substring("now".length);
+  } else {
+    index = text.indexOf("||");
+    if (index === -1) {
+      parseString = text;
+      mathString = "";
+    } else {
+      parseString = text.substring(0, index);
+      mathString = text.substring(index + 2);
+    }
+    date = new Date(Date.parse(parseString));
+  }
+
+  if (!mathString.length) {
+    return date;
+  }
+
+  return parseDateMath(mathString, date, roundUp);
 }
 
-export function convert(dms) {
-  if (typeof dms !== "string" || !dms.match(/^now/i)) {
-    return false;
-  }
-  var items = dms.match(regexGlobal);
-  if (!items || items.length === 0) {
-    return false;
-  }
-  return items.reduce(check, 0);
-}
+function parseDateMath(mathString, date, roundUp) {
+  let dateTime = date;
+  const len = mathString.length;
+  let i = 0;
 
-export const labelsToUnit = {
-  year: "y",
-  years: "y",
-  month: "M",
-  months: "M",
-  week: "w",
-  weeks: "w",
-  day: "d",
-  days: "d",
-  hour: "h",
-  hours: "h",
-  minute: "m",
-  minutes: "m",
-  second: "s",
-  seconds: "s",
-};
+  while (i < len) {
+    const c = mathString.charAt(i++);
+    let type;
+    let num;
+    let unit;
 
-const validIntervals = ["1w", "1d", "1h", "15m", "5m", "1m"];
+    if (c === "/") {
+      type = 0;
+    } else if (c === "+") {
+      type = 1;
+    } else if (c === "-") {
+      type = 2;
+    } else {
+      return;
+    }
 
-export function intervalIsAllowed(from, to, interval) {
-  const durationSeconds = (to - from) / 1000;
-  const durationMinutes = durationSeconds / 60;
-  const durationHours = durationMinutes / 60;
-  if (interval === "1w" && durationHours < 7 * 24) {
-    return false;
-  }
-  if (interval === "1d" && durationHours < 24) {
-    return false;
-  }
-  if (interval === "1h" && durationMinutes < 60) {
-    return false;
-  }
-  if (interval === "15m" && durationMinutes < 15) {
-    return false;
-  }
-  if (interval === "15m" && durationHours > 24 * 4) {
-    return false;
-  }
-  if (interval === "1h" && durationHours > 24 * 30) {
-    return false;
-  }
-  if (interval === "5m" && durationHours > 24) {
-    return false;
-  }
-  if (interval === "1m" && durationHours > 4) {
-    return false;
-  }
-  return true;
-}
+    if (isNaN(mathString.charAt(i))) {
+      num = 1;
+    } else if (mathString.length === 2) {
+      num = mathString.charAt(i);
+    } else {
+      const numFrom = i;
+      while (!isNaN(mathString.charAt(i))) {
+        i++;
+        if (i >= len) return;
+      }
+      num = parseInt(mathString.substring(numFrom, i), 10);
+    }
 
-export function determineInterval(from, to) {
-  const durationSeconds = (to - from) / 1000;
-  const durationMinutes = durationSeconds / 60;
-  const durationHours = durationMinutes / 60;
-  if (durationHours > 6 * 30 * 24) {
-    return "1w";
+    if (type === 0) {
+      // rounding is only allowed on whole, single, units (eg M or 1M, not 0.5M or 2M)
+      if (num !== 1) {
+        return;
+      }
+    }
+
+    unit = mathString.charAt(i++);
+
+    // append additional characters in the unit
+    for (let j = i; j < len; j++) {
+      const unitChar = mathString.charAt(i);
+      if (/[a-z]/i.test(unitChar)) {
+        unit += unitChar;
+        i++;
+      } else {
+        break;
+      }
+    }
+
+    if (units.indexOf(unit) === -1) {
+      return;
+    }
+
+    if (type === 0) {
+      if (roundUp) {
+        dateTime = startOrEndOf(false, dateTime, unit);
+      } else {
+        dateTime = startOrEndOf(true, dateTime, unit);
+      }
+    } else if (type === 1) {
+      dateTime = add(dateTime, {
+        [unitsMap[unit].name]: num,
+      });
+    } else if (type === 2) {
+      dateTime = sub(dateTime, {
+        [unitsMap[unit].name]: num,
+      });
+    }
   }
-  if (durationHours > 10 * 24) {
-    return "1d";
-  }
-  if (durationHours > 6) {
-    return "1h";
-  }
-  if (durationHours > 2) {
-    return "15m";
-  }
-  if (durationMinutes > 60) {
-    return "5m";
-  }
-  if (durationMinutes <= 60) {
-    return "1m";
-  }
-  return "1d";
+
+  return dateTime;
 }

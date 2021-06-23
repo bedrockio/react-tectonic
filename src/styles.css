@@ -1,3 +1,10 @@
+:root {
+  --tnic-primary-color: #77a741;
+  --tnic-primary-color-hover: #77a741d2;
+  --tnic-secondary-color: #423629;
+  --tnic-text-color-black: #2a2a2a;
+}
+
 body {
   font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
@@ -113,10 +120,6 @@ body {
   position: relative;
 }
 
-.tnic-timeRP .tnic-timeOption:hover {
-  background: rgba(0, 0, 0, 0.1);
-}
-
 .tnic-timeRP .tnic-timeOption:hover .tnic-hovertext {
   visibility: visible;
 }
@@ -159,27 +162,58 @@ body {
 .tnic-button {
   cursor: pointer;
   display: inline-block;
+  min-height: 1em;
   outline: none;
   border: none;
   vertical-align: baseline;
-  background: #e0e1e2 none;
-  color: rgba(0, 0, 0, 0.6);
-  margin: 0 0.25em 0 0;
-  padding: 0.5em 1em;
+  background: var(--tnic-primary-color) none;
+  color: #ffffff;
+  font-family: inherit;
+  margin: 0em 0.4em 0em 0.4em;
+  padding: 0.78571429em 1.5em 0.78571429em;
   text-transform: none;
   text-shadow: none;
   font-weight: bold;
   line-height: 1em;
+  font-style: normal;
   text-align: center;
-  border-radius: 0.28571429rem;
+  text-decoration: none;
+  border-radius: 0.21428571rem;
+  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
   user-select: none;
   transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
     box-shadow 0.1s ease, background 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.tnic-button--secondary {
-  background: none;
-  border: none;
+.tnic-button:hover {
+  background-color: darken(--tnic-primary-color, 20%);
+  background-color: #435e24;
+  background-image: none;
+  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
+  color: #ffffff;
+}
+
+.tnic-button--basic.tnic-button--basic {
+  background: transparent none !important;
+  color: var(--tnic-text-color-black) !important;
+  font-weight: normal;
+  border-radius: 0.21428571rem;
+  text-transform: none;
+  text-shadow: none !important;
+  box-shadow: none;
+}
+
+.tnic-button--basic:hover {
+  background: #ffffff !important;
+  color: rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 0px 0px 0px 1px rgb(34 36 38 / 35%) inset,
+    0px 0px 0px 0px #d1d5db inset;
+}
+
+.tnic-button.tnic-button--primary:hover {
+  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
+  color: #ffffff;
 }
 
 .tnic-button--icon {
@@ -209,6 +243,14 @@ body {
   align-items: center;
   cursor: pointer;
   justify-content: space-between;
+}
+
+.tnic-timeOption--active {
+  background: var(--tnic-primary-color-hover);
+}
+
+.tnic-timeOption:hover {
+  background: rgba(238, 238, 238, 0.577) !important;
 }
 
 .tnic-timeOption .tnic-input {
@@ -249,9 +291,21 @@ body {
 /*** DayPicker-Day ***/
 
 .tnic-dayPicker
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
+  background-color: var(--tnic-primary-color);
+  opacity: 0.8;
+}
+
+.tnic-dayPicker
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: var(--tnic-primary-color);
+}
+
+.tnic-dayPicker
   .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-  background-color: #f0f8ff !important;
-  color: #4a90e2;
+  background-color: var(--tnic-primary-color);
+  color: #fff;
+  opacity: 0.8;
 }
 .tnic-dayPicker .DayPicker-Day {
   border-radius: 0 !important;

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
+import { determineInterval } from "../utils/date";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateTimeSeries = ({
@@ -28,7 +29,14 @@ export const AggregateTimeSeries = ({
         baseUrl,
         token,
         body: getAnalyticsRequestBody(
-          { ...params, dateField: context.dateField },
+          {
+            ...params,
+            dateField: context.dateField,
+            interval:
+              params.interval === "auto"
+                ? determineInterval(timeRange)
+                : params.interval,
+          },
           timeRange,
           context
         ),
@@ -55,6 +63,10 @@ export const AggregateTimeSeries = ({
   return React.Children.map(children, (child) =>
     React.cloneElement(child, { data, status })
   );
+};
+
+AggregateTimeSeries.defaultProps = {
+  interval: "auto",
 };
 
 AggregateTimeSeries.propTypes = {

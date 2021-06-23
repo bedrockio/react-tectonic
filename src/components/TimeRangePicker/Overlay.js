@@ -4,12 +4,14 @@ import { Calendar } from "./Calendar";
 import { IconClose } from "../Icons";
 import { Button } from "../Button";
 import { TimeOptions } from "./TimeOptions";
-import { labelsToUnit } from "../../utils/dateMath";
+import { labelsToUnit } from "../../utils/date";
 
 export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   const [optionValue, setOptionValue] = React.useState();
   const [option, setOption] = React.useState();
   const [refreshKey, setRefreshKey] = React.useState();
+
+  console.log(option);
 
   const [validTimeOptions, setValidTimeOptions] = React.useState(
     props.timeOptions
@@ -42,11 +44,11 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   return (
     <div className="tnic-overlay">
       <div className="tnic-header">
-        <div className="tnic-title">
-          Select time range [Last entry {stats.to?.toLocaleDateString()}]
-        </div>
+        <div className="tnic-title">Select time range</div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Button onClick={handleReset}>Reset</Button>
+          <Button basic onClick={handleReset}>
+            Reset
+          </Button>
           <Button icon onClick={() => onClose()}>
             <IconClose />
           </Button>
@@ -97,7 +99,9 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
       </div>
       <div className="tnic-footer">
         <span>
-          <Button secondary>Cancel</Button>
+          <Button basic onClick={onClose}>
+            Cancel
+          </Button>
           <Button onClick={handleOnApply} disabled={!option}>
             Apply
           </Button>
