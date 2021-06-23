@@ -11,8 +11,6 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   const [option, setOption] = React.useState();
   const [refreshKey, setRefreshKey] = React.useState();
 
-  console.log(option);
-
   const [validTimeOptions, setValidTimeOptions] = React.useState(
     props.timeOptions
   );
@@ -34,9 +32,12 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
         from: `now-${optionValue}${labelsToUnit[option.unit]}`,
       });
     } else if (stats.isHistorical || option.type === "absolute") {
+      const fromStr = option.from.toLocaleDateString();
+      const toStr = option.to.toLocaleDateString();
+
       onChange({
         ...option,
-        label: `${option.from.toLocaleDateString()} - ${option.to.toLocaleDateString()}`,
+        label: toStr === fromStr ? toStr : `${fromStr} - ${toStr}`,
       });
     }
   };
@@ -63,7 +64,14 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
         }}
       >
         {!stats.isHistorical && (
-          <div style={{ width: "300px", borderTop: "1px solid #ccc" }}>
+          <div
+            style={{
+              width: "300px",
+              height: "336px",
+              overflow: "auto",
+              borderTop: "1px solid #ccc",
+            }}
+          >
             <TimeOptions
               key={refreshKey}
               timeOptions={validTimeOptions}

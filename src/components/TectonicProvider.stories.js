@@ -8,13 +8,14 @@ export default {
   component: TectonicProvider,
 };
 
-const Template = (args) => <TectonicProvider {...args} />;
+const Template = (args) => {
+  return <TectonicProvider {...args} />;
+};
 
 export const Basic = (args) => <Template {...args}>Hello world</Template>;
 
 export const Theming = (args) => (
   <Template {...args}>
-    <Button>Button</Button>
     <Button primary>Primary</Button>
     <Button basic>Basic</Button>
   </Template>

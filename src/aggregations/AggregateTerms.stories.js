@@ -3,21 +3,13 @@ import React from "react";
 import { AggregateTerms } from "./AggregateTerms";
 import { Table } from "../visualizations/Table";
 import { DonutChart } from "../visualizations/DonutChart";
-import { TectonicProvider } from "../../.storybook/decorators";
+import { TectonicProvider } from "../components/TectonicProvider";
 
 export default {
   title: "Aggregations/AggregateTerms",
   component: AggregateTerms,
-  decorators: [(Story) => <TectonicProvider>{Story()}</TectonicProvider>],
 };
 
-const Template = (args) => (
-  <AggregateTerms {...args}>
-    <Table />
-  </AggregateTerms>
-);
-
-export const Regular = Template.bind({});
 const defaultArgs = {
   collection: "bar-purchases",
   aggField: "event.server.name",
@@ -26,7 +18,34 @@ const defaultArgs = {
   termsSize: 10,
 };
 
-Regular.args = defaultArgs;
+const defaultArgsWithToken = {
+  ...defaultArgs,
+  token: window.sessionStorage.getItem("token"),
+};
+
+const TemplateWithProvider = (args) => (
+  <TectonicProvider
+    collection={window.sessionStorage.getItem("collection")}
+    token={window.sessionStorage.getItem("token")}
+    disableCollectionStats
+  >
+    <AggregateTerms {...args}>
+      <Table />
+    </AggregateTerms>
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = defaultArgs;
+
+const Template = (args) => (
+  <AggregateTerms {...args}>
+    <Table />
+  </AggregateTerms>
+);
+
+export const Basic = Template.bind({});
+Basic.args = defaultArgsWithToken;
 
 const TemplateAsFunction = (args) => (
   <AggregateTerms {...args}>
@@ -37,11 +56,11 @@ const TemplateAsFunction = (args) => (
 );
 
 export const AsFunction = TemplateAsFunction.bind({});
-AsFunction.args = defaultArgs;
+AsFunction.args = defaultArgsWithToken;
 
 export const WithError = TemplateAsFunction.bind({});
 WithError.args = {
-  ...defaultArgs,
+  ...defaultArgsWithToken,
   badAttribute: 1123,
 };
 
@@ -51,4 +70,4 @@ const TemplateDonut = (args) => (
   </AggregateTerms>
 );
 export const AsDonut = TemplateDonut.bind({});
-AsDonut.args = defaultArgs;
+AsDonut.args = defaultArgsWithToken;

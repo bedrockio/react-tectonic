@@ -1,12 +1,11 @@
 import React from "react";
-import { TectonicProvider } from "../../.storybook/decorators";
+import { TectonicProvider } from "../components/TectonicProvider";
 
 import { AggregateStats } from "./AggregateStats";
 
 export default {
   title: "Aggregations/AggregateStats",
   component: AggregateStats,
-  decorators: [(Story) => <TectonicProvider>{Story()}</TectonicProvider>],
 };
 
 const defaultArgs = {
@@ -14,14 +13,41 @@ const defaultArgs = {
   fields: ["event.consumption.price"],
 };
 
+const TemplateWithProvider = (args) => (
+  <TectonicProvider
+    collection={window.sessionStorage.getItem("collection")}
+    token={window.sessionStorage.getItem("token")}
+    disableCollectionStats
+  >
+    <AggregateStats {...args}>
+      {({ data = {}, status }) => {
+        return (
+          <div>
+            Count: {JSON.stringify(data)}
+            <br />
+            Status:{" "}
+            {status.error ? status.error.message : JSON.stringify(status.error)}
+          </div>
+        );
+      }}
+    </AggregateStats>
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = defaultArgs;
+
 const TemplateAsFunction = (args) => (
-  <AggregateStats {...args}>
+  <AggregateStats token={window.sessionStorage.getItem("token")} {...args}>
     {({ data = {}, status }) => {
       return (
         <div>
           Count: {JSON.stringify(data)}
           <br />
-          Status: {JSON.stringify(status)}
+          Status:{" "}
+          {status.error
+            ? `{"error": "${status.error.message}"}`
+            : JSON.stringify(status.error)}
         </div>
       );
     }}

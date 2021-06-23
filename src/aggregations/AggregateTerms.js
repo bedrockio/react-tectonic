@@ -11,10 +11,11 @@ export const AggregateTerms = ({
   children,
   ...params
 }) => {
-  let context = useTectonicContext();
-  if (!baseUrl) baseUrl = context.baseUrl;
-  if (!token) token = context.token;
-  if (!timeRange) timeRange = context.timeRange;
+  let ctx = useTectonicContext();
+  if (!baseUrl) baseUrl = ctx.baseUrl;
+  if (!token) token = ctx.token;
+  if (!timeRange) timeRange = ctx.timeRange;
+  const isReady = (ctx.token && ctx.isReady) || token;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -28,7 +29,11 @@ export const AggregateTerms = ({
         path: "/1/analytics/terms",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(params, timeRange, context),
+        body: getAnalyticsRequestBody({
+          params,
+          timeRange,
+          ctx,
+        }),
       });
       setData(data);
       setStatus({ success: true });
@@ -38,12 +43,12 @@ export const AggregateTerms = ({
   }
 
   React.useEffect(() => {
-    if (token) {
+    if (isReady) {
       fetchData();
-    } else {
+    } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, ...Object.values(params)]);
+  }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -58,7 +63,7 @@ AggregateTerms.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
   filter: AggregateFilterType,
-  collection: PropTypes.string.isRequired,
+  collection: PropTypes.string,
   aggField: PropTypes.string.isRequired,
   aggFieldOrder: PropTypes.oneOf(["desc", "asc"]),
   field: PropTypes.string,

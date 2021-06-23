@@ -94,7 +94,7 @@ export const SeriesChart = ({
           )}
           {legend && <Legend />}
           <ChartGraph
-            type="monotone"
+            type="monotoneX"
             dataKey={valueField || "value"}
             name={valueFieldName || "Value"}
             stroke={_color}
@@ -104,13 +104,7 @@ export const SeriesChart = ({
             activeDot={
               disableDot ? { r: 0 } : { r: 6, strokeWidth: 2, fill: "#f5821f" }
             }
-            dot={{
-              stroke: _color,
-              strokeWidth: 2,
-              strokeOpacity: 1,
-              r: 4,
-              fill: "#fff",
-            }}
+            dot={false}
             barSize={30}
           />
         </Chart>

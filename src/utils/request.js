@@ -93,16 +93,16 @@ export const request = async (options) => {
   }
 };
 
-export function getAnalyticsRequestBody(params, timeRange, context) {
+export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
   if (!timeRange) {
     return {
-      collection: context.collection,
+      collection: ctx.collection,
       ...params,
     };
   }
 
   return {
-    collection: context.collection,
+    collection: ctx.collection,
     ...params,
     filter: {
       ...params.filter,

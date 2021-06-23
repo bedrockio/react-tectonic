@@ -2,12 +2,18 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub } from "date-fns";
+import { lighten } from "../utils/color";
 
 const TectonicContext = React.createContext({});
 
 const aDay = 24 * 60 * 60 * 1000;
 
-const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
+const TectonicProvider = ({
+  disableCollectionStats,
+  getDefaultTimeRange,
+  children,
+  ...props
+}) => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
@@ -16,17 +22,17 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
   const [stats, setStats] = React.useState({
     isHistorical: false,
   });
-  const [theming, setTheming] = React.useState(props.theming);
+  const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
 
   React.useEffect(() => {
-    let root = document.documentElement;
-    root.style.setProperty("--tnic-primary-color", theming.primaryColor);
-    root.style.setProperty("--tnic-secondary-color", theming.secondaryColor);
-  }, [props.theming]);
+    const root = document.documentElement;
+    root.style.setProperty("--tnic-primary-color", primaryColor);
+    root.style.setProperty("--tnic-primary-color-hover", primaryColor + "D9");
+  }, [props.primaryColor]);
 
   const [isReady, setIsReady] = React.useState(false);
 
-  async function fetchCollectionState() {
+  async function fetchCollectionStats() {
     if (!token) {
       return console.error("[TectonicProvider] No token provided");
     }
@@ -62,13 +68,15 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
   }
 
   React.useEffect(() => {
-    fetchCollectionState();
-  }, [collection, token]);
+    if (!disableCollectionStats) {
+      fetchCollectionStats();
+    }
+  }, [collection, token, disableCollectionStats]);
 
   const values = React.useMemo(() => {
     return {
-      theming,
-      setTheming,
+      primaryColor,
+      setPrimaryColor,
       baseUrl,
       token,
       setToken,
@@ -97,8 +105,8 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
     setStats,
     stats,
     isReady,
-    theming,
-    setTheming,
+    primaryColor,
+    setPrimaryColor,
   ]);
 
   return (
@@ -109,22 +117,17 @@ const TectonicProvider = ({ getDefaultTimeRange, children, ...props }) => {
 };
 
 TectonicProvider.propTypes = {
-  theming: PropTypes.shape({
-    primaryColor: PropTypes.string,
-    secondaryColor: PropTypes.string,
-  }),
+  primaryColor: PropTypes.string,
   token: PropTypes.string,
   dateField: PropTypes.string,
   baseUrl: PropTypes.bool,
   timeRange: PropTypes.shape({ from: PropTypes.any, to: PropTypes.any }),
   getDefaultTimeRange: PropTypes.func,
+  disableCollectionStats: PropTypes.bool,
 };
 
 TectonicProvider.defaultProps = {
-  theming: {
-    primaryColor: "#77a741",
-    secondaryColor: "#423629",
-  },
+  primaryColor: "#77a741",
   dateField: "ingestedAt",
   getDefaultTimeRange: (minDate, maxDate, isHistorical) => {
     if (isHistorical) {

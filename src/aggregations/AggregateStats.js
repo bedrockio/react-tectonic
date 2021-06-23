@@ -13,10 +13,12 @@ export const AggregateStats = ({
   dateField,
   ...params
 }) => {
-  let context = useTectonicContext();
-  if (!baseUrl) baseUrl = context.baseUrl;
-  if (!token) token = context.token;
-  if (!timeRange) timeRange = context.timeRange;
+  let ctx = useTectonicContext();
+  if (!baseUrl) baseUrl = ctx.baseUrl;
+  if (!token) token = ctx.token;
+  if (!timeRange) timeRange = ctx.timeRange;
+
+  const isReady = (ctx.token && ctx.isReady) || token;
 
   const [data, setData] = React.useState({});
   const [status, setStatus] = React.useState({ loading: true });
@@ -29,7 +31,11 @@ export const AggregateStats = ({
         path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(params, timeRange, context),
+        body: getAnalyticsRequestBody({
+          params,
+          timeRange,
+          ctx,
+        }),
       });
       setData(data);
       setStatus({ success: true });
@@ -39,12 +45,19 @@ export const AggregateStats = ({
   }
 
   React.useEffect(() => {
-    if (token && context.stats) {
+    if (isReady) {
       fetchData();
-    } else {
+    } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, cardinality, timeRange, ...Object.values(params)]);
+  }, [
+    token,
+    baseUrl,
+    isReady,
+    cardinality,
+    timeRange,
+    ...Object.values(params),
+  ]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -59,7 +72,7 @@ AggregateStats.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
   cardinality: PropTypes.bool,
-  collection: PropTypes.string.isRequired,
+  collection: PropTypes.string,
   fields: PropTypes.arrayOf(PropTypes.string),
   filter: AggregateFilterType,
   timeRange: TimeRangeType,
