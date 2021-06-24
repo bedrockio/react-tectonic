@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub } from "date-fns";
-import { lighten } from "../utils/color";
+import { TimeRangeType } from "../utils/propTypes";
 
 const TectonicContext = React.createContext({});
 
@@ -10,12 +10,13 @@ const aDay = 24 * 60 * 60 * 1000;
 
 const TectonicProvider = ({
   disableCollectionStats,
-  getDefaultTimeRange,
+  getTimeRangeFromCollectionStats,
   children,
   ...props
 }) => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
+  const [timeZone, setTimeZone] = React.useState(props.timeZone);
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
   const [dateField, setDateField] = React.useState(props.dateField);
   const [collection, setCollection] = React.useState(props.collection);
@@ -30,11 +31,14 @@ const TectonicProvider = ({
     root.style.setProperty("--tnic-primary-color-hover", primaryColor + "D9");
   }, [props.primaryColor]);
 
-  const [isReady, setIsReady] = React.useState(false);
+  const [isReady, setIsReady] = React.useState(disableCollectionStats);
 
   async function fetchCollectionStats() {
-    if (!token) {
-      return console.error("[TectonicProvider] No token provided");
+    if (!collection || !token) {
+      console.error(
+        "[TectonicProvider] Please provide a `token` and `collection` or set `disableCollectionStats` to true"
+      );
+      return;
     }
 
     try {
@@ -53,13 +57,14 @@ const TectonicProvider = ({
       const to = new Date(data[dateField].max);
       const isHistorical = to.valueOf() < Date.now() - aDay - 20;
 
-      setStats({
+      const stats = {
         isHistorical,
         from,
         to,
-      });
+      };
 
-      setTimeRange(getDefaultTimeRange(from, to, isHistorical));
+      setStats(stats);
+      setTimeRange(getTimeRangeFromCollectionStats(stats));
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
@@ -75,6 +80,8 @@ const TectonicProvider = ({
 
   const values = React.useMemo(() => {
     return {
+      timeZone,
+      setTimeZone,
       primaryColor,
       setPrimaryColor,
       baseUrl,
@@ -107,6 +114,8 @@ const TectonicProvider = ({
     isReady,
     primaryColor,
     setPrimaryColor,
+    timeZone,
+    setTimeZone,
   ]);
 
   return (
@@ -119,31 +128,37 @@ const TectonicProvider = ({
 TectonicProvider.propTypes = {
   primaryColor: PropTypes.string,
   token: PropTypes.string,
+  collection: PropTypes.string,
   dateField: PropTypes.string,
   baseUrl: PropTypes.bool,
-  timeRange: PropTypes.shape({ from: PropTypes.any, to: PropTypes.any }),
-  getDefaultTimeRange: PropTypes.func,
+  defaultTimeRange: PropTypes.func,
+  timeRange: TimeRangeType,
+  getTimeRangeFromCollectionStats: PropTypes.func,
   disableCollectionStats: PropTypes.bool,
 };
 
 TectonicProvider.defaultProps = {
   primaryColor: "#77a741",
   dateField: "ingestedAt",
-  getDefaultTimeRange: (minDate, maxDate, isHistorical) => {
-    if (isHistorical) {
+  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  getTimeRangeFromCollectionStats: (stats) => {
+    if (stats.isHistorical) {
       return {
-        to: maxDate,
+        to: stats.maxDate,
         from: new Date(
-          Math.max(minDate.valueOf(), sub(maxDate, { days: 7 }).valueOf())
+          Math.max(
+            stats.minDate.valueOf(),
+            sub(stats.maxDate, { days: 7 }).valueOf()
+          )
         ),
       };
     }
 
-    const x = {
+    const timeRange = {
       to: "now",
       from: "now-1h/d",
     };
-    return x;
+    return timeRange;
   },
 };
 

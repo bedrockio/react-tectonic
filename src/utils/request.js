@@ -107,7 +107,7 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
     filter: {
       ...params.filter,
       range: {
-        [context.dateField]: {
+        [ctx.dateField]: {
           gte: timeRange.from,
           lt: timeRange.to,
           time_zone: timeRange.timeRange,

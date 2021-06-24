@@ -1,22 +1,14 @@
 import React from "react";
-import { TectonicProvider } from "../../.storybook/decorators";
 
+import { TectonicProvider } from "../components/TectonicProvider";
 import { AggregateTimeSeries } from "./AggregateTimeSeries";
 import { SeriesChart } from "../visualizations/SeriesChart";
 
 export default {
   title: "Aggregations/AggregateTimeSeries",
   component: AggregateTimeSeries,
-  decorators: [(Story) => <TectonicProvider>{Story()}</TectonicProvider>],
 };
 
-const Template = (args) => (
-  <AggregateTimeSeries {...args}>
-    <SeriesChart variant="bar" valueField="count" />
-  </AggregateTimeSeries>
-);
-
-export const Regular = Template.bind({});
 const defaultArgs = {
   collection: "bar-purchases",
   operation: "count",
@@ -24,7 +16,34 @@ const defaultArgs = {
   dateField: "event.orderedAt",
 };
 
-Regular.args = defaultArgs;
+const defaultArgsWithToken = {
+  ...defaultArgs,
+  token: window.sessionStorage.getItem("token"),
+};
+
+const TemplateWithProvider = (args) => (
+  <TectonicProvider
+    collection={window.sessionStorage.getItem("collection")}
+    token={window.sessionStorage.getItem("token")}
+    disableCollectionStats
+  >
+    <AggregateTimeSeries {...args}>
+      <SeriesChart variant="bar" valueField="count" />
+    </AggregateTimeSeries>
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = defaultArgs;
+
+const Template = (args) => (
+  <AggregateTimeSeries {...args}>
+    <SeriesChart variant="bar" valueField="count" />
+  </AggregateTimeSeries>
+);
+
+export const Basic = Template.bind({});
+Basic.args = defaultArgsWithToken;
 
 const TemplateAsFunction = (args) => (
   <AggregateTimeSeries {...args}>
@@ -42,10 +61,10 @@ const TemplateAsFunction = (args) => (
 );
 
 export const AsFunction = TemplateAsFunction.bind({});
-AsFunction.args = defaultArgs;
+AsFunction.args = defaultArgsWithToken;
 
 export const WithError = TemplateAsFunction.bind({});
 WithError.args = {
-  ...defaultArgs,
+  ...defaultArgsWithToken,
   badAttribute: 12313,
 };

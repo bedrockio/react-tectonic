@@ -12,10 +12,11 @@ export const AggregateTimeSeries = ({
   children,
   ...params
 }) => {
-  let context = useTectonicContext();
-  if (!baseUrl) baseUrl = context.baseUrl;
-  if (!token) token = context.token;
-  if (!timeRange) timeRange = context.timeRange;
+  let ctx = useTectonicContext();
+  if (!baseUrl) baseUrl = ctx.baseUrl;
+  if (!token) token = ctx.token;
+  if (!timeRange) timeRange = ctx.timeRange;
+  const isReady = (ctx.token && ctx.isReady) || token;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -28,18 +29,18 @@ export const AggregateTimeSeries = ({
         path: "/1/analytics/time-series",
         baseUrl,
         token,
-        body: getAnalyticsRequestBody(
-          {
+        body: getAnalyticsRequestBody({
+          params: {
             ...params,
-            dateField: context.dateField,
+            dateField: params.dateField || ctx.dateField,
             interval:
               params.interval === "auto"
                 ? determineInterval(timeRange)
                 : params.interval,
           },
           timeRange,
-          context
-        ),
+          ctx,
+        }),
       });
       setData(data);
       setStatus({ success: true });
@@ -49,12 +50,12 @@ export const AggregateTimeSeries = ({
   }
 
   React.useEffect(() => {
-    if (token && context.isReady) {
+    if (isReady) {
       fetchData();
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, context.isReady, timeRange, ...Object.values(params)]);
+  }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -72,7 +73,7 @@ AggregateTimeSeries.defaultProps = {
 AggregateTimeSeries.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
-  collection: PropTypes.string.isRequired,
+  collection: PropTypes.string,
   operation: PropTypes.string.isRequired,
   field: PropTypes.string,
   interval: PropTypes.string,

@@ -12,10 +12,12 @@ export const Aggregate = ({
   type,
   children,
 }) => {
-  let context = useTectonicContext();
-  if (!baseUrl) baseUrl = context.baseUrl;
-  if (!token) token = context.token;
-  if (!timeRange) timeRange = context.timeRange;
+  let ctx = useTectonicContext();
+  if (!baseUrl) baseUrl = ctx.baseUrl;
+  if (!token) token = ctx.token;
+  if (!timeRange) timeRange = ctx.timeRange;
+
+  const isReady = (ctx.token && ctx.isReady) || token;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -30,7 +32,7 @@ export const Aggregate = ({
             path: `/1/analytics/${type}`,
             baseUrl,
             token,
-            body: getAnalyticsRequestBody(requestBody, timeRange, context),
+            body: getAnalyticsRequestBody({ requestBody, timeRange, ctx }),
           })
         )
       );
@@ -42,12 +44,12 @@ export const Aggregate = ({
   }
 
   React.useEffect(() => {
-    if (token) {
+    if (isReady) {
       fetchData();
-    } else {
+    } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, requests, type]);
+  }, [token, baseUrl, isReady, requests, type]);
 
   if (typeof children === "function") {
     return children({ data, status });
