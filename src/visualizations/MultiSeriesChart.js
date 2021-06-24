@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
 import { Message, ChartContainer } from "../components";
+import { useTectonicContext } from "../components/TectonicProvider";
 
 import {
   AreaChart,
@@ -67,6 +68,8 @@ export const MultiSeriesChart = ({
   disableDot,
   status,
 }) => {
+  const ctx = useTectonicContext();
+
   let Chart = LineChart;
   let ChartGraph = Line;
   if (variant === "area") {
@@ -79,7 +82,11 @@ export const MultiSeriesChart = ({
   }
 
   const fusedData = fuse(data, valueField);
-  const finalColors = colors || defaultColors;
+
+  const _colors =
+    (colors === defaultColors &&
+      ctx?.primaryColor && [ctx?.primaryColor, ...defaultColors]) ||
+    defaultColors;
 
   const tickFormatter = formatterForDataCadence(
     data[0] || { timestamp: new Date() }
@@ -130,7 +137,7 @@ export const MultiSeriesChart = ({
           />
           {legend && <Legend iconType="circle" />}
           {data.map((data, index) => {
-            const color = finalColors[index % finalColors.length];
+            const color = _colors[index % _colors.length];
             return (
               <ChartGraph
                 type="monotone"
@@ -164,17 +171,14 @@ MultiSeriesChart.propTypes = {
    * Is this the principal call to action on the page?
    */
   data: PropTypes.arrayOf(PropTypes.array),
-  /**
-   * Color of the line or bar
-   */
-  color: PropTypes.string,
 
   variant: PropTypes.oneOf(["line", "bar", "area"]),
+  colors: PropTypes.arrayOf(PropTypes.string),
 };
 
 MultiSeriesChart.defaultProps = {
   data: [],
   status: { success: true },
-  color: defaultColors[0],
+  colors: defaultColors,
   variant: "line",
 };

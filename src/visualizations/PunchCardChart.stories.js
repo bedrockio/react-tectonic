@@ -2,6 +2,7 @@ import React from "react";
 
 import { PunchCardChart } from "./PunchCardChart";
 
+/*
 export default {
   title: "Visualizations/PunchCardChart",
   component: PunchCardChart,
@@ -19,6 +20,7 @@ export default {
     },
   },
 };
+*/
 
 export const PunchCardChartWithData = PunchCardChart.bind({});
 

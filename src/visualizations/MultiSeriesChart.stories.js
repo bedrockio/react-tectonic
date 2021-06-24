@@ -1,6 +1,7 @@
 import React from "react";
 
 import { MultiSeriesChart } from "./MultiSeriesChart";
+import { TectonicProvider } from "../components/TectonicProvider";
 
 const data1 = [
   {
@@ -118,6 +119,18 @@ export default {
       },
     },
   },
+};
+
+const TemplateWithProvider = (args) => (
+  <TectonicProvider>
+    <MultiSeriesChart {...args} />
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = {
+  data: [data1, data2],
+  status: "success",
 };
 
 const Template = (args) => <MultiSeriesChart {...args} />;

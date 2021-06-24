@@ -68,6 +68,7 @@ const TectonicProvider = ({
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
+      console.error(e);
       setStats({});
     }
   }
@@ -144,12 +145,9 @@ TectonicProvider.defaultProps = {
   getTimeRangeFromCollectionStats: (stats) => {
     if (stats.isHistorical) {
       return {
-        to: stats.maxDate,
+        to: stats.to,
         from: new Date(
-          Math.max(
-            stats.minDate.valueOf(),
-            sub(stats.maxDate, { days: 7 }).valueOf()
-          )
+          Math.max(stats.from.valueOf(), sub(stats.to, { days: 7 }).valueOf())
         ),
       };
     }
