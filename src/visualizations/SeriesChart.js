@@ -35,7 +35,7 @@ export const SeriesChart = ({
 }) => {
   const ctx = useTectonicContext();
 
-  const _color = color || ctx?.theming?.primaryColor || defaultColors[0];
+  const _color = color || ctx?.primaryColor || defaultColors[0];
 
   let Chart = LineChart;
   let ChartGraph = Line;

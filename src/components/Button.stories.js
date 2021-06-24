@@ -1,6 +1,5 @@
 import React from "react";
 
-import { TectonicProvider } from "./TectonicProvider";
 import { IconCalendar } from "./Icons";
 import { Button } from "./Button";
 

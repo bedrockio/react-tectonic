@@ -1,6 +1,7 @@
 import React from "react";
 
 import { DonutChart } from "./DonutChart";
+import { TectonicProvider } from "../components/TectonicProvider";
 
 export default {
   title: "Visualizations/DonutChart",
@@ -18,6 +19,25 @@ export default {
       },
     },
   },
+};
+
+const TemplateWithProvider = (args) => (
+  <TectonicProvider>
+    <DonutChart {...args} />
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = {
+  data: [
+    { key: "Cocktail", count: 2372, value: 0 },
+    { key: "Liquor", count: 1078, value: 0 },
+    { key: "Wine", count: 619, value: 0 },
+    { key: "Food", count: 540, value: 0 },
+    { key: "Beverage", count: 354, value: 0 },
+    { key: "Beer", count: 294, value: 0 },
+  ],
+  status: "success",
 };
 
 const Template = (args) => <DonutChart {...args} />;

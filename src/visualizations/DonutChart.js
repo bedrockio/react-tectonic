@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { useTectonicContext } from "../components/TectonicProvider";
 import { startCase } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors } from "../utils/visualization";
@@ -30,6 +31,7 @@ export const DonutChart = ({
   colors,
   colorFn,
 }) => {
+  const ctx = useTectonicContext();
   let trimmedData = data;
   if (limit) {
     const other = { key: "Other", count: 0, value: 0 };
@@ -42,6 +44,11 @@ export const DonutChart = ({
       trimmedData.push(other);
     }
   }
+
+  const _colors =
+    (colors === defaultColors &&
+      ctx?.primaryColor && [ctx?.primaryColor, ...defaultColors]) ||
+    defaultColors;
 
   let total = 0;
   data.forEach((item) => {
@@ -89,7 +96,7 @@ export const DonutChart = ({
                 fill={
                   colorFn
                     ? colorFn(entry, index)
-                    : colors[index % colors.length]
+                    : _colors[index % _colors.length]
                 }
               />
             ))}
