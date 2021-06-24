@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
-import { sub } from "date-fns";
+import { sub, startOfDay, endOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
 
 const TectonicContext = React.createContext({});
@@ -26,9 +26,37 @@ const TectonicProvider = ({
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
 
   React.useEffect(() => {
+    setToken(props.token);
+  }, [props.token]);
+
+  React.useEffect(() => {
+    setBaseUrl(props.baseUrl);
+  }, [props.baseUrl]);
+
+  React.useEffect(() => {
+    setTimeZone(props.timeZone);
+  }, [props.timeZone]);
+
+  React.useEffect(() => {
+    setTimeRange(props.timeRange);
+  }, [props.timeRange]);
+
+  React.useEffect(() => {
+    setDateField(props.dateField);
+  }, [props.dateField]);
+
+  React.useEffect(() => {
+    setCollection(props.collection);
+  }, [props.collection]);
+
+  React.useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--tnic-primary-color", primaryColor);
-    root.style.setProperty("--tnic-primary-color-hover", primaryColor + "D9");
+    root.style.setProperty("--tnic-primary-color", props.primaryColor);
+    root.style.setProperty(
+      "--tnic-primary-color-hover",
+      props.primaryColor + "D9"
+    );
+    setPrimaryColor(primaryColor);
   }, [props.primaryColor]);
 
   const [isReady, setIsReady] = React.useState(disableCollectionStats);
@@ -146,8 +174,10 @@ TectonicProvider.defaultProps = {
     if (stats.isHistorical) {
       return {
         to: stats.to,
-        from: new Date(
-          Math.max(stats.from.valueOf(), sub(stats.to, { days: 7 }).valueOf())
+        from: startOfDay(
+          new Date(
+            Math.max(stats.from.valueOf(), sub(stats.to, { days: 7 }).valueOf())
+          )
         ),
       };
     }
