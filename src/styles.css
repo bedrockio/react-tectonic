@@ -257,10 +257,13 @@ body {
 
 .tnic-timeOption.tnic-timeOption--active {
   background: var(--tnic-primary-color-hover) !important;
+  color: #fff;
+  font-weight: bold;
 }
 
 .tnic-timeOption:hover {
   background: rgba(238, 238, 238, 0.577);
+  opacity: 0.8;
 }
 
 .tnic-timeOption .tnic-input {

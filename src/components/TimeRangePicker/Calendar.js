@@ -37,8 +37,8 @@ export const Calendar = ({
   const [range, setRange] = React.useState(convertedTimeRange);
 
   const [time, setTime] = React.useState({
-    from: format(convertedTimeRange.from, "hh:mm:ss"),
-    to: format(convertedTimeRange.to, "hh:mm:ss"),
+    from: format(convertedTimeRange.from, "HH:mm:ss"),
+    to: format(convertedTimeRange.to, "HH:mm:ss"),
   });
 
   React.useEffect(() => {

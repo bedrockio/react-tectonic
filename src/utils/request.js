@@ -101,6 +101,17 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
     };
   }
 
+  let to = timeRange.to;
+  if (timeRange.to instanceof Date) {
+    if (
+      timeRange.to.getSeconds() === 59 &&
+      timeRange.to.getMinutes() == 59 &&
+      timeRange.to.getHours() == 23
+    ) {
+      to = new Date(timeRange.to.valueOf() + 1000);
+    }
+  }
+
   return {
     collection: ctx.collection,
     ...params,
@@ -109,7 +120,7 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
       range: {
         [ctx.dateField]: {
           gte: timeRange.from,
-          lt: timeRange.to,
+          lt: to,
           time_zone: timeRange.timeRange,
         },
       },
