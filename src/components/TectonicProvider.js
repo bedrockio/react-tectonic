@@ -1,15 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
-import { sub, startOfDay, endOfDay } from "date-fns";
+import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
+import { version } from "../../package.json";
 
 const TectonicContext = React.createContext({});
 
 const aDay = 24 * 60 * 60 * 1000;
 
 const TectonicProvider = ({
-  disableCollectionStats,
+  disableInitialization,
   getTimeRangeFromCollectionStats,
   children,
   ...props
@@ -24,6 +25,7 @@ const TectonicProvider = ({
     isHistorical: false,
   });
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
+  const [isReady, setIsReady] = React.useState(disableInitialization);
 
   React.useEffect(() => {
     setToken(props.token);
@@ -58,8 +60,6 @@ const TectonicProvider = ({
     );
     setPrimaryColor(primaryColor);
   }, [props.primaryColor]);
-
-  const [isReady, setIsReady] = React.useState(disableCollectionStats);
 
   async function fetchCollectionStats() {
     if (!collection || !token) {
@@ -96,16 +96,42 @@ const TectonicProvider = ({
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
-      console.error(e);
-      setStats({});
+      console.error(
+        `["TectonicProvider"] Failed to look up collection (${collection}) stats ${e.message}`
+      );
+    }
+  }
+
+  async function fetchTectonicVersion() {
+    try {
+      const data = await request({
+        method: "GET",
+        path: "/",
+        baseUrl,
+      });
+
+      const majorVersion = Number(version.split(".")[0]);
+      if (majorVersion !== Number(data.version.split(".")[0])) {
+        console.error(
+          `[TectonicProvider] The Tectonic version (${data.version}) doesn't match react-tectonic (${version})`
+        );
+      }
+    } catch (e) {
+      console.error(`["TectonicProvider"] Failed to look up Tectonic version`);
     }
   }
 
   React.useEffect(() => {
-    if (!disableCollectionStats) {
+    if (!disableInitialization) {
+      fetchTectonicVersion();
+    }
+  }, [disableInitialization]);
+
+  React.useEffect(() => {
+    if (!disableInitialization) {
       fetchCollectionStats();
     }
-  }, [collection, token, disableCollectionStats]);
+  }, [collection, token, disableInitialization]);
 
   const values = React.useMemo(() => {
     return {
@@ -163,7 +189,7 @@ TectonicProvider.propTypes = {
   defaultTimeRange: PropTypes.func,
   timeRange: TimeRangeType,
   getTimeRangeFromCollectionStats: PropTypes.func,
-  disableCollectionStats: PropTypes.bool,
+  disableInitialization: PropTypes.bool,
 };
 
 TectonicProvider.defaultProps = {

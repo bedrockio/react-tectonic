@@ -25,7 +25,7 @@ const TemplateWithProvider = (args) => (
   <TectonicProvider
     collection={window.sessionStorage.getItem("collection")}
     token={window.sessionStorage.getItem("token")}
-    disableCollectionStats
+    disableInitialization
   >
     <AggregateTimeSeries {...args}>
       <SeriesChart variant="bar" valueField="count" />

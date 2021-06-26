@@ -27,7 +27,7 @@ const TemplateWithProvider = (args) => (
   <TectonicProvider
     collection={window.sessionStorage.getItem("collection")}
     token={window.sessionStorage.getItem("token")}
-    disableCollectionStats
+    disableInitialization
   >
     <AggregateTerms {...args}>
       <Table />

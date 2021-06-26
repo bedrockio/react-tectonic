@@ -1,3 +1,4 @@
+import { version } from "../../package.json";
 class CustomError extends Error {
   get name() {
     return this.constructor.name;
@@ -36,6 +37,7 @@ export const request = async (options) => {
       ...(token && {
         Authorization: `Bearer ${token}`,
       }),
+      Client: `react-tectonic/${version}`,
     },
     options.headers
   );
