@@ -10,6 +10,8 @@ export const AggregateTimeSeries = ({
   token,
   timeRange,
   children,
+  interval: propsInterval,
+  onIntervalChange,
   ...params
 }) => {
   let ctx = useTectonicContext();
@@ -17,6 +19,15 @@ export const AggregateTimeSeries = ({
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
   const isReady = (ctx.token && ctx.isReady) || token;
+  const [interval, setInterval] = React.useState(propsInterval);
+
+  React.useEffect(() => {
+    setInterval(propsInterval);
+  }, [propsInterval]);
+
+  React.useEffect(() => {
+    onIntervalChange(interval);
+  }, [interval]);
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -34,9 +45,7 @@ export const AggregateTimeSeries = ({
             ...params,
             dateField: params.dateField || ctx.dateField,
             interval:
-              params.interval === "auto"
-                ? determineInterval(timeRange)
-                : params.interval,
+              interval === "auto" ? determineInterval(timeRange) : interval,
           },
           timeRange,
           ctx,
@@ -55,10 +64,10 @@ export const AggregateTimeSeries = ({
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
+  }, [token, baseUrl, isReady, interval, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
-    return children({ data, status });
+    return children({ data, status, interval, setInterval });
   }
 
   return React.Children.map(children, (child) =>
@@ -68,6 +77,7 @@ export const AggregateTimeSeries = ({
 
 AggregateTimeSeries.defaultProps = {
   interval: "auto",
+  onIntervalChange: () => {},
 };
 
 AggregateTimeSeries.propTypes = {
@@ -77,6 +87,7 @@ AggregateTimeSeries.propTypes = {
   operation: PropTypes.string.isRequired,
   field: PropTypes.string,
   interval: PropTypes.string,
+  onIntervalChange: PropTypes.func,
   dateField: PropTypes.string,
   filter: AggregateFilterType,
   timeRange: TimeRangeType,

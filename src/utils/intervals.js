@@ -1,34 +1,38 @@
-const validIntervals = ["1w", "1d", "1h", "15m", "5m", "1m"];
+const intervals = {
+  "1s": 1,
+  "10s": 10,
+  "1m": 60,
+  "5m": 5 * 60,
+  "10m": 10 * 60,
+  "15m": 15 * 60,
+  "30m": 30 * 60,
+  "1h": 60 * 60,
+  "1d": 24 * 60 * 60,
+  "1w": 7 * 24 * 60 * 60,
+  "1M": 30 * 24 * 60 * 60,
+  "1y": 365 * 24 * 60 * 60,
+};
 
-export function intervalIsAllowed(from, to, interval) {
+const intervalList = Object.keys(intervals).map((key) => {
+  return {
+    key,
+    duration: intervals[key],
+  };
+});
+
+const maxBucketSize = 500;
+
+export function validIntervals(from, to) {
   const durationSeconds = (to - from) / 1000;
-  const durationMinutes = durationSeconds / 60;
-  const durationHours = durationMinutes / 60;
-  if (interval === "1w" && durationHours < 7 * 24) {
-    return false;
-  }
-  if (interval === "1d" && durationHours < 24) {
-    return false;
-  }
-  if (interval === "1h" && durationMinutes < 60) {
-    return false;
-  }
-  if (interval === "15m" && durationMinutes < 15) {
-    return false;
-  }
-  if (interval === "15m" && durationHours > 24 * 4) {
-    return false;
-  }
-  if (interval === "1h" && durationHours > 24 * 30) {
-    return false;
-  }
-  if (interval === "5m" && durationHours > 24) {
-    return false;
-  }
-  if (interval === "1m" && durationHours > 4) {
-    return false;
-  }
-  return true;
+
+  const validIntervals = intervalList
+    .filter((item) => {
+      const numberOfBuckets = Math.floor(durationSeconds / item.duration);
+      return numberOfBuckets > 1 && maxBucketSize > numberOfBuckets;
+    })
+    .map((item) => item.key);
+
+  return validIntervals;
 }
 
 export function determineInterval(from, to) {

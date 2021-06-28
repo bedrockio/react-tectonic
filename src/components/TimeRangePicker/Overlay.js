@@ -50,7 +50,7 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
           <Button basic onClick={handleReset}>
             Reset
           </Button>
-          <Button icon onClick={() => onClose()}>
+          <Button basic icon onClick={() => onClose()}>
             <IconClose />
           </Button>
         </div>

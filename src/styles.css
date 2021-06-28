@@ -159,29 +159,23 @@ body {
 /*** Button ***/
 
 .tnic-button {
+  color: inherit;
+  border: 0;
   cursor: pointer;
-  display: inline-block;
-  min-height: 1em;
-  outline: none;
-  border: none;
-  vertical-align: baseline;
-  background: var(--tnic-primary-color) none;
-  color: #ffffff;
-  font-family: inherit;
-  margin: 0em 0.4em 0em 0.4em;
-  padding: 0.78571429em 1.5em 0.78571429em;
-  text-transform: none;
-  text-shadow: none;
-  font-weight: bold;
-  line-height: 1em;
-  font-style: normal;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 0.21428571rem;
-  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
+  margin: 0;
+  display: inline-flex;
+  outline: 0;
+  padding: 0;
+  position: relative;
+  align-items: center;
   user-select: none;
-  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
-    box-shadow 0.1s ease, background 0.1s ease;
+  border-radius: 0;
+  vertical-align: middle;
+  -moz-appearance: none;
+  justify-content: center;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -203,10 +197,14 @@ body {
 }
 
 .tnic-button.tnic-button--basic:hover {
-  background: #ffffff !important;
+  background: none !important;
   color: rgba(0, 0, 0, 0.8) !important;
   box-shadow: 0px 0px 0px 1px rgb(34 36 38 / 35%) inset,
     0px 0px 0px 0px #d1d5db inset;
+}
+
+.tnic-button.tnic-button--compact {
+  padding: 0.58928571em 1.125em 0.58928571em !important;
 }
 
 .tnic-button.tnic-button--primary:hover {
@@ -220,17 +218,15 @@ body {
 }
 
 .tnic-button--icon {
-  background: none;
-  border: none;
-  line-height: 24px;
-  margin: 0;
-  padding: 0;
+  margin: 0em 0.4em 0em 0.4em;
+  padding: 5px;
+  border-radius: 0.21428571rem;
 }
 
 .tnic-button.tnic-button--icon:hover {
   color: var(--tnic-primary-color-hover);
-  background: none;
-  transform: scale(1.2);
+  box-shadow: 0px 0px 0px 1px rgb(34 36 38 / 35%) inset,
+    0px 0px 0px 0px #d1d5db inset;
 }
 
 .tnic-button--disabled {

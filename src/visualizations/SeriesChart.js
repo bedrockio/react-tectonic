@@ -31,6 +31,9 @@ export const SeriesChart = ({
   legend,
   variant,
   disableDot,
+  interval,
+  onIntervalChange,
+  timeRange,
   color,
 }) => {
   const ctx = useTectonicContext();
@@ -55,7 +58,11 @@ export const SeriesChart = ({
   const noData = !data || !data.length;
 
   return (
-    <ChartContainer>
+    <ChartContainer
+      timeRange={timeRange}
+      interval={interval}
+      onIntervalChange={onIntervalChange}
+    >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
       )}
@@ -115,6 +122,8 @@ export const SeriesChart = ({
 
 SeriesChart.propTypes = {
   status: PropTypes.object,
+  interval: PropTypes.interval,
+  onIntervalChange: PropTypes.func,
   /**
    * Is this the principal call to action on the page?
    */
