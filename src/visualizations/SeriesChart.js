@@ -3,7 +3,10 @@ import PropTypes from "prop-types";
 
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
-import { Message, ChartContainer } from "../components";
+import {
+  Message,
+  ChartContainer as DefaultChartContainer,
+} from "../components";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 import {
@@ -28,7 +31,9 @@ export const SeriesChart = ({
   valueField,
   valueFieldName,
   valueFieldFormatter,
+  chartContainer: ChartContainer,
   legend,
+  title,
   variant,
   disableDot,
   interval,
@@ -59,6 +64,7 @@ export const SeriesChart = ({
 
   return (
     <ChartContainer
+      title={title}
       timeRange={timeRange}
       interval={interval}
       onIntervalChange={onIntervalChange}
@@ -73,10 +79,10 @@ export const SeriesChart = ({
           key={status.success} //ensure that destroy the chat as we have d
           data={data}
           margin={{
-            top: 5,
-            right: 20,
-            left: 25,
-            bottom: 5,
+            top: 6,
+            right: 6,
+            left: 6,
+            bottom: 6,
           }}
         >
           <XAxis
@@ -92,7 +98,10 @@ export const SeriesChart = ({
             tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
-            tickMargin={8}
+            tickMargin={10}
+            orientation="left"
+            type="number"
+            mirror
           />
           {variant !== "bar" && (
             <Tooltip
@@ -121,6 +130,7 @@ export const SeriesChart = ({
 };
 
 SeriesChart.propTypes = {
+  title: PropTypes.string,
   status: PropTypes.object,
   interval: PropTypes.interval,
   onIntervalChange: PropTypes.func,
@@ -140,4 +150,5 @@ SeriesChart.defaultProps = {
   data: [],
   status: { success: true },
   variant: "line",
+  chartContainer: DefaultChartContainer,
 };

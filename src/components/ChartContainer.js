@@ -3,18 +3,18 @@ import PropTypes from "prop-types";
 import { validIntervals } from "../utils/intervals";
 import { toDate } from "../utils/date";
 import { TimeRangeType } from "../utils/propTypes";
-import { Button } from "../components/Button";
-import { BarChart, LineChart } from "../components/Icons";
-
+import { Dropdown } from "../components/Dropdown";
+import { BarChart, LineChart, IconMore } from "../components/Icons";
 export const ChartContainer = ({
   children,
   height,
+  title,
   interval,
   timeRange,
   onIntervalChange,
   classNames,
 }) => {
-  const classes = ["tnic-chart", classNames].filter(Boolean);
+  const classes = ["tnic-chartContainer", classNames].filter(Boolean);
 
   const intervals = validIntervals(
     toDate(timeRange?.from),
@@ -23,31 +23,49 @@ export const ChartContainer = ({
 
   return (
     <div style={{ height: `${height}px` }} className={classes.join(" ")}>
-      <div
-        style={{
-          position: "absolute",
-          zIndex: 1000,
-          top: "1.4em",
-          right: "1em",
-          width: "100%",
-        }}
-      >
-        <div>
-          Display:
-          <Button compact basic icon>
-            <BarChart />
-          </Button>
-          <Button compact basic icon>
-            <LineChart />
-          </Button>
-        </div>
-        <div>
-          intervals:
-          {intervals.map((interval) => (
-            <Button basic compact key={interval}>
-              {interval}
-            </Button>
-          ))}
+      <div className="tnic-chartContainer--container">
+        <div className="tnic-chartContainer--title tnic-title">{title}</div>
+        <div
+          className="tnic-chartContainer--actions"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flex: 0,
+          }}
+        >
+          <Dropdown
+            title="Display"
+            options={[
+              {
+                label: "Line",
+                icon: LineChart,
+              },
+              {
+                label: "Bar",
+                icon: BarChart,
+              },
+            ]}
+          />
+          <Dropdown
+            title="Interval"
+            options={intervals.map((interval) => {
+              return {
+                label: interval,
+              };
+            })}
+          />
+          <Dropdown
+            icon={IconMore}
+            alignMenu="right"
+            options={[
+              {
+                label: "Export Chart Data",
+              },
+              {
+                label: "Download Image",
+              },
+            ]}
+          />
         </div>
       </div>
 

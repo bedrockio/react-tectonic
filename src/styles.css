@@ -2,6 +2,7 @@
   --tnic-primary-color: #77a741;
   --tnic-primary-color-hover: #77a741d9;
   --tnic-text-color-black: #2a2a2a;
+  --tnic-font-size: 14px;
 }
 
 body {
@@ -16,7 +17,7 @@ body {
 /*** Message ***/
 
 .tnic-message {
-  font-size: 1em;
+  font-size: var(--tnic-font-size);
   position: relative;
   min-height: 1em;
   margin: 1em 0;
@@ -137,9 +138,8 @@ body {
 .tnic-icon {
   background-repeat: no-repeat;
   display: inline-block;
-  height: 24px;
-  width: 24px;
-
+  height: 20px;
+  width: 20px;
   vertical-align: middle;
 }
 
@@ -159,23 +159,30 @@ body {
 /*** Button ***/
 
 .tnic-button {
-  color: inherit;
-  border: 0;
   cursor: pointer;
-  margin: 0;
-  display: inline-flex;
-  outline: 0;
-  padding: 0;
-  position: relative;
-  align-items: center;
-  user-select: none;
-  border-radius: 0;
-  vertical-align: middle;
-  -moz-appearance: none;
-  justify-content: center;
+  display: inline-block;
+  min-height: 1em;
+  font-size: var(--tnic-font-size);
+  outline: none;
+  border: none;
+  vertical-align: baseline;
+  background: var(--tnic-primary-color) none;
+  color: #ffffff;
+  font-family: inherit;
+  margin: 0em 0.4em 0em 0.4em;
+  padding: 0.78571429em 1.5em 0.78571429em;
+  text-transform: none;
+  text-shadow: none;
+  font-weight: bold;
+  line-height: 1em;
+  font-style: normal;
+  text-align: center;
   text-decoration: none;
-  background-color: transparent;
-  -webkit-appearance: none;
+  border-radius: 0.21428571rem;
+  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
+  user-select: none;
+  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
+    box-shadow 0.1s ease, background 0.1s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -219,8 +226,15 @@ body {
 
 .tnic-button--icon {
   margin: 0em 0.4em 0em 0.4em;
-  padding: 5px;
-  border-radius: 0.21428571rem;
+  padding: 4px;
+  border-radius: 15%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.tnic-button.tnic-button--compact.tnic-button--icon {
+  padding: 4px !important;
 }
 
 .tnic-button.tnic-button--icon:hover {
@@ -242,7 +256,7 @@ body {
 .tnic-timeOption {
   height: 48px;
   padding: 0 18px 0 12px;
-  font-size: 14px;
+  font-size: var(--tnic-font-size);
   line-height: 22px;
   display: flex;
   align-items: center;
@@ -268,7 +282,6 @@ body {
 
 /*** Title ***/
 .tnic-title {
-  line-height: 22px;
   font-weight: bold;
   flex: 1;
 }
@@ -326,4 +339,118 @@ body {
 .tnic-dayPicker .DayPicker-Day--end {
   border-top-right-radius: 50% !important;
   border-bottom-right-radius: 50% !important;
+}
+
+/*** Dropdown ***/
+.tnic-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.tnic-dropdown .tnic-button {
+  padding: 0 5px;
+  line-height: 30px;
+  background: none;
+  color: var(--tnic-text-color-black);
+  font-weight: normal;
+}
+
+.tnic-dropdown .tnic-button:hover {
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.tnic-dropdown__active .tnic-dropdown--menu {
+  display: block !important;
+  visibility: visible !important;
+}
+
+.tnic-dropdown__right .tnic-dropdown--menu {
+  right: 0;
+}
+
+.tnic-dropdown__left .tnic-dropdown--menu {
+  left: 0;
+}
+
+.tnic-dropdown__center .tnic-dropdown--menu {
+  left: 0;
+  right: 0;
+}
+
+.tnic-dropdown--menu {
+  cursor: auto;
+  position: absolute;
+  display: none;
+  outline: 0;
+  user-select: none;
+  top: 105%;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  margin: 0;
+  padding: 5px 0;
+  background: #fff;
+  font-size: var(--tnic-font-size);
+  text-shadow: none;
+  text-align: left;
+  box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+  z-index: 11;
+}
+
+.tnic-dropdown--item {
+  position: relative;
+  cursor: pointer;
+  display: block;
+  border: none;
+  height: auto;
+  text-align: left;
+  border-top: none;
+  line-height: 1em;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 0.6em;
+  font-size: var(--tnic-font-size);
+  text-transform: none;
+  font-weight: 400;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-touch-callout: none;
+}
+
+.tnic-dropdown--item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.tnic-dropdown--item .tnic-icon {
+  margin-right: 0.5em;
+}
+
+/** ChartContainer **/
+
+.tnic-chartContainer {
+  padding: 0.5em;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.tnic-chartContainer--container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.2em;
+  margin-top: -0.3em;
+}
+
+.tnic-chartContainer--title {
+  flex: 1;
+  font-size: var(--tnic-font-size);
+  display: flex;
+  align-items: center;
+}
+
+.tnic-chartContainer--actions {
+  flex: 0;
 }

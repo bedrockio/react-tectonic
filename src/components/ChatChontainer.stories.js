@@ -9,7 +9,11 @@ export default {
 };
 
 const Template = (args) => (
-  <ChartContainer {...args} timeRange={{ from: "now-1M", to: "now" }}>
+  <ChartContainer
+    {...args}
+    title="Chart with title"
+    timeRange={{ from: "now-1M", to: "now" }}
+  >
     <ResponsiveContainer height={400}>
       <div style={{ backgroundColor: "blue", height: `100%` }}>Chart</div>
     </ResponsiveContainer>

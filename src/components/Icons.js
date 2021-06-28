@@ -59,6 +59,16 @@ export const IconClose = () => {
   );
 };
 
+export const IconMore = () => {
+  return (
+    <span className="tnic-icon">
+      <svg viewBox="0 0 18 18" focusable="false">
+        <path d="M9 6a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 5a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"></path>
+      </svg>
+    </span>
+  );
+};
+
 export const IconChevronRight = () => {
   return (
     <span className="tnic-icon">
