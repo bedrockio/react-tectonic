@@ -47,10 +47,10 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
       <div className="tnic-header">
         <div className="tnic-title">Select time range</div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Button basic onClick={handleReset}>
+          <Button compact basic onClick={handleReset}>
             Reset
           </Button>
-          <Button basic icon onClick={() => onClose()}>
+          <Button compact basic icon onClick={() => onClose()}>
             <IconClose />
           </Button>
         </div>
@@ -107,10 +107,10 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
       </div>
       <div className="tnic-footer">
         <span>
-          <Button basic onClick={onClose}>
+          <Button compact basic onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleOnApply} disabled={!option}>
+          <Button compact onClick={handleOnApply} disabled={!option}>
             Apply
           </Button>
         </span>

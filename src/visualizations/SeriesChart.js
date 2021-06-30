@@ -46,7 +46,7 @@ export const SeriesChart = ({
   chartContainer: ChartContainer,
   legend,
   title,
-  variant: propsVariant,
+  chartType: propsChartType,
   disableDot,
   onIntervalChange,
   timeRange,
@@ -55,7 +55,7 @@ export const SeriesChart = ({
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
-  const [variant, setVariant] = React.useState(propsVariant || "line");
+  const [chartType, setChartType] = React.useState(propsChartType || "line");
 
   const svgChartRef = React.createRef();
 
@@ -63,21 +63,20 @@ export const SeriesChart = ({
   let ChartGraph = Line;
 
   React.useEffect(() => {
-    setVariant(propsVariant);
-  }, [propsVariant]);
+    setChartType(propsChartType);
+  }, [propsChartType]);
 
-  if (variant == "area") {
+  if (chartType == "area") {
     Chart = AreaChart;
     ChartGraph = Area;
   }
-  if (variant === "bar") {
+  if (chartType === "bar") {
     Chart = BarChart;
     ChartGraph = Bar;
   }
 
   const tickFormatter = formatterForDataCadence(data);
 
-  const defaultValueFieldFormatter = (value) => numberWithCommas(value);
   const noData = !data || !data.length;
 
   const intervals =
@@ -123,7 +122,7 @@ export const SeriesChart = ({
           value: interval,
         };
       })}
-      variants={[
+      chartTypes={[
         {
           label: "Line",
           value: "line",
@@ -141,8 +140,8 @@ export const SeriesChart = ({
         },
       ]}
       actions={defaultActions}
-      onVariant={(option) => setVariant(option.value)}
-      onAction={handleAction}
+      onChartTypeChange={(option) => setChartType(option.value)}
+      onActionChange={handleAction}
       timeRange={timeRange}
       onIntervalChange={onIntervalChange}
     >
@@ -154,7 +153,7 @@ export const SeriesChart = ({
       <ResponsiveContainer height={400}>
         <Chart
           ref={svgChartRef}
-          key={`${variant}-${status.success}`} //ensure that destroy the chat as we have d
+          key={`${chartType}-${status.success}`} //ensure that destroy the chat as we have d
           data={data}
           margin={{
             top: 6,
@@ -173,7 +172,7 @@ export const SeriesChart = ({
             tickMargin={5}
           />
           <YAxis
-            tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
+            tickFormatter={valueFieldFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
             tickMargin={4}
@@ -181,7 +180,7 @@ export const SeriesChart = ({
             type="number"
             mirror
           />
-          {variant !== "bar" && (
+          {chartType !== "bar" && (
             <Tooltip
               labelFormatter={(unixTime) => new Date(unixTime).toLocaleString()}
             />
@@ -193,7 +192,7 @@ export const SeriesChart = ({
             name={valueFieldName || "Value"}
             stroke={_color}
             strokeWidth={2}
-            fill={["bar", "area"].includes(variant) ? _color : undefined}
+            fill={["bar", "area"].includes(chartType) ? _color : undefined}
             opacity={1}
             activeDot={
               disableDot ? { r: 0 } : { r: 6, strokeWidth: 2, fill: "#f5821f" }
@@ -230,4 +229,5 @@ SeriesChart.defaultProps = {
   status: { success: true },
   variant: "line",
   chartContainer: DefaultChartContainer,
+  valueFieldFormatter: (value) => numberWithCommas(value),
 };

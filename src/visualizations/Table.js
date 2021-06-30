@@ -56,7 +56,7 @@ export const Table = ({
       title={title}
       height={400}
       actions={defaultActions.filter((c) => c.value !== "download-image")}
-      onAction={handleAction}
+      onActionChange={handleAction}
     >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
@@ -92,12 +92,12 @@ export const Table = ({
 
 Table.propTypes = {
   status: PropTypes.object,
-  title: PropTypes.string,
   /**
    * Is this the principal call to action on the page?
    */
   data: PropTypes.array,
   chartContainer: PropTypes.elementType,
+  title: PropTypes.string,
 };
 
 Table.defaultProps = {

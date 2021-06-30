@@ -2,7 +2,8 @@
   --tnic-primary-color: #77a741;
   --tnic-primary-color-hover: #77a741d9;
   --tnic-text-color-black: #2a2a2a;
-  --tnic-font-size: 14px;
+  --tnic-body-font-size: 14px;
+  --tnic-title-font-size: 16px;
 }
 
 body {
@@ -17,7 +18,7 @@ body {
 /*** Message ***/
 
 .tnic-message {
-  font-size: var(--tnic-font-size);
+  font-size: var(--tnic-body-font-size);
   position: relative;
   min-height: 1em;
   margin: 1em 0;
@@ -52,21 +53,20 @@ body {
   color: rgba(0, 0, 0, 0.87);
   border-collapse: separate;
   border-spacing: 0;
+  font-size: var(--tnic-body-font-size);
 }
 
 .tnic-table thead th {
   cursor: auto;
-  text-align: inherit;
   color: rgba(0, 0, 0, 0.87);
-  padding: 0.92857143em 0.78571429em;
-  vertical-align: inherit;
-  font-weight: 700;
+  padding: 0.6em 0.6em;
+  font-weight: bold;
   text-transform: none;
   border-bottom: 1px solid rgba(34, 36, 38, 0.1);
 }
 
 .tnic-table thead tr:first-child th {
-  padding-top: 0;
+  padding-top: 0.6em;
 }
 
 .tnic-table td:first-child,
@@ -108,7 +108,7 @@ body {
 }
 
 .tnic-table td {
-  padding: 0.78571429em 0.78571429em;
+  padding: 0.6em 0.6em;
   text-align: inherit;
 }
 
@@ -162,7 +162,7 @@ body {
   cursor: pointer;
   display: inline-block;
   min-height: 1em;
-  font-size: var(--tnic-font-size);
+  font-size: var(--tnic-body-font-size);
   outline: none;
   border: none;
   vertical-align: baseline;
@@ -193,21 +193,19 @@ body {
   color: #ffffff;
 }
 
-.tnic-button--basic.tnic-button--basic {
-  background: transparent none !important;
-  color: var(--tnic-text-color-black) !important;
+.tnic-button.tnic-button--basic {
+  background: none;
+  color: var(--tnic-text-color-black);
   font-weight: normal;
   border-radius: 0.21428571rem;
   text-transform: none;
-  text-shadow: none !important;
+  text-shadow: none;
   box-shadow: none;
 }
 
 .tnic-button.tnic-button--basic:hover {
-  background: none !important;
+  background-color: rgba(0, 0, 0, 0.04);
   color: rgba(0, 0, 0, 0.8) !important;
-  box-shadow: 0px 0px 0px 1px rgb(34 36 38 / 35%) inset,
-    0px 0px 0px 0px #d1d5db inset;
 }
 
 .tnic-button.tnic-button--compact {
@@ -256,7 +254,7 @@ body {
 .tnic-timeOption {
   height: 48px;
   padding: 0 18px 0 12px;
-  font-size: var(--tnic-font-size);
+  font-size: var(--tnic-body-font-size);
   line-height: 22px;
   display: flex;
   align-items: center;
@@ -269,6 +267,7 @@ body {
   background: var(--tnic-primary-color-hover) !important;
   color: #fff;
   font-weight: bold;
+  fill: #fff;
 }
 
 .tnic-timeOption:hover {
@@ -283,6 +282,7 @@ body {
 /*** Title ***/
 .tnic-title {
   font-weight: bold;
+  font-size: var(--tnic-title-font-size);
   flex: 1;
 }
 
@@ -352,7 +352,6 @@ body {
   line-height: 30px;
   background: none;
   color: var(--tnic-text-color-black);
-  font-weight: normal;
 }
 
 .tnic-dropdown .tnic-button:hover {
@@ -370,6 +369,7 @@ body {
 }
 .tnic-dropdown__right .tnic-button--icon {
   margin: 0;
+  margin-right: calc(-0.5em - 2px);
 }
 
 .tnic-dropdown__left .tnic-dropdown--menu {
@@ -394,7 +394,7 @@ body {
   margin: 0;
   padding: 5px 0;
   background: #fff;
-  font-size: var(--tnic-font-size);
+  font-size: var(--tnic-body-font-size);
   text-shadow: none;
   text-align: left;
   box-shadow: 0 2px 3px 0 rgb(34 36 38 / 15%);
@@ -414,7 +414,7 @@ body {
   line-height: 1em;
   color: rgba(0, 0, 0, 0.87);
   padding: 0.6em;
-  font-size: var(--tnic-font-size);
+  font-size: var(--tnic-body-font-size);
   text-transform: none;
   font-weight: 400;
   -webkit-box-shadow: none;
@@ -443,18 +443,6 @@ body {
   overflow: hidden;
 }
 
-.tnic-chartContainer__no-title .tnic-chartContainer--container {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  display: none;
-  z-index: 100;
-}
-
-.tnic-chartContainer__no-title:hover .tnic-chartContainer--container {
-  display: block;
-}
-
 .tnic-chartContainer--container {
   display: flex;
   flex-direction: row;
@@ -464,11 +452,33 @@ body {
 
 .tnic-chartContainer--title {
   flex: 1;
-  font-size: var(--tnic-font-size);
-  display: flex;
-  align-items: center;
+  font-size: var(--tnic-title-font-size);
+  line-height: 30px;
 }
 
 .tnic-chartContainer--actions {
-  flex: 0;
+  flex: 1;
+  display: none;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.tnic-chartContainer--actions .tnic-button {
+  text-decoration: underline;
+}
+
+.tnic-chartContainer:hover .tnic-chartContainer--actions {
+  display: flex;
+}
+
+.tnic-chartContainer__no-title .tnic-chartContainer--actions {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  display: none;
+  z-index: 100;
+}
+
+.tnic-chartContainer__no-title:hover .tnic-chartContainer--actions {
+  display: flex;
 }

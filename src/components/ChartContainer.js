@@ -8,12 +8,12 @@ export const ChartContainer = ({
   children,
   height,
   title,
-  variants,
-  onVariant,
-  intervals,
-  onInterval,
+  chartTypes,
   actions,
-  onAction,
+  intervals,
+  onChartTypeChange,
+  onIntervalChange,
+  onActionChange,
   classNames,
 }) => {
   const classes = [
@@ -26,39 +26,29 @@ export const ChartContainer = ({
     <div style={{ height: `${height}px` }} className={classes.join(" ")}>
       <div className="tnic-chartContainer--container">
         <div className="tnic-chartContainer--title tnic-title">{title}</div>
-        <div
-          className="tnic-chartContainer--actions"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flex: 0,
-          }}
-        >
-          {variants.length > 0 && (
+        <div className="tnic-chartContainer--actions">
+          {chartTypes.length > 0 && (
             <Dropdown
-              title="Variants"
-              options={variants}
-              onChange={onVariant}
+              title="Chart type"
+              options={chartTypes}
+              onChange={onChartTypeChange}
             />
           )}
           {intervals.length > 0 && (
             <Dropdown
               title="Interval"
               options={intervals}
-              onChange={onInterval}
+              onChange={onIntervalChange}
             />
           )}
-          {actions.length > 0 && (
-            <Dropdown
-              icon={IconMore}
-              alignMenu="right"
-              options={actions}
-              onChange={onAction}
-            />
-          )}
+          <Dropdown
+            icon={IconMore}
+            alignMenu="right"
+            options={actions}
+            onChange={onActionChange}
+          />
         </div>
       </div>
-
       {children}
     </div>
   );
@@ -66,20 +56,20 @@ export const ChartContainer = ({
 
 ChartContainer.propTypes = {
   actions: PropTypes.arrayOf(OptionType),
-  variants: PropTypes.arrayOf(OptionType),
+  chartTypes: PropTypes.arrayOf(OptionType),
   intervals: PropTypes.arrayOf(OptionType),
   title: PropTypes.string,
-  onInterval: PropTypes.func,
-  onVariant: PropTypes.func,
-  onAction: PropTypes.func,
+  onIntervalChange: PropTypes.func,
+  onChartTypeChange: PropTypes.func,
+  onActionChange: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 
 ChartContainer.defaultProps = {
-  variants: [],
+  chartTypes: [],
   actions: [],
   intervals: [],
-  onInterval: () => {},
-  onVariant: () => {},
-  onAction: () => {},
+  onIntervalChange: () => {},
+  onChartTypeChange: () => {},
+  onActionChange: () => {},
 };
