@@ -2,7 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { formatterForDataCadence } from "../utils/visualization";
-import { Message, ChartContainer } from "../components";
+import {
+  Message,
+  ChartContainer as DefaultChartContainer,
+} from "../components";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 import {
@@ -67,6 +70,8 @@ export const MultiSeriesChart = ({
   colors,
   disableDot,
   status,
+  title,
+  chartContainer: ChartContainer,
 }) => {
   const ctx = useTectonicContext();
 
@@ -102,7 +107,7 @@ export const MultiSeriesChart = ({
   ///XXX todo deal with no data
 
   return (
-    <ChartContainer>
+    <ChartContainer title={title}>
       {status.success && noData && (
         <Message>No data available for this time period</Message>
       )}
@@ -113,10 +118,10 @@ export const MultiSeriesChart = ({
         <Chart
           data={fusedData}
           margin={{
-            top: 5,
-            right: 20,
-            left: 10,
-            bottom: 5,
+            top: 6,
+            right: 6,
+            left: 6,
+            bottom: 6,
           }}
         >
           <CartesianGrid vertical={false} stroke="#EEF0F4" />
@@ -134,6 +139,7 @@ export const MultiSeriesChart = ({
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
             tickMargin={8}
+            mirror
           />
           {legend && <Legend iconType="circle" />}
           {data.map((data, index) => {
@@ -167,11 +173,11 @@ export const MultiSeriesChart = ({
 
 MultiSeriesChart.propTypes = {
   status: PropTypes.object,
+  title: PropTypes.string,
   /**
    * Is this the principal call to action on the page?
    */
   data: PropTypes.arrayOf(PropTypes.array),
-
   variant: PropTypes.oneOf(["line", "bar", "area"]),
   colors: PropTypes.arrayOf(PropTypes.string),
   chartContainer: PropTypes.elementType,
@@ -182,4 +188,5 @@ MultiSeriesChart.defaultProps = {
   status: { success: true },
   colors: defaultColors,
   variant: "line",
+  chartContainer: DefaultChartContainer,
 };

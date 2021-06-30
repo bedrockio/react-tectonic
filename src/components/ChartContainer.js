@@ -41,12 +41,14 @@ export const ChartContainer = ({
               onChange={onIntervalChange}
             />
           )}
-          <Dropdown
-            icon={IconMore}
-            alignMenu="right"
-            options={actions}
-            onChange={onActionChange}
-          />
+          {actions.length > 0 && (
+            <Dropdown
+              icon={IconMore}
+              alignMenu="right"
+              options={actions}
+              onChange={onActionChange}
+            />
+          )}
         </div>
       </div>
       {children}
