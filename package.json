@@ -23,11 +23,11 @@
   },
   "homepage": "https://github.com/bedrockio/react-tectonic#readme",
   "peerDependencies": {
+    "date-fns": "^2.10.0",
     "lodash": ">=4",
     "react": ">=16 <18",
     "react-day-picker": "7.*",
-    "react-dom": ">=16 <18",
-    "date-fns": "^2.10.0"
+    "react-dom": ">=16 <18"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.16",
