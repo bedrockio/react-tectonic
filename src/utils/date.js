@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { parse } from "./datemath";
 
 export const labelsToUnit = {
@@ -21,7 +22,9 @@ export function toDate(stringOrDate) {
   return parse(stringOrDate);
 }
 
-const validIntervals = ["1w", "1d", "1h", "15m", "5m", "1m"];
+export function toCsvDateFormat(date) {
+  return format(date, "dd/MM/yyyy HH:mm:ss");
+}
 
 export function intervalIsAllowed(timeRange, interval) {
   const durationSeconds = (timeRange.to - timeRange.from) / 1000;

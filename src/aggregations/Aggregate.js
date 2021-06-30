@@ -26,13 +26,13 @@ export const Aggregate = ({
     setStatus({ loading: true });
     try {
       const data = await Promise.all(
-        requests.map((requestBody) =>
+        requests.map((params) =>
           request({
             method: "POST",
             path: `/1/analytics/${type}`,
             baseUrl,
             token,
-            body: getAnalyticsRequestBody({ requestBody, timeRange, ctx }),
+            body: getAnalyticsRequestBody({ params, timeRange, ctx }),
           })
         )
       );

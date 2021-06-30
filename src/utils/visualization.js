@@ -42,3 +42,14 @@ export const defaultColors = [
   "#a333c8",
   "#6435c9",
 ];
+
+export const defaultActions = [
+  {
+    label: "Export Data",
+    value: "export-data",
+  },
+  {
+    label: "Download Image",
+    value: "download-image",
+  },
+];

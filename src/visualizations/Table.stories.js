@@ -18,6 +18,11 @@ export default {
   title: "Visualizations/Table",
   component: Table,
   argTypes: {
+    title: {
+      control: {
+        type: "text",
+      },
+    },
     status: {
       mapping: {
         loading: { loading: true },

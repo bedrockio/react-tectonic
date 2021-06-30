@@ -22,3 +22,9 @@ export const TimeRangeType = PropTypes.shape({
   to: timeField.isRequired,
   timeZone: PropTypes.string,
 });
+
+export const OptionType = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  icon: PropTypes.elementType,
+  value: PropTypes.string.isRequired,
+});

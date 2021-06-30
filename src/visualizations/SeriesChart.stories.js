@@ -53,12 +53,6 @@ export default {
   title: "Visualizations/SeriesChart",
   component: SeriesChart,
   argTypes: {
-    variant: {
-      options: ["line", "area", "bar"],
-      control: {
-        type: "radio",
-      },
-    },
     status: {
       mapping: {
         loading: { loading: true },
@@ -66,6 +60,17 @@ export default {
         error: { error: new Error("Oops something went wrong") },
       },
       options: ["loading", "success", "error"],
+      control: {
+        type: "select",
+      },
+    },
+    timeRange: {
+      mapping: {
+        today: { to: "now", from: "now-1h/d" },
+        lastmonth: { to: "now", from: "now-1M/M" },
+        none: undefined,
+      },
+      options: ["today", "lastmonth", "none"],
       control: {
         type: "select",
       },

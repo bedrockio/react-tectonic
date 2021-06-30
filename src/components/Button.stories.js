@@ -10,7 +10,11 @@ export default {
 
 const Template = (args) => <Button {...args}>Hello</Button>;
 
-export const Basic = (args) => <Template {...args} />;
+export const Regular = (args) => <Template {...args} />;
+
+export const CompactButton = (args) => <Template {...args} compact />;
+
+export const BasicButton = (args) => <Template {...args} basic />;
 
 export const PrimaryButton = (args) => <Template {...args} primary />;
 

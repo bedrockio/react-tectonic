@@ -7,6 +7,7 @@ export const Button = ({
   disabled,
   primary,
   secondary,
+  compact,
   basic,
   ...props
 }) => {
@@ -14,6 +15,7 @@ export const Button = ({
     "tnic-button",
     primary && "tnic-button--primary",
     icon && "tnic-button--icon",
+    compact && "tnic-button--compact",
     disabled && "tnic-button--disabled",
     basic && "tnic-button--basic",
   ].filter(Boolean);
@@ -30,6 +32,7 @@ Button.propTypes = {
   icon: PropTypes.bool,
   disabled: PropTypes.bool,
   basic: PropTypes.bool,
+  compact: PropTypes.bool,
 };
 
 Button.defaultProps = {};
