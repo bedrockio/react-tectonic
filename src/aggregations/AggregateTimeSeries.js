@@ -71,7 +71,7 @@ export const AggregateTimeSeries = ({
   }
 
   return React.Children.map(children, (child) =>
-    React.cloneElement(child, { data, status })
+    React.cloneElement(child, { data, status, onIntervalChange: setInterval })
   );
 };
 

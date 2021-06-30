@@ -174,6 +174,7 @@ MultiSeriesChart.propTypes = {
 
   variant: PropTypes.oneOf(["line", "bar", "area"]),
   colors: PropTypes.arrayOf(PropTypes.string),
+  chartContainer: PropTypes.elementType,
 };
 
 MultiSeriesChart.defaultProps = {

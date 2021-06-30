@@ -368,6 +368,9 @@ body {
 .tnic-dropdown__right .tnic-dropdown--menu {
   right: 0;
 }
+.tnic-dropdown__right .tnic-button--icon {
+  margin: 0;
+}
 
 .tnic-dropdown__left .tnic-dropdown--menu {
   left: 0;
@@ -430,11 +433,26 @@ body {
 /** ChartContainer **/
 
 .tnic-chartContainer {
-  padding: 0.5em;
+  padding: 1em;
   box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
     0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   background-color: #fff;
   border-radius: 2px;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tnic-chartContainer__no-title .tnic-chartContainer--container {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  display: none;
+  z-index: 100;
+}
+
+.tnic-chartContainer__no-title:hover .tnic-chartContainer--container {
+  display: block;
 }
 
 .tnic-chartContainer--container {

@@ -1,25 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { validIntervals } from "../utils/intervals";
-import { toDate } from "../utils/date";
-import { TimeRangeType } from "../utils/propTypes";
+import { OptionType } from "../utils/propTypes";
 import { Dropdown } from "../components/Dropdown";
-import { BarChart, LineChart, IconMore } from "../components/Icons";
+import { IconMore } from "../components/Icons";
+
 export const ChartContainer = ({
   children,
   height,
   title,
-  interval,
-  timeRange,
-  onIntervalChange,
+  variants,
+  onVariant,
+  intervals,
+  onInterval,
+  actions,
+  onAction,
   classNames,
 }) => {
-  const classes = ["tnic-chartContainer", classNames].filter(Boolean);
-
-  const intervals = validIntervals(
-    toDate(timeRange?.from),
-    toDate(timeRange?.to)
-  );
+  const classes = [
+    "tnic-chartContainer",
+    !title?.length && "tnic-chartContainer__no-title",
+    classNames,
+  ].filter(Boolean);
 
   return (
     <div style={{ height: `${height}px` }} className={classes.join(" ")}>
@@ -33,39 +34,28 @@ export const ChartContainer = ({
             flex: 0,
           }}
         >
-          <Dropdown
-            title="Display"
-            options={[
-              {
-                label: "Line",
-                icon: LineChart,
-              },
-              {
-                label: "Bar",
-                icon: BarChart,
-              },
-            ]}
-          />
-          <Dropdown
-            title="Interval"
-            options={intervals.map((interval) => {
-              return {
-                label: interval,
-              };
-            })}
-          />
-          <Dropdown
-            icon={IconMore}
-            alignMenu="right"
-            options={[
-              {
-                label: "Export Chart Data",
-              },
-              {
-                label: "Download Image",
-              },
-            ]}
-          />
+          {variants.length > 0 && (
+            <Dropdown
+              title="Variants"
+              options={variants}
+              onChange={onVariant}
+            />
+          )}
+          {intervals.length > 0 && (
+            <Dropdown
+              title="Interval"
+              options={intervals}
+              onChange={onInterval}
+            />
+          )}
+          {actions.length > 0 && (
+            <Dropdown
+              icon={IconMore}
+              alignMenu="right"
+              options={actions}
+              onChange={onAction}
+            />
+          )}
         </div>
       </div>
 
@@ -75,15 +65,21 @@ export const ChartContainer = ({
 };
 
 ChartContainer.propTypes = {
-  controls: PropTypes.bool,
-  timeRange: TimeRangeType,
-  interval: PropTypes.string,
-  onIntervalChange: PropTypes.func,
+  actions: PropTypes.arrayOf(OptionType),
+  variants: PropTypes.arrayOf(OptionType),
+  intervals: PropTypes.arrayOf(OptionType),
+  title: PropTypes.string,
+  onInterval: PropTypes.func,
+  onVariant: PropTypes.func,
+  onAction: PropTypes.func,
   children: PropTypes.node.isRequired,
 };
 
 ChartContainer.defaultProps = {
-  interval: "auto",
-  controls: true,
-  onIntervalChange: () => {},
+  variants: [],
+  actions: [],
+  intervals: [],
+  onInterval: () => {},
+  onVariant: () => {},
+  onAction: () => {},
 };

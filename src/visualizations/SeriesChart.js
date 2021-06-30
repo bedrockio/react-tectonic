@@ -2,12 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { numberWithCommas } from "../utils/formatting";
-import { formatterForDataCadence } from "../utils/visualization";
+import {
+  formatterForDataCadence,
+  defaultActions,
+} from "../utils/visualization";
+import { exportToCsv, downloadImage } from "../utils/exporters";
+import { toCsvDateFormat } from "../utils/date";
+
 import {
   Message,
   ChartContainer as DefaultChartContainer,
+  IconAreaChart,
+  IconBarChart,
+  IconLineChart,
+  useTectonicContext,
 } from "../components";
-import { useTectonicContext } from "../components/TectonicProvider";
+
+import { validIntervals, intervalToLabel } from "../utils/intervals";
+import { toDate } from "../utils/date";
 
 import {
   AreaChart,
@@ -34,21 +46,27 @@ export const SeriesChart = ({
   chartContainer: ChartContainer,
   legend,
   title,
-  variant,
+  variant: propsVariant,
   disableDot,
-  interval,
   onIntervalChange,
   timeRange,
   color,
 }) => {
   const ctx = useTectonicContext();
-
   const _color = color || ctx?.primaryColor || defaultColors[0];
+
+  const [variant, setVariant] = React.useState(propsVariant || "line");
+
+  const svgChartRef = React.createRef();
 
   let Chart = LineChart;
   let ChartGraph = Line;
 
-  if (variant === "area") {
+  React.useEffect(() => {
+    setVariant(propsVariant);
+  }, [propsVariant]);
+
+  if (variant == "area") {
     Chart = AreaChart;
     ChartGraph = Area;
   }
@@ -62,11 +80,70 @@ export const SeriesChart = ({
   const defaultValueFieldFormatter = (value) => numberWithCommas(value);
   const noData = !data || !data.length;
 
+  const intervals =
+    validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];
+
+  const handleDownloadImage = async (ref) => {
+    if (ref && ref.container) {
+      let svg = ref.container.children[0];
+      await downloadImage(
+        svg,
+        ref.container.clientWidth,
+        ref.container.clientHeight,
+        "chart.png"
+      );
+    }
+  };
+
+  function handleAction(option) {
+    const action = option.value;
+    if (action === "download-image") {
+      handleDownloadImage(svgChartRef.current);
+    } else if (action === "export-data") {
+      exportToCsv(
+        [
+          `"Date - TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}"`,
+          "Value",
+        ],
+        data.map((row) => [
+          `"${toCsvDateFormat(new Date(row.timestamp))}"`,
+          row.value,
+        ]),
+        "export.csv"
+      );
+    }
+  }
+
   return (
     <ChartContainer
       title={title}
+      intervals={intervals.map((interval) => {
+        return {
+          label: intervalToLabel(interval),
+          value: interval,
+        };
+      })}
+      variants={[
+        {
+          label: "Line",
+          value: "line",
+          icon: IconLineChart,
+        },
+        {
+          label: "Bar",
+          value: "bar",
+          icon: IconBarChart,
+        },
+        {
+          label: "Area",
+          value: "area",
+          icon: IconAreaChart,
+        },
+      ]}
+      actions={defaultActions}
+      onVariant={(option) => setVariant(option.value)}
+      onAction={handleAction}
       timeRange={timeRange}
-      interval={interval}
       onIntervalChange={onIntervalChange}
     >
       {status.success && noData && (
@@ -76,7 +153,8 @@ export const SeriesChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
       <ResponsiveContainer height={400}>
         <Chart
-          key={status.success} //ensure that destroy the chat as we have d
+          ref={svgChartRef}
+          key={`${variant}-${status.success}`} //ensure that destroy the chat as we have d
           data={data}
           margin={{
             top: 6,
@@ -92,14 +170,14 @@ export const SeriesChart = ({
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ stroke: "#6C767B" }}
             axisLine={{ stroke: "#6C767B" }}
-            tickMargin={8}
+            tickMargin={5}
           />
           <YAxis
             tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
-            tickMargin={10}
-            orientation="left"
+            tickMargin={4}
+            padding={{ bottom: 0 }}
             type="number"
             mirror
           />
@@ -132,7 +210,7 @@ export const SeriesChart = ({
 SeriesChart.propTypes = {
   title: PropTypes.string,
   status: PropTypes.object,
-  interval: PropTypes.interval,
+  interval: PropTypes.string,
   onIntervalChange: PropTypes.func,
   /**
    * Is this the principal call to action on the page?
@@ -144,6 +222,7 @@ SeriesChart.propTypes = {
   color: PropTypes.string,
 
   variant: PropTypes.oneOf(["line", "bar", "area"]),
+  chartContainer: PropTypes.elementType,
 };
 
 SeriesChart.defaultProps = {

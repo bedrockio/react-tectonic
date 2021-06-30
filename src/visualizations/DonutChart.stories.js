@@ -18,11 +18,22 @@ export default {
         type: "select",
       },
     },
+    timeRange: {
+      mapping: {
+        today: { to: "now", from: "now-1h/d" },
+        lastmonth: { to: "now", from: "now-1M/M" },
+        none: undefined,
+      },
+      options: ["today", "lastmonth", "none"],
+      control: {
+        type: "select",
+      },
+    },
   },
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider>
+  <TectonicProvider disableInitialization>
     <DonutChart {...args} />
   </TectonicProvider>
 );

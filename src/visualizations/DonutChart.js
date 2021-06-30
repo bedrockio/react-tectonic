@@ -9,11 +9,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-import { useTectonicContext } from "../components/TectonicProvider";
+import { exportToCsv, downloadImage } from "../utils/exporters";
+
 import { startCase } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
-import { defaultColors } from "../utils/visualization";
-import { Message, ChartContainer } from "../components";
+import { defaultColors, defaultActions } from "../utils/visualization";
+
+import {
+  Message,
+  ChartContainer as DefaultChartContainer,
+  useTectonicContext,
+} from "../components";
 
 /**
  * Primary UI component for user interaction
@@ -28,10 +34,15 @@ export const DonutChart = ({
   percent,
   precision,
   labels = {},
+  title,
+  chartContainer: ChartContainer,
   colors,
   colorFn,
 }) => {
   const ctx = useTectonicContext();
+
+  const svgChartRef = React.createRef();
+
   let trimmedData = data;
   if (limit) {
     const other = { key: "Other", count: 0, value: 0 };
@@ -71,8 +82,45 @@ export const DonutChart = ({
     trimmedData = [{ key: "No Data", count: 1, value: 0 }];
   }
 
+  const handleDownloadImage = async (ref) => {
+    if (ref && ref.container) {
+      let svg = ref.container.children[0];
+      await downloadImage(
+        svg,
+        ref.container.clientWidth,
+        ref.container.clientHeight,
+        "chart.png"
+      );
+    }
+  };
+
+  const nameFormatter = keyFormatter || defaultKeyFormatter;
+
+  const getValue = (item) => item[valueField || "count"];
+
+  function handleAction(option) {
+    const action = option.value;
+    if (action === "download-image") {
+      handleDownloadImage(svgChartRef.current);
+    } else if (action === "export-data") {
+      exportToCsv(
+        [`Name`, "Value", "Percentage"],
+        trimmedData.map((row) => [
+          nameFormatter(row),
+          getValue(row),
+          `${Math.round((getValue(row) / total) * 100)}%`,
+        ]),
+        "export.csv"
+      );
+    }
+  }
+
   return (
-    <ChartContainer>
+    <ChartContainer
+      title={title}
+      actions={defaultActions}
+      onAction={handleAction}
+    >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
       )}
@@ -80,7 +128,7 @@ export const DonutChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
 
       <ResponsiveContainer height={height}>
-        <PieChart data={trimmedData} key={status.success}>
+        <PieChart ref={svgChartRef} data={trimmedData} key={status.success}>
           <Pie
             data={trimmedData}
             innerRadius={Math.round(height * 0.2)}
@@ -128,7 +176,9 @@ export const DonutChart = ({
 };
 
 DonutChart.propTypes = {
+  title: PropTypes.string,
   status: PropTypes.object,
+
   /**
    * Is this the principal call to action on the page?
    */
@@ -143,10 +193,12 @@ DonutChart.propTypes = {
    */
   labels: PropTypes.object,
   colors: PropTypes.arrayOf(PropTypes.string),
+  chartContainer: PropTypes.elementType,
 };
 
 DonutChart.defaultProps = {
   status: { success: true },
   data: [],
   colors: defaultColors,
+  chartContainer: DefaultChartContainer,
 };

@@ -17,7 +17,7 @@ export const IconCalendar = () => {
   );
 };
 
-export const BarChart = () => {
+export const IconBarChart = () => {
   return (
     <span className="tnic-icon">
       <svg
@@ -33,7 +33,23 @@ export const BarChart = () => {
   );
 };
 
-export const LineChart = () => {
+export const IconAreaChart = () => {
+  return (
+    <span className="tnic-icon">
+      <svg
+        height="100%"
+        viewBox="0 0 24 24"
+        width="100%"
+        preserveAspectRatio="xMidYMid meet"
+        focusable="false"
+      >
+        <path d="M3,13v7h18v-1.5l-9-7L8,17L3,13z M3,7l4,3l5-7l5,4h4v8.97l-9.4-7.31l-3.98,5.48L3,10.44V7z"></path>
+      </svg>
+    </span>
+  );
+};
+
+export const IconLineChart = () => {
   return (
     <span className="tnic-icon">
       <svg

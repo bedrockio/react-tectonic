@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Button } from "./Button";
+import { OptionType } from "../utils/propTypes";
 
 export const Dropdown = ({
   icon: Icon,
@@ -65,13 +66,7 @@ export const Dropdown = ({
 };
 
 Dropdown.propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      icon: PropTypes.node,
-      value: PropTypes.string,
-    })
-  ),
+  options: PropTypes.arrayOf(OptionType),
   onChange: PropTypes.func,
   alignMenu: PropTypes.oneOf(["left", "right", "center"]),
 };

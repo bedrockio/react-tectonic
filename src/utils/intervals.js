@@ -13,6 +13,21 @@ const intervals = {
   "1y": 365 * 24 * 60 * 60,
 };
 
+const intervalsLabel = {
+  "1s": "1 second",
+  "10s": "10 seconds",
+  "1m": "1 minute",
+  "5m": "5 minutes",
+  "10m": "10 minutes",
+  "15m": "15 minuntes",
+  "30m": "30 minutes",
+  "1h": "1 hour",
+  "1d": "1 day",
+  "1w": "1 week",
+  "1M": "1 month",
+  "1y": "1 year",
+};
+
 const intervalList = Object.keys(intervals).map((key) => {
   return {
     key,
@@ -33,6 +48,10 @@ export function validIntervals(from, to) {
     .map((item) => item.key);
 
   return validIntervals;
+}
+
+export function intervalToLabel(interval) {
+  return intervalsLabel[interval];
 }
 
 export function determineInterval(from, to) {
