@@ -15,11 +15,14 @@ module.exports = {
       configFile: path.join(__dirname, ".babelrc"),
     },
   },
+
   extends: [
     "plugin:bedrock/recommended",
     "plugin:bedrock/jest",
-    "plugin:bedrock/react",
+    "plugin:react/recommended",
   ],
+
+  reportUnusedDisableDirectives: true,
   globals: {
     __ENV__: "readonly",
   },

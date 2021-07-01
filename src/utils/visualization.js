@@ -1,3 +1,9 @@
+import {
+  IconAreaChart,
+  IconBarChart,
+  IconLineChart,
+} from "../components/Icons";
+
 const ONE_HOUR = 1000 * 60 * 60;
 
 export const formatterForDataCadence = (data = []) => {
@@ -48,8 +54,28 @@ export const defaultActions = [
     label: "Export Data",
     value: "export-data",
   },
+  /*
   {
     label: "Download Image",
     value: "download-image",
+  },
+  */
+];
+
+export const defaultChartTypes = [
+  {
+    label: "Line",
+    value: "line",
+    icon: IconLineChart,
+  },
+  {
+    label: "Bar",
+    value: "bar",
+    icon: IconBarChart,
+  },
+  {
+    label: "Area",
+    value: "area",
+    icon: IconAreaChart,
   },
 ];

@@ -75,6 +75,12 @@ export default {
         type: "select",
       },
     },
+    enabledControls: {
+      options: ["actions", "intervals", "chartTypes"],
+      control: {
+        type: "inline-check",
+      },
+    },
   },
 };
 

@@ -18,15 +18,10 @@ export default {
         type: "select",
       },
     },
-    timeRange: {
-      mapping: {
-        today: { to: "now", from: "now-1h/d" },
-        lastmonth: { to: "now", from: "now-1M/M" },
-        none: undefined,
-      },
-      options: ["today", "lastmonth", "none"],
+    enabledControls: {
+      options: ["actions"],
       control: {
-        type: "select",
+        type: "inline-check",
       },
     },
   },

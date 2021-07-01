@@ -5,16 +5,16 @@ import { numberWithCommas } from "../utils/formatting";
 import {
   formatterForDataCadence,
   defaultActions,
+  defaultChartTypes,
 } from "../utils/visualization";
+
 import { exportToCsv, downloadImage } from "../utils/exporters";
 import { toCsvDateFormat } from "../utils/date";
+import { TimeRangeType } from "../utils/propTypes";
 
 import {
   Message,
   ChartContainer as DefaultChartContainer,
-  IconAreaChart,
-  IconBarChart,
-  IconLineChart,
   useTectonicContext,
 } from "../components";
 
@@ -31,7 +31,6 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -41,19 +40,48 @@ export const SeriesChart = ({
   status,
   data,
   valueField,
+  // eslint-disable-next-line react/prop-types
   valueFieldName,
+  valueFieldLabel,
+  // eslint-disable-next-line react/prop-types
   valueFieldFormatter,
+  valueFormatter,
+  labelFormatter,
   chartContainer: ChartContainer,
-  legend,
   title,
+  // eslint-disable-next-line react/prop-types
+  variant,
   chartType: propsChartType,
   disableDot,
   onIntervalChange,
   timeRange,
   color,
+  enabledControls,
 }) => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
+
+  if (valueFieldName) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[SeriesChart] valueFieldName is deprecated use valueFieldLabel"
+    );
+    valueFieldLabel = valueFieldName;
+  }
+
+  if (variant) {
+    // eslint-disable-next-line no-console
+    console.warn("[SeriesChart] varient is deprecated use chartType");
+    propsChartType = variant;
+  }
+
+  if (valueFieldFormatter) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[SeriesChart] valueFieldFormatter is deprecated use valueFormatter"
+    );
+    valueFormatter = valueFieldFormatter;
+  }
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");
 
@@ -116,31 +144,16 @@ export const SeriesChart = ({
   return (
     <ChartContainer
       title={title}
+      enabledControls={noData ? [] : enabledControls}
       intervals={intervals.map((interval) => {
         return {
           label: intervalToLabel(interval),
           value: interval,
         };
       })}
-      chartTypes={[
-        {
-          label: "Line",
-          value: "line",
-          icon: IconLineChart,
-        },
-        {
-          label: "Bar",
-          value: "bar",
-          icon: IconBarChart,
-        },
-        {
-          label: "Area",
-          value: "area",
-          icon: IconAreaChart,
-        },
-      ]}
+      chartTypes={defaultChartTypes}
       actions={defaultActions}
-      onChartTypeChange={(option) => setChartType(option.value)}
+      onChartTypeChange={setChartType}
       onActionChange={handleAction}
       timeRange={timeRange}
       onIntervalChange={onIntervalChange}
@@ -153,7 +166,7 @@ export const SeriesChart = ({
       <ResponsiveContainer height={400}>
         <Chart
           ref={svgChartRef}
-          key={`${chartType}-${status.success}`} //ensure that destroy the chat as we have d
+          key={`${chartType}-${status.success}`}
           data={data}
           margin={{
             top: 6,
@@ -162,34 +175,10 @@ export const SeriesChart = ({
             bottom: 6,
           }}
         >
-          <XAxis
-            dataKey="timestamp"
-            name="Time"
-            tickFormatter={tickFormatter}
-            tick={{ fill: "#6C767B", fontSize: "13" }}
-            tickLine={{ stroke: "#6C767B" }}
-            axisLine={{ stroke: "#6C767B" }}
-            tickMargin={5}
-          />
-          <YAxis
-            tickFormatter={valueFieldFormatter}
-            tick={{ fill: "#6C767B", fontSize: "13" }}
-            tickLine={{ fill: "#6C767B" }}
-            tickMargin={4}
-            padding={{ bottom: 0 }}
-            type="number"
-            mirror
-          />
-          {chartType !== "bar" && (
-            <Tooltip
-              labelFormatter={(unixTime) => new Date(unixTime).toLocaleString()}
-            />
-          )}
-          {legend && <Legend />}
           <ChartGraph
             type="monotoneX"
-            dataKey={valueField || "value"}
-            name={valueFieldName || "Value"}
+            dataKey={valueField}
+            name={valueFieldLabel}
             stroke={_color}
             strokeWidth={2}
             fill={["bar", "area"].includes(chartType) ? _color : undefined}
@@ -200,6 +189,32 @@ export const SeriesChart = ({
             dot={false}
             barSize={30}
           />
+          <XAxis
+            dataKey="timestamp"
+            name="Time"
+            tickFormatter={tickFormatter}
+            tick={{ fill: "#6C767B", fontSize: "13" }}
+            tickLine={{ stroke: "#6C767B" }}
+            axisLine={{ stroke: "#6C767B" }}
+            tickMargin={5}
+          />
+          <YAxis
+            tickFormatter={valueFormatter}
+            tick={{ fill: "#6C767B", fontSize: "13" }}
+            tickLine={{ fill: "#6C767B" }}
+            tickMargin={4}
+            padding={{ bottom: 0 }}
+            type="number"
+            mirror
+          />
+
+          {/* The bar chart blows up if there is tooltip? disabling for now */}
+          {chartType !== "bar" && (
+            <Tooltip
+              formatter={valueFormatter}
+              labelFormatter={labelFormatter}
+            />
+          )}
         </Chart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -208,9 +223,18 @@ export const SeriesChart = ({
 
 SeriesChart.propTypes = {
   title: PropTypes.string,
+  valueFormatter: PropTypes.func,
+  labelFormatter: PropTypes.func,
+  valueField: PropTypes.string,
+  valueFieldLabel: PropTypes.string,
+  chartType: PropTypes.oneOf(["line", "bar", "area"]),
   status: PropTypes.object,
-  interval: PropTypes.string,
   onIntervalChange: PropTypes.func,
+  timeRange: TimeRangeType,
+  enabledControls: PropTypes.arrayOf(
+    PropTypes.oneOf(["intervals", "chartTypes", "actions"])
+  ),
+
   /**
    * Is this the principal call to action on the page?
    */
@@ -219,15 +243,19 @@ SeriesChart.propTypes = {
    * Color of the line or bar
    */
   color: PropTypes.string,
-
-  variant: PropTypes.oneOf(["line", "bar", "area"]),
+  legend: PropTypes.bool,
+  disableDot: PropTypes.bool,
   chartContainer: PropTypes.elementType,
 };
 
 SeriesChart.defaultProps = {
+  valueField: "value",
+  valueFieldLabel: "Value",
   data: [],
   status: { success: true },
-  variant: "line",
+  chartType: "line",
   chartContainer: DefaultChartContainer,
-  valueFieldFormatter: (value) => numberWithCommas(value),
+  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
+  valueFormatter: (value) => numberWithCommas(value),
+  enabledControls: ["intervals", "chartTypes", "actions"],
 };

@@ -52,11 +52,16 @@ export const Aggregate = ({
   }, [token, baseUrl, isReady, requests, type]);
 
   if (typeof children === "function") {
-    return children({ data, status });
+    return children({ data, status, timeRange, setInterval });
   }
 
   return React.Children.map(children, (child) =>
-    React.cloneElement(child, { data, status })
+    React.cloneElement(child, {
+      data,
+      status,
+      timeRange,
+      onIntervalChange: setInterval,
+    })
   );
 };
 

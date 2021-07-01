@@ -34,6 +34,12 @@ export default {
         type: "select",
       },
     },
+    enabledControls: {
+      options: ["actions"],
+      control: {
+        type: "inline-check",
+      },
+    },
   },
 };
 

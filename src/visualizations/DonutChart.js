@@ -27,19 +27,40 @@ import {
 export const DonutChart = ({
   status,
   data,
+  labelField,
+  // eslint-disable-next-line react/prop-types
   keyField,
+  // eslint-disable-next-line react/prop-types
   keyFormatter,
+  labelFormatter: propsLabelFormatter,
+  valueFormatter,
   valueField,
   limit,
-  percent,
+  procent,
   precision,
-  labels = {},
   title,
+  enabledControls,
   chartContainer: ChartContainer,
   colors,
   colorFn,
 }) => {
   const ctx = useTectonicContext();
+
+  if (keyField) {
+    // eslint-disable-next-line no-console
+    console.warn("[DonutChartChart] keyField is deprecated use labelField");
+    labelField = keyField;
+  }
+
+  if (keyFormatter) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[DonutChartChart] keyFormatter is deprecated use labelFormatter"
+    );
+    propsLabelFormatter = keyFormatter;
+  }
+
+  const labelFormatter = (item) => propsLabelFormatter(item[labelField]);
 
   const svgChartRef = React.createRef();
 
@@ -63,17 +84,8 @@ export const DonutChart = ({
 
   let total = 0;
   data.forEach((item) => {
-    total += item[valueField || "count"];
+    total += item[valueField];
   });
-
-  const defaultKeyFormatter = (item) => {
-    const key = keyField || "key";
-    const label = item[key].toString();
-    if (label.length <= 3) {
-      return label.toUpperCase();
-    }
-    return labels[key] || startCase(label.toLowerCase());
-  };
 
   const height = 400;
 
@@ -94,11 +106,8 @@ export const DonutChart = ({
     }
   };
 
-  const nameFormatter = keyFormatter || defaultKeyFormatter;
-
-  const getValue = (item) => item[valueField || "count"];
-
   function handleAction(option) {
+    const getValue = (item) => item[valueField];
     const action = option.value;
     if (action === "download-image") {
       handleDownloadImage(svgChartRef.current);
@@ -106,7 +115,7 @@ export const DonutChart = ({
       exportToCsv(
         [`Name`, "Value", "Percentage"],
         trimmedData.map((row) => [
-          nameFormatter(row),
+          labelFormatter(row),
           getValue(row),
           `${Math.round((getValue(row) / total) * 100)}%`,
         ]),
@@ -118,6 +127,7 @@ export const DonutChart = ({
   return (
     <ChartContainer
       title={title}
+      enabledControls={enabledControls}
       actions={defaultActions}
       onAction={handleAction}
     >
@@ -135,8 +145,8 @@ export const DonutChart = ({
             outerRadius={Math.round(height * 0.36)}
             fill="#8884d8"
             paddingAngle={5}
-            nameKey={keyFormatter || defaultKeyFormatter}
-            dataKey={valueField || "count"}
+            nameKey={labelFormatter}
+            dataKey={valueField}
           >
             {trimmedData.map((entry, index) => (
               <Cell
@@ -154,7 +164,7 @@ export const DonutChart = ({
           {!noData && (
             <Tooltip
               formatter={(value) => {
-                if (percent) {
+                if (procent) {
                   if (precision) {
                     return `${
                       Math.round((value / total) * (10 * precision) * 100) /
@@ -164,8 +174,7 @@ export const DonutChart = ({
                     return `${Math.round((value / total) * 100)}%`;
                   }
                 }
-
-                return numberWithCommas(value);
+                return valueFormatter(value);
               }}
             />
           )}
@@ -178,22 +187,18 @@ export const DonutChart = ({
 DonutChart.propTypes = {
   title: PropTypes.string,
   status: PropTypes.object,
-
-  /**
-   * Is this the principal call to action on the page?
-   */
+  limit: PropTypes.number,
+  labelFormatter: PropTypes.func,
+  valueFormatter: PropTypes.func,
+  valueField: PropTypes.string,
+  labelField: PropTypes.string,
+  procent: PropTypes.bool,
+  precision: PropTypes.bool,
+  colorFn: PropTypes.func,
   data: PropTypes.array,
-  /**
-   * What background color to use
-   */
-  keyField: PropTypes.string,
-
-  /**
-   * Labels
-   */
-  labels: PropTypes.object,
   colors: PropTypes.arrayOf(PropTypes.string),
   chartContainer: PropTypes.elementType,
+  enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
 };
 
 DonutChart.defaultProps = {
@@ -201,4 +206,13 @@ DonutChart.defaultProps = {
   data: [],
   colors: defaultColors,
   chartContainer: DefaultChartContainer,
+  enabledControls: ["actions"],
+  labelFormatter: (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  valueFormatter: (value) => {
+    return numberWithCommas(value);
+  },
+  labelField: "key",
+  valueField: "count",
 };

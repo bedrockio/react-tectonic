@@ -1,12 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
-import { formatterForDataCadence } from "../utils/visualization";
+import { TimeRangeType } from "../utils/propTypes";
+import {
+  formatterForDataCadence,
+  defaultChartTypes,
+  defaultActions,
+} from "../utils/visualization";
 import {
   Message,
   ChartContainer as DefaultChartContainer,
 } from "../components";
 import { useTectonicContext } from "../components/TectonicProvider";
+
+import { validIntervals, intervalToLabel } from "../utils/intervals";
+
+import { toDate } from "../utils/date";
 
 import {
   AreaChart,
@@ -17,7 +26,6 @@ import {
   Bar,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
@@ -36,8 +44,7 @@ const fuse = (series, valueField) => {
         if (!byTs[item.timestamp]) {
           byTs[item.timestamp] = {};
         }
-        byTs[item.timestamp][`${index}-value`] =
-          item[valueField || "value"] || 0;
+        byTs[item.timestamp][`${index}-value`] = item[valueField] || 0;
       });
     });
   }
@@ -57,31 +64,65 @@ const fuse = (series, valueField) => {
   });
 };
 
-const defaultValueFieldFormatter = (value) => numberWithCommas(value);
-
 export const MultiSeriesChart = ({
-  data,
-  valueField,
-  valueFieldNames,
+  // eslint-disable-next-line react/prop-types
   valueFieldFormatter,
-  legend,
+  // eslint-disable-next-line react/prop-types
   variant,
+  // eslint-disable-next-line react/prop-types
+  valueFieldNames,
+  data,
+  timeRange,
+  chartType: propsChartType,
+  valueField,
+  labelFormatter,
+  valueFormatter,
+  legend,
   stacked,
   colors,
   disableDot,
+  enabledControls,
   status,
   title,
   chartContainer: ChartContainer,
+  labels,
 }) => {
   const ctx = useTectonicContext();
 
+  if (variant) {
+    // eslint-disable-next-line no-console
+    console.warn("[MultiSeriesChart] varient is deprecated use chartType");
+    propsChartType = variant;
+  }
+
+  if (valueFieldFormatter) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "[MultiSeriesChart] valueFieldFormatter is deprecated use valueFormatter"
+    );
+    valueFormatter = valueFieldFormatter;
+  }
+
+  if (valueFieldNames) {
+    // eslint-disable-next-line no-console
+    console.warn("[MultiSeriesChart] valueFieldNames is deprecated use labels");
+    labels = valueFieldFormatter;
+  }
+
+  const [chartType, setChartType] = React.useState(propsChartType || "line");
+
   let Chart = LineChart;
   let ChartGraph = Line;
-  if (variant === "area") {
+
+  React.useEffect(() => {
+    setChartType(propsChartType);
+  }, [propsChartType]);
+
+  if (chartType == "area") {
     Chart = AreaChart;
     ChartGraph = Area;
   }
-  if (variant === "bar") {
+  if (chartType === "bar") {
     Chart = BarChart;
     ChartGraph = Bar;
   }
@@ -106,8 +147,23 @@ export const MultiSeriesChart = ({
 
   ///XXX todo deal with no data
 
+  const intervals =
+    validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];
+
   return (
-    <ChartContainer title={title}>
+    <ChartContainer
+      enabledControls={noData ? [] : enabledControls}
+      intervals={intervals.map((interval) => {
+        return {
+          label: intervalToLabel(interval),
+          value: interval,
+        };
+      })}
+      chartTypes={defaultChartTypes}
+      actions={defaultActions}
+      title={title}
+      onChartTypeChange={setChartType}
+    >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
       )}
@@ -116,6 +172,7 @@ export const MultiSeriesChart = ({
 
       <ResponsiveContainer height={400}>
         <Chart
+          key={`${chartType}-${status.success}`}
           data={fusedData}
           margin={{
             top: 6,
@@ -124,7 +181,24 @@ export const MultiSeriesChart = ({
             bottom: 6,
           }}
         >
-          <CartesianGrid vertical={false} stroke="#EEF0F4" />
+          {data.map((_, index) => {
+            const color = _colors[index % _colors.length];
+            return (
+              <ChartGraph
+                type="monotone"
+                key={`${index}-value`}
+                dataKey={`${index}-value`}
+                name={labels ? labels[index] : `Metric ${index + 1}`}
+                stroke={color}
+                fill={["area", "bar"].includes(chartType) ? color : undefined}
+                fillOpacity={1}
+                opacity={1}
+                activeDot={disableDot ? { r: 0 } : { r: 6 }}
+                stackId={chartType !== "line" && stacked ? 1 : undefined}
+              />
+            );
+          })}
+
           <XAxis
             dataKey="timestamp"
             name="Time"
@@ -135,34 +209,18 @@ export const MultiSeriesChart = ({
             tickMargin={8}
           />
           <YAxis
-            tickFormatter={valueFieldFormatter || defaultValueFieldFormatter}
+            tickFormatter={valueFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
             tickMargin={8}
             mirror
           />
-          {legend && <Legend iconType="circle" />}
-          {data.map((data, index) => {
-            const color = _colors[index % _colors.length];
-            return (
-              <ChartGraph
-                type="monotone"
-                key={`${index}-value`}
-                dataKey={`${index}-value`}
-                name={valueFieldNames ? valueFieldNames[index] : "Value"}
-                stroke={color}
-                fill={["area", "bar"].includes(variant) ? color : undefined}
-                fillOpacity={1}
-                opacity={1}
-                activeDot={disableDot ? { r: 0 } : { r: 6 }}
-                stackId={stacked ? "1" : undefined}
-              />
-            );
-          })}
-          {variant !== "bar" && (
+          {(chartType === "bar" || legend) && <Legend iconType="circle" />}
+
+          {chartType !== "bar" && (
             <Tooltip
-              formatter={valueFieldFormatter || defaultValueFieldFormatter}
-              labelFormatter={(unixTime) => new Date(unixTime).toLocaleString()}
+              formatter={valueFormatter}
+              labelFormatter={labelFormatter}
             />
           )}
         </Chart>
@@ -172,21 +230,34 @@ export const MultiSeriesChart = ({
 };
 
 MultiSeriesChart.propTypes = {
+  labels: PropTypes.arrayOf(PropTypes.string),
   status: PropTypes.object,
   title: PropTypes.string,
-  /**
-   * Is this the principal call to action on the page?
-   */
+  legend: PropTypes.bool,
+  stacked: PropTypes.bool,
+  timeRange: TimeRangeType,
   data: PropTypes.arrayOf(PropTypes.array),
-  variant: PropTypes.oneOf(["line", "bar", "area"]),
+  chartType: PropTypes.oneOf(["line", "bar", "area"]),
   colors: PropTypes.arrayOf(PropTypes.string),
   chartContainer: PropTypes.elementType,
+  valueField: PropTypes.string,
+  valueFormatter: PropTypes.func,
+  labelFormatter: PropTypes.func,
+  disableDot: PropTypes.bool,
+  enabledControls: PropTypes.arrayOf(
+    PropTypes.oneOf(["intervals", "chartTypes", "actions"])
+  ),
 };
 
 MultiSeriesChart.defaultProps = {
   data: [],
   status: { success: true },
   colors: defaultColors,
-  variant: "line",
+  chartType: "line",
   chartContainer: DefaultChartContainer,
+  valueField: "value",
+  valueFormatter: (value) => numberWithCommas(value),
+  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
+  enabledControls: ["intervals", "chartTypes", "actions"],
+  stacked: true,
 };

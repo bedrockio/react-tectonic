@@ -96,9 +96,11 @@ export const request = async (options) => {
 };
 
 export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
+  const dateField = params.dateField || ctx.dateField;
   if (!timeRange) {
     return {
       collection: ctx.collection,
+      dateField,
       ...params,
     };
   }
@@ -120,7 +122,7 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
     filter: {
       ...params.filter,
       range: {
-        [ctx.dateField]: {
+        [dateField]: {
           gte: timeRange.from,
           lt: to,
           time_zone: timeRange.timeRange,

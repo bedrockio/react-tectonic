@@ -29,6 +29,12 @@ export const AggregateTimeSeries = ({
     onIntervalChange(interval);
   }, [interval]);
 
+  React.useEffect(() => {
+    if (timeRange) {
+      setInterval(determineInterval(timeRange));
+    }
+  }, [timeRange]);
+
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
 
@@ -67,11 +73,16 @@ export const AggregateTimeSeries = ({
   }, [token, baseUrl, isReady, interval, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
-    return children({ data, status, interval, setInterval });
+    return children({ data, status, timeRange, setInterval });
   }
 
   return React.Children.map(children, (child) =>
-    React.cloneElement(child, { data, status, onIntervalChange: setInterval })
+    React.cloneElement(child, {
+      data,
+      status,
+      timeRange,
+      onIntervalChange: setInterval,
+    })
   );
 };
 

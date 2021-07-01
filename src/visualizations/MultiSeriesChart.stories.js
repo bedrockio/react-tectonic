@@ -53,39 +53,39 @@ const data1 = [
 const data2 = [
   {
     timestamp: 1535932800000,
-    value: 14,
+    value: 4,
   },
   {
     timestamp: 1536537600000,
-    value: 22,
+    value: 5,
   },
   {
     timestamp: 1537142400000,
-    value: 18,
+    value: 12,
   },
   {
     timestamp: 1537747200000,
-    value: 24,
+    value: 3,
   },
   {
     timestamp: 1538352000000,
-    value: 26,
+    value: 3,
   },
   {
     timestamp: 1538956800000,
-    value: 20,
+    value: 2,
   },
   {
     timestamp: 1539561600000,
-    value: 21,
+    value: 35,
   },
   {
     timestamp: 1540166400000,
-    value: 21,
+    value: 23,
   },
   {
     timestamp: 1540771200000,
-    value: 18,
+    value: 23,
   },
   {
     timestamp: 1541376000000,
@@ -101,7 +101,7 @@ export default {
   title: "Visualizations/MultiSeriesChart",
   component: MultiSeriesChart,
   argTypes: {
-    variant: {
+    chartType: {
       options: ["area", "bar", "line"],
       control: {
         type: "radio",
@@ -122,7 +122,7 @@ export default {
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider>
+  <TectonicProvider disableInitialization>
     <MultiSeriesChart {...args} />
   </TectonicProvider>
 );

@@ -13,30 +13,17 @@ import { exportToCsv } from "../utils/exporters";
 export const Table = ({
   status,
   title,
-  keyField,
-  keyName,
+  labelField,
   valueField,
   valueFieldName,
+  labelFieldName,
   data,
-  keyFormatter,
-  valueFieldFormatter,
+  labelFormatter,
+  valueFormatter,
   chartContainer: ChartContainer,
-  labels = {},
+  enabledControls,
 }) => {
-  const defaultKeyFormatter = (item) => {
-    const key = keyField || "key";
-    const label = item[key];
-    if (label.length <= 3) {
-      return label.toUpperCase();
-    }
-    return labels[key] || startCase(label.toLowerCase());
-  };
-
   const noData = !data || !data.length;
-
-  const _valueField = valueField || "value";
-
-  const getKeyValue = keyFormatter ? keyFormatter : defaultKeyFormatter;
 
   function handleAction(option) {
     const action = option.value;
@@ -44,8 +31,8 @@ export const Table = ({
       // handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {
       exportToCsv(
-        [keyName || "Name", valueFieldName || "Value"],
-        data.map((row) => [getKeyValue(row), row[_valueField]]),
+        [valueFieldName, valueFieldName],
+        data.map((row) => [row[labelField], row[valueField]]),
         "export.csv"
       );
     }
@@ -55,8 +42,9 @@ export const Table = ({
     <ChartContainer
       title={title}
       height={400}
-      actions={defaultActions.filter((c) => c.value !== "download-image")}
+      actions={defaultActions}
       onActionChange={handleAction}
+      enabledControls={enabledControls}
     >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
@@ -67,20 +55,16 @@ export const Table = ({
       <table width={"100%"} className="tnic-table">
         <thead>
           <tr>
-            <th style={{ width: "62.5%" }}>{keyName || "Name"}</th>
-            <th>{valueFieldName || "Value"}</th>
+            <th style={{ width: "62.5%" }}>{labelFieldName}</th>
+            <th>{valueFieldName}</th>
           </tr>
         </thead>
         <tbody>
           {data.map((item) => {
             return (
-              <tr key={item.key}>
-                <td>{getKeyValue(item)}</td>
-                <td>
-                  {valueFieldFormatter
-                    ? valueFieldFormatter(item[valueField || "value"])
-                    : numberWithCommas(Math.round(item[valueField || "value"]))}
-                </td>
+              <tr key={item[labelField]}>
+                <td>{labelFormatter(item[labelField])}</td>
+                <td>{valueFormatter(item[valueField])}</td>
               </tr>
             );
           })}
@@ -98,10 +82,29 @@ Table.propTypes = {
   data: PropTypes.array,
   chartContainer: PropTypes.elementType,
   title: PropTypes.string,
+  labelFormatter: PropTypes.func,
+  valueFormatter: PropTypes.func,
+  valueField: PropTypes.string,
+  labelField: PropTypes.string,
+  valueFieldName: PropTypes.string,
+  labelFieldName: PropTypes.string,
+  enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
 };
 
 Table.defaultProps = {
   status: { success: true },
   data: [],
   chartContainer: DefaultChartContainer,
+  valueFieldName: "Value",
+  labelFieldName: "Name",
+  labelField: "key",
+  valueField: "value",
+  labelFormatter: (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  valueFormatter: (value) => {
+    return numberWithCommas(value);
+  },
+
+  enabledControls: ["actions"],
 };

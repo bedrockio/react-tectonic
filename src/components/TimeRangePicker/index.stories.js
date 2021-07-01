@@ -5,6 +5,7 @@ import "react-day-picker/lib/style.css";
 
 import { TimeRangePicker } from ".";
 import { TectonicProvider } from "../TectonicProvider";
+import { Button } from "../Button";
 import { toDate } from "../../utils/date";
 import { AggregateTimeSeries } from "../../aggregations";
 import { SeriesChart } from "../../visualizations";
@@ -25,7 +26,7 @@ const Template = (args) => {
     <>
       <TimeRangePicker
         renderButton={(text, handleOnClick) => (
-          <button onClick={handleOnClick}>{text}</button>
+          <Button onClick={handleOnClick}>{text}</Button>
         )}
         timeRange={timeRange}
         onChange={setTimeRange}
@@ -62,12 +63,13 @@ const TemplateWithChart = (args) => (
   >
     <TimeRangePicker
       renderButton={(text, handleOnClick) => (
-        <button onClick={handleOnClick}>{text}</button>
+        <Button onClick={handleOnClick}>{text}</Button>
       )}
       {...args}
     />
+    <br />
     <AggregateTimeSeries operation="count">
-      <SeriesChart valueField="count" />
+      <SeriesChart title="Orders Count" valueField="count" />
     </AggregateTimeSeries>
   </TectonicProvider>
 );

@@ -63,6 +63,7 @@ const TectonicProvider = ({
 
   async function fetchCollectionStats() {
     if (!collection || !token) {
+      // eslint-disable-next-line no-console
       console.error(
         "[TectonicProvider] Please provide a `token` and `collection` or set `disableCollectionStats` to true"
       );
@@ -96,6 +97,7 @@ const TectonicProvider = ({
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
+      // eslint-disable-next-line no-console
       console.error(
         `["TectonicProvider"] Failed to look up collection (${collection}) stats ${e.message}`
       );
@@ -112,11 +114,13 @@ const TectonicProvider = ({
 
       const majorVersion = Number(version.split(".")[0]);
       if (majorVersion !== Number(data.version.split(".")[0])) {
+        // eslint-disable-next-line no-console
         console.error(
           `[TectonicProvider] The Tectonic version (${data.version}) doesn't match react-tectonic (${version})`
         );
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(`["TectonicProvider"] Failed to look up Tectonic version`);
     }
   }
@@ -190,6 +194,8 @@ TectonicProvider.propTypes = {
   timeRange: TimeRangeType,
   getTimeRangeFromCollectionStats: PropTypes.func,
   disableInitialization: PropTypes.bool,
+  timeZone: PropTypes.string,
+  children: PropTypes.node,
 };
 
 TectonicProvider.defaultProps = {

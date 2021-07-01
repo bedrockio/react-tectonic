@@ -464,7 +464,7 @@ body {
 }
 
 .tnic-chartContainer--actions .tnic-button {
-  text-decoration: underline;
+  margin: 0;
 }
 
 .tnic-chartContainer:hover .tnic-chartContainer--actions {

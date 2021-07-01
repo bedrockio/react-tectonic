@@ -15,6 +15,7 @@ export const ChartContainer = ({
   onIntervalChange,
   onActionChange,
   classNames,
+  enabledControls,
 }) => {
   const classes = [
     "tnic-chartContainer",
@@ -27,21 +28,21 @@ export const ChartContainer = ({
       <div className="tnic-chartContainer--container">
         <div className="tnic-chartContainer--title tnic-title">{title}</div>
         <div className="tnic-chartContainer--actions">
-          {chartTypes.length > 0 && (
+          {enabledControls.includes("chartTypes") && chartTypes.length > 0 && (
             <Dropdown
-              title="Chart type"
+              title="Chart"
               options={chartTypes}
-              onChange={onChartTypeChange}
+              onChange={(option) => onChartTypeChange(option.value)}
             />
           )}
-          {intervals.length > 0 && (
+          {enabledControls.includes("intervals") && intervals.length > 0 && (
             <Dropdown
               title="Interval"
               options={intervals}
-              onChange={onIntervalChange}
+              onChange={(option) => onIntervalChange(option.value)}
             />
           )}
-          {actions.length > 0 && (
+          {enabledControls.includes("actions") && actions.length > 0 && (
             <Dropdown
               icon={IconMore}
               alignMenu="right"
@@ -65,6 +66,11 @@ ChartContainer.propTypes = {
   onChartTypeChange: PropTypes.func,
   onActionChange: PropTypes.func,
   children: PropTypes.node.isRequired,
+  height: PropTypes.number,
+  classNames: PropTypes.arrayOf(PropTypes.string),
+  enabledControls: PropTypes.arrayOf(
+    PropTypes.oneOf(["intervals", "chartTypes", "actions"])
+  ),
 };
 
 ChartContainer.defaultProps = {
@@ -74,4 +80,5 @@ ChartContainer.defaultProps = {
   onIntervalChange: () => {},
   onChartTypeChange: () => {},
   onActionChange: () => {},
+  enabledControls: [],
 };

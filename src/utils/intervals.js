@@ -35,7 +35,7 @@ const intervalList = Object.keys(intervals).map((key) => {
   };
 });
 
-const maxBucketSize = 500;
+const maxBucketSize = 700;
 
 export function validIntervals(from, to) {
   const durationSeconds = (to - from) / 1000;
