@@ -21,3 +21,10 @@ To style the component, use src/style.css as template and update it to fit the d
 ## Date Math
 
 We are using https://date-fns.org (also required for the react-day-picker)
+
+## Build And Release
+
+```
+yarn build
+npm publish
+```
