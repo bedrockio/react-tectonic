@@ -61,7 +61,7 @@ ChartContainer.propTypes = {
   actions: PropTypes.arrayOf(OptionType),
   chartTypes: PropTypes.arrayOf(OptionType),
   intervals: PropTypes.arrayOf(OptionType),
-  title: PropTypes.string,
+  title: PropTypes.node,
   onIntervalChange: PropTypes.func,
   onChartTypeChange: PropTypes.func,
   onActionChange: PropTypes.func,

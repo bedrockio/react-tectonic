@@ -1,5 +1,6 @@
 import React from "react";
-
+import PropTypes from "prop-types";
+import { TimeRangeType } from "../../utils/propTypes";
 import { Overlay } from "./Overlay";
 
 import { useTectonicContext } from "../TectonicProvider";
@@ -60,10 +61,17 @@ export const TimeRangePicker = ({
   );
 };
 
-TimeRangePicker.propTypes = {};
+TimeRangePicker.propTypes = {
+  timeRange: TimeRangeType,
+  renderButton: PropTypes.func,
+  classNames: PropTypes.arrayOf(PropTypes.string),
+  timeOptions: PropTypes.array,
+  onChange: PropTypes.func,
+};
 
 TimeRangePicker.defaultProps = {
   onChange: () => {},
+  renderButton: () => {},
   timeOptions: [
     {
       type: "fixed",

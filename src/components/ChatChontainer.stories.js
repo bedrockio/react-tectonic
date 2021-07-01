@@ -33,7 +33,7 @@ export const Basic = (args) => (
   <Template
     {...args}
     intervals={[{ label: "1day" }]}
-    variants={[
+    chartTypes={[
       {
         label: "line",
         icon: IconLineChart,
@@ -45,4 +45,8 @@ export const Basic = (args) => (
     ]}
     actions={[{ label: "Download" }]}
   />
+);
+
+export const WithTitle = (args) => (
+  <Template {...args} title={<h3>title</h3>} />
 );

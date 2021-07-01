@@ -15,7 +15,8 @@ export const AggregateTerms = ({
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
-  const isReady = (ctx.token && ctx.isReady) || token;
+
+  const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -35,8 +36,8 @@ export const AggregateTerms = ({
           ctx,
         }),
       });
-      setData(data);
       setStatus({ success: true });
+      setData(data);
     } catch (error) {
       setStatus({ error });
     }

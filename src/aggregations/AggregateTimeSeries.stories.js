@@ -28,7 +28,7 @@ const TemplateWithProvider = (args) => (
     disableInitialization
   >
     <AggregateTimeSeries {...args}>
-      <SeriesChart variant="bar" valueField="count" />
+      <SeriesChart chartType="bar" valueField="count" />
     </AggregateTimeSeries>
   </TectonicProvider>
 );
@@ -38,7 +38,7 @@ WithProvider.args = defaultArgs;
 
 const Template = (args) => (
   <AggregateTimeSeries {...args}>
-    <SeriesChart variant="bar" valueField="count" />
+    <SeriesChart chartType="bar" valueField="count" />
   </AggregateTimeSeries>
 );
 
@@ -52,7 +52,7 @@ const TemplateAsFunction = (args) => (
         <SeriesChart
           data={data}
           status={status}
-          variant="line"
+          chartType="line"
           valueField="count"
         />
       );

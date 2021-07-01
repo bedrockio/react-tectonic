@@ -64,14 +64,7 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
         }}
       >
         {!stats.isHistorical && (
-          <div
-            style={{
-              width: "300px",
-              height: "336px",
-              overflow: "auto",
-              borderTop: "1px solid #ccc",
-            }}
-          >
+          <div className="tnic-overlay--container">
             <TimeOptions
               key={refreshKey}
               timeOptions={validTimeOptions}

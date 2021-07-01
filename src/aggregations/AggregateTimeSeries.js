@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
-import { determineInterval } from "../utils/date";
+import { determineInterval } from "../utils/intervals";
 import { useTectonicContext } from "../components/TectonicProvider";
 
 export const AggregateTimeSeries = ({
@@ -18,7 +18,8 @@ export const AggregateTimeSeries = ({
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
-  const isReady = (ctx.token && ctx.isReady) || token;
+
+  const isReady = ctx.token ? ctx.token && ctx.isReady : token;
   const [interval, setInterval] = React.useState(propsInterval);
 
   React.useEffect(() => {
@@ -57,8 +58,8 @@ export const AggregateTimeSeries = ({
           ctx,
         }),
       });
-      setData(data);
       setStatus({ success: true });
+      setData(data);
     } catch (error) {
       setStatus({ error });
     }

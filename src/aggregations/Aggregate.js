@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { determineInterval } from "../utils/intervals";
 import { TimeRangeType } from "../utils/propTypes";
 
 export const Aggregate = ({
@@ -9,6 +10,8 @@ export const Aggregate = ({
   baseUrl,
   token,
   requests,
+  interval: propsInterval,
+  onIntervalChange,
   type,
   children,
 }) => {
@@ -17,7 +20,23 @@ export const Aggregate = ({
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
 
-  const isReady = (ctx.token && ctx.isReady) || token;
+  const [interval, setInterval] = React.useState(propsInterval);
+
+  React.useEffect(() => {
+    setInterval(propsInterval);
+  }, [propsInterval]);
+
+  React.useEffect(() => {
+    onIntervalChange(interval);
+  }, [interval]);
+
+  React.useEffect(() => {
+    if (timeRange?.from) {
+      setInterval(determineInterval(timeRange));
+    }
+  }, [timeRange]);
+
+  const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
   const [data, setData] = React.useState([]);
   const [status, setStatus] = React.useState({ loading: true });
@@ -32,24 +51,28 @@ export const Aggregate = ({
             path: `/1/analytics/${type}`,
             baseUrl,
             token,
-            body: getAnalyticsRequestBody({ params, timeRange, ctx }),
+            body: getAnalyticsRequestBody({
+              params: { ...params, interval },
+              timeRange,
+              ctx,
+            }),
           })
         )
       );
-      setData(data);
       setStatus({ success: true });
+      setData(data);
     } catch (error) {
       setStatus({ error });
     }
   }
 
   React.useEffect(() => {
-    if (isReady) {
+    if (isReady && interval && requests.length) {
       fetchData();
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [token, baseUrl, isReady, requests, type]);
+  }, [token, baseUrl, isReady, timeRange, interval, type, requests]);
 
   if (typeof children === "function") {
     return children({ data, status, timeRange, setInterval });
@@ -71,4 +94,9 @@ Aggregate.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
   timeRange: TimeRangeType,
+};
+
+Aggregate.defaultProps = {
+  interval: "1d",
+  onIntervalChange: () => {},
 };

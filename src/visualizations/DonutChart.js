@@ -185,7 +185,7 @@ export const DonutChart = ({
 };
 
 DonutChart.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.node,
   status: PropTypes.object,
   limit: PropTypes.number,
   labelFormatter: PropTypes.func,

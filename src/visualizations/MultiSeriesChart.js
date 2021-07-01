@@ -74,6 +74,7 @@ export const MultiSeriesChart = ({
   data,
   timeRange,
   chartType: propsChartType,
+  onIntervalChange,
   valueField,
   labelFormatter,
   valueFormatter,
@@ -162,6 +163,7 @@ export const MultiSeriesChart = ({
       chartTypes={defaultChartTypes}
       actions={defaultActions}
       title={title}
+      onIntervalChange={onIntervalChange}
       onChartTypeChange={setChartType}
     >
       {status.success && noData && (
@@ -230,9 +232,10 @@ export const MultiSeriesChart = ({
 };
 
 MultiSeriesChart.propTypes = {
+  onIntervalChange: PropTypes.func,
   labels: PropTypes.arrayOf(PropTypes.string),
   status: PropTypes.object,
-  title: PropTypes.string,
+  title: PropTypes.node,
   legend: PropTypes.bool,
   stacked: PropTypes.bool,
   timeRange: TimeRangeType,

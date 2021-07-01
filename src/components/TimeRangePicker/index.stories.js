@@ -7,8 +7,12 @@ import { TimeRangePicker } from ".";
 import { TectonicProvider } from "../TectonicProvider";
 import { Button } from "../Button";
 import { toDate } from "../../utils/date";
-import { AggregateTimeSeries } from "../../aggregations";
-import { SeriesChart } from "../../visualizations";
+import {
+  AggregateTimeSeries,
+  AggregateTerms,
+  Aggregate,
+} from "../../aggregations";
+import { SeriesChart, MultiSeriesChart } from "../../visualizations";
 
 export default {
   title: "Components/TimeRangePicker",
@@ -74,4 +78,56 @@ const TemplateWithChart = (args) => (
   </TectonicProvider>
 );
 
-export const WithProvider = (args) => <TemplateWithChart {...args} />;
+export const WithProvider = TemplateWithChart.bind({});
+
+const TemplateWithMultiChart = (args) => (
+  <TectonicProvider
+    collection={window.sessionStorage.getItem("collection")}
+    token={window.sessionStorage.getItem("token")}
+    dateField="event.orderedAt"
+  >
+    <TimeRangePicker
+      renderButton={(text, handleOnClick) => (
+        <Button onClick={handleOnClick}>{text}</Button>
+      )}
+      {...args}
+    />
+    <br />
+    <AggregateTerms
+      collection={"bar-purchases"}
+      aggField="event.consumption.category"
+      field="event.consumption.price"
+      operation="sum"
+      termsSize={2}
+    >
+      {({ data: terms }) => {
+        return (
+          <Aggregate
+            type="time-series"
+            requests={terms.map((term) => {
+              return {
+                collection: "bar-purchases",
+                operation: "sum",
+                field: "event.consumption.price",
+                dateField: "event.orderedAt",
+                filter: {
+                  terms: [
+                    { "event.consumption.category": { value: term.key } },
+                  ],
+                },
+              };
+            })}
+          >
+            <MultiSeriesChart
+              chartType="area"
+              valueField="value"
+              labels={terms.map((term) => term.key)}
+            />
+          </Aggregate>
+        );
+      }}
+    </AggregateTerms>
+  </TectonicProvider>
+);
+
+export const WithMultiChartProvider = TemplateWithMultiChart.bind({});

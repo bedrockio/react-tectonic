@@ -1,3 +1,5 @@
+import { toDate } from "./date";
+
 const intervals = {
   "1s": 1,
   "10s": 10,
@@ -54,10 +56,13 @@ export function intervalToLabel(interval) {
   return intervalsLabel[interval];
 }
 
-export function determineInterval(from, to) {
+export function determineInterval(timeRange) {
+  const from = toDate(timeRange.from);
+  const to = toDate(timeRange.to);
   const durationSeconds = (to - from) / 1000;
   const durationMinutes = durationSeconds / 60;
   const durationHours = durationMinutes / 60;
+
   if (durationHours > 6 * 30 * 24) {
     return "1w";
   }

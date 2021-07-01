@@ -222,7 +222,7 @@ export const SeriesChart = ({
 };
 
 SeriesChart.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.node,
   valueFormatter: PropTypes.func,
   labelFormatter: PropTypes.func,
   valueField: PropTypes.string,

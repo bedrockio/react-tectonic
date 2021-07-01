@@ -51,8 +51,8 @@ const TemplateWithProvider = (args) => (
       {...args}
     >
       <MultiSeriesChart
-        valueFieldNames={["Wine", "Food", "Beer"]}
-        variant="bar"
+        labels={["Wine", "Food", "Beer"]}
+        chartType="bar"
         stacked
         valueField="value"
       />
@@ -96,11 +96,9 @@ const TemplateTermsAggregated = (args) => (
             {...args}
           >
             <MultiSeriesChart
-              variant="area"
-              area
-              stacked
+              chartType="area"
               valueField="value"
-              valueFieldNames={terms.map((term) => term.key)}
+              labels={terms.map((term) => term.key)}
             />
           </Aggregate>
         );

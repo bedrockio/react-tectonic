@@ -81,7 +81,7 @@ Table.propTypes = {
    */
   data: PropTypes.array,
   chartContainer: PropTypes.elementType,
-  title: PropTypes.string,
+  title: PropTypes.node,
   labelFormatter: PropTypes.func,
   valueFormatter: PropTypes.func,
   valueField: PropTypes.string,
