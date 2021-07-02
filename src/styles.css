@@ -128,6 +128,7 @@ body {
 
 .tnic-overlay {
   position: absolute;
+  top: 110%;
   box-shadow: 0px 2px 3px 0px rgb(60 64 67 / 30%),
     0px 6px 10px 4px rgb(60 64 67 / 15%);
   background-color: #fff;
@@ -302,7 +303,7 @@ body {
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 0.6em;
   align-items: center;
 }
 
@@ -312,6 +313,12 @@ body {
   border-top: 1px solid #ccc;
 }
 
+.tnic-header .tnic-button {
+  margin-right: 0;
+}
+.tnic-footer .tnic-button {
+  margin-right: 0;
+}
 /*** Other ***/
 
 .tnic-hovertext {
@@ -370,6 +377,12 @@ body {
 .tnic-dropdown__active .tnic-dropdown--menu {
   display: block !important;
   visibility: visible !important;
+}
+
+.tnic-dropdown--item.tnic-dropdown__selected {
+  background-color: var(--tnic-primary-color-hover);
+  fill: #fff;
+  color: #fff;
 }
 
 .tnic-dropdown__right .tnic-dropdown--menu {
@@ -432,6 +445,8 @@ body {
 
 .tnic-dropdown--item:hover {
   background-color: rgba(0, 0, 0, 0.04);
+  color: #000;
+  fill: #000;
 }
 
 .tnic-dropdown--item .tnic-icon {
@@ -441,10 +456,7 @@ body {
 /** ChartContainer **/
 
 .tnic-chartContainer {
-  margin: 1rem 0em;
   padding: 1em;
-  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
-    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
   background-color: #fff;
   border-radius: 2px;
   position: relative;

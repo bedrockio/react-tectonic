@@ -74,7 +74,7 @@ export const AggregateTimeSeries = ({
   }, [token, baseUrl, isReady, interval, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
-    return children({ data, status, timeRange, setInterval });
+    return children({ data, status, timeRange, setInterval, interval });
   }
 
   return React.Children.map(children, (child) =>
@@ -82,6 +82,7 @@ export const AggregateTimeSeries = ({
       data,
       status,
       timeRange,
+      interval,
       onIntervalChange: setInterval,
     })
   );

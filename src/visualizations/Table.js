@@ -22,6 +22,7 @@ export const Table = ({
   valueFormatter,
   chartContainer: ChartContainer,
   enabledControls,
+  exportFilename,
 }) => {
   const noData = !data || !data.length;
 
@@ -33,7 +34,7 @@ export const Table = ({
       exportToCsv(
         [valueFieldName, valueFieldName],
         data.map((row) => [row[labelField], row[valueField]]),
-        "export.csv"
+        exportFilename
       );
     }
   }
@@ -89,9 +90,11 @@ Table.propTypes = {
   valueFieldName: PropTypes.string,
   labelFieldName: PropTypes.string,
   enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
+  exportFilename: PropTypes.string,
 };
 
 Table.defaultProps = {
+  exportFilename: "export.csv",
   status: { success: true },
   data: [],
   chartContainer: DefaultChartContainer,

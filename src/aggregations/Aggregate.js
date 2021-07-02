@@ -52,6 +52,7 @@ export const Aggregate = ({
             baseUrl,
             token,
             body: getAnalyticsRequestBody({
+              type,
               params: { ...params, interval },
               timeRange,
               ctx,
@@ -84,6 +85,7 @@ export const Aggregate = ({
       status,
       timeRange,
       onIntervalChange: setInterval,
+      interval,
     })
   );
 };

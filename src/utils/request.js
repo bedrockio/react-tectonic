@@ -95,12 +95,13 @@ export const request = async (options) => {
   }
 };
 
-export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
+export function getAnalyticsRequestBody({ params, timeRange, ctx, type }) {
   const dateField = params.dateField || ctx.dateField;
+
   if (!timeRange) {
     return {
       collection: ctx.collection,
-      dateField,
+      dateField: type === "time-series" ? dateField : undefined,
       ...params,
     };
   }
@@ -125,7 +126,7 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx }) {
         [dateField]: {
           gte: timeRange.from,
           lt: to,
-          time_zone: timeRange.timeRange,
+          time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         },
       },
     },

@@ -54,9 +54,12 @@ export const SeriesChart = ({
   chartType: propsChartType,
   disableDot,
   onIntervalChange,
+  interval,
   timeRange,
   color,
   enabledControls,
+  exportFilename,
+  axisColor,
 }) => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
@@ -128,15 +131,12 @@ export const SeriesChart = ({
       handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {
       exportToCsv(
-        [
-          `"Date - TZ: ${Intl.DateTimeFormat().resolvedOptions().timeZone}"`,
-          "Value",
-        ],
+        ["Date", "Value"],
         data.map((row) => [
           `"${toCsvDateFormat(new Date(row.timestamp))}"`,
           row.value,
         ]),
-        "export.csv"
+        exportFilename
       );
     }
   }
@@ -151,6 +151,8 @@ export const SeriesChart = ({
           value: interval,
         };
       })}
+      activeChartType={chartType}
+      activeInterval={interval}
       chartTypes={defaultChartTypes}
       actions={defaultActions}
       onChartTypeChange={setChartType}
@@ -166,7 +168,7 @@ export const SeriesChart = ({
       <ResponsiveContainer height={400}>
         <Chart
           ref={svgChartRef}
-          key={`${chartType}-${status.success}`}
+          key={`${chartType}-${status.success}-${data.length}`}
           data={data}
           margin={{
             top: 6,
@@ -181,7 +183,8 @@ export const SeriesChart = ({
             name={valueFieldLabel}
             stroke={_color}
             strokeWidth={2}
-            fill={["bar", "area"].includes(chartType) ? _color : undefined}
+            fill={["bar", "area"].includes(chartType) ? `${_color}` : undefined}
+            fillOpacity={0.3}
             opacity={1}
             activeDot={
               disableDot ? { r: 0 } : { r: 6, strokeWidth: 2, fill: "#f5821f" }
@@ -193,15 +196,15 @@ export const SeriesChart = ({
             dataKey="timestamp"
             name="Time"
             tickFormatter={tickFormatter}
-            tick={{ fill: "#6C767B", fontSize: "13" }}
-            tickLine={{ stroke: "#6C767B" }}
-            axisLine={{ stroke: "#6C767B" }}
+            tick={{ fill: axisColor, fontSize: "13" }}
+            tickLine={{ stroke: axisColor }}
+            axisLine={{ stroke: axisColor }}
             tickMargin={5}
           />
           <YAxis
             tickFormatter={valueFormatter}
-            tick={{ fill: "#6C767B", fontSize: "13" }}
-            tickLine={{ fill: "#6C767B" }}
+            tick={{ fill: axisColor, fontSize: "13" }}
+            tickLine={{ fill: axisColor }}
             tickMargin={4}
             padding={{ bottom: 0 }}
             type="number"
@@ -243,12 +246,15 @@ SeriesChart.propTypes = {
    * Color of the line or bar
    */
   color: PropTypes.string,
+  axisColor: PropTypes.string,
   legend: PropTypes.bool,
   disableDot: PropTypes.bool,
   chartContainer: PropTypes.elementType,
+  exportFilename: PropTypes.string,
 };
 
 SeriesChart.defaultProps = {
+  exportFilename: "export.csv",
   valueField: "value",
   valueFieldLabel: "Value",
   data: [],
@@ -258,4 +264,5 @@ SeriesChart.defaultProps = {
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   valueFormatter: (value) => numberWithCommas(value),
   enabledControls: ["intervals", "chartTypes", "actions"],
+  axisColor: "#363B3D",
 };

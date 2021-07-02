@@ -43,6 +43,7 @@ export const DonutChart = ({
   chartContainer: ChartContainer,
   colors,
   colorFn,
+  exportFilename,
 }) => {
   const ctx = useTectonicContext();
 
@@ -119,7 +120,7 @@ export const DonutChart = ({
           getValue(row),
           `${Math.round((getValue(row) / total) * 100)}%`,
         ]),
-        "export.csv"
+        exportFilename
       );
     }
   }
@@ -199,9 +200,11 @@ DonutChart.propTypes = {
   colors: PropTypes.arrayOf(PropTypes.string),
   chartContainer: PropTypes.elementType,
   enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
+  exportFilename: PropTypes.string,
 };
 
 DonutChart.defaultProps = {
+  exportFilename: "export.csv",
   status: { success: true },
   data: [],
   colors: defaultColors,

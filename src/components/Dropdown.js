@@ -7,6 +7,7 @@ export const Dropdown = ({
   icon: Icon,
   alignMenu,
   title,
+  value,
   options,
   onChange,
   classNames,
@@ -36,6 +37,7 @@ export const Dropdown = ({
   return (
     <div className={classes.join(" ")}>
       <Button
+        basic
         onClick={(e) => {
           setOpen(!open);
         }}
@@ -52,7 +54,12 @@ export const Dropdown = ({
             <div
               key={option.label}
               role="option"
-              className="tnic-dropdown--item"
+              className={[
+                "tnic-dropdown--item",
+                value === option.value && "tnic-dropdown__selected",
+              ]
+                .filter(Boolean)
+                .join(" ")}
               onClick={() => onChange(option)}
             >
               {Icon && <Icon />}

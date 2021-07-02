@@ -11,6 +11,8 @@ export const ChartContainer = ({
   chartTypes,
   actions,
   intervals,
+  activeChartType,
+  activeInterval,
   onChartTypeChange,
   onIntervalChange,
   onActionChange,
@@ -30,6 +32,7 @@ export const ChartContainer = ({
         <div className="tnic-chartContainer--actions">
           {enabledControls.includes("chartTypes") && chartTypes.length > 0 && (
             <Dropdown
+              value={activeChartType}
               title="Chart"
               options={chartTypes}
               onChange={(option) => onChartTypeChange(option.value)}
@@ -37,6 +40,7 @@ export const ChartContainer = ({
           )}
           {enabledControls.includes("intervals") && intervals.length > 0 && (
             <Dropdown
+              value={activeInterval}
               title="Interval"
               options={intervals}
               onChange={(option) => onIntervalChange(option.value)}
@@ -58,6 +62,8 @@ export const ChartContainer = ({
 };
 
 ChartContainer.propTypes = {
+  activeChartType: PropTypes.string,
+  activeInterval: PropTypes.string,
   actions: PropTypes.arrayOf(OptionType),
   chartTypes: PropTypes.arrayOf(OptionType),
   intervals: PropTypes.arrayOf(OptionType),

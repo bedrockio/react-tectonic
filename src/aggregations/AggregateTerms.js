@@ -23,7 +23,6 @@ export const AggregateTerms = ({
 
   async function fetchData() {
     setStatus({ loading: true });
-
     try {
       const data = await request({
         method: "POST",

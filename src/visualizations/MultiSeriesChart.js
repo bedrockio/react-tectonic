@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
+import { exportToCsv } from "../utils/exporters";
 import {
   formatterForDataCadence,
   defaultChartTypes,
@@ -15,7 +16,7 @@ import { useTectonicContext } from "../components/TectonicProvider";
 
 import { validIntervals, intervalToLabel } from "../utils/intervals";
 
-import { toDate } from "../utils/date";
+import { toDate, toCsvDateFormat } from "../utils/date";
 
 import {
   AreaChart,
@@ -71,6 +72,7 @@ export const MultiSeriesChart = ({
   variant,
   // eslint-disable-next-line react/prop-types
   valueFieldNames,
+
   data,
   timeRange,
   chartType: propsChartType,
@@ -87,6 +89,9 @@ export const MultiSeriesChart = ({
   title,
   chartContainer: ChartContainer,
   labels,
+  exportFilename,
+  // eslint-disable-next-line react/prop-types
+  interval, //interval
 }) => {
   const ctx = useTectonicContext();
 
@@ -151,9 +156,30 @@ export const MultiSeriesChart = ({
   const intervals =
     validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];
 
+  function handleAction(option) {
+    console.log(option);
+    const action = option.value;
+    if (action === "download-image") {
+      //handleDownloadImage(svgChartRef.current);
+    } else if (action === "export-data") {
+      data.forEach((serie, index) =>
+        exportToCsv(
+          ["Date", "Value"],
+          serie.map((row) => [
+            `"${toCsvDateFormat(new Date(row.timestamp))}"`,
+            row.value,
+          ]),
+          labels[index] || `metric-${index + 1}` + ".csv"
+        )
+      );
+    }
+  }
+
   return (
     <ChartContainer
       enabledControls={noData ? [] : enabledControls}
+      activeInterval={interval}
+      activeChartType={chartType}
       intervals={intervals.map((interval) => {
         return {
           label: intervalToLabel(interval),
@@ -165,6 +191,7 @@ export const MultiSeriesChart = ({
       title={title}
       onIntervalChange={onIntervalChange}
       onChartTypeChange={setChartType}
+      onActionChange={handleAction}
     >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
@@ -193,8 +220,9 @@ export const MultiSeriesChart = ({
                 name={labels ? labels[index] : `Metric ${index + 1}`}
                 stroke={color}
                 fill={["area", "bar"].includes(chartType) ? color : undefined}
-                fillOpacity={1}
+                fillOpacity={0.3}
                 opacity={1}
+                dot={false}
                 activeDot={disableDot ? { r: 0 } : { r: 6 }}
                 stackId={chartType !== "line" && stacked ? 1 : undefined}
               />
@@ -250,9 +278,11 @@ MultiSeriesChart.propTypes = {
   enabledControls: PropTypes.arrayOf(
     PropTypes.oneOf(["intervals", "chartTypes", "actions"])
   ),
+  exportFilename: PropTypes.string,
 };
 
 MultiSeriesChart.defaultProps = {
+  exportFilename: "export.csv",
   data: [],
   status: { success: true },
   colors: defaultColors,
@@ -263,4 +293,5 @@ MultiSeriesChart.defaultProps = {
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
   stacked: true,
+  labels: [],
 };
