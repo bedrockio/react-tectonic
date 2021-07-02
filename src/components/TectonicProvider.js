@@ -189,7 +189,7 @@ TectonicProvider.propTypes = {
   token: PropTypes.string,
   collection: PropTypes.string,
   dateField: PropTypes.string,
-  baseUrl: PropTypes.bool,
+  baseUrl: PropTypes.string,
   defaultTimeRange: PropTypes.func,
   timeRange: TimeRangeType,
   getTimeRangeFromCollectionStats: PropTypes.func,
