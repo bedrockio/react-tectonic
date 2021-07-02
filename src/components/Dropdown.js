@@ -23,6 +23,7 @@ export const Dropdown = ({
 
   function listener() {
     setOpen(false);
+    return false;
   }
 
   React.useEffect(() => {
