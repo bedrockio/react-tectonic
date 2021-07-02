@@ -29,6 +29,8 @@ export const Dropdown = ({
   React.useEffect(() => {
     if (open) {
       document.addEventListener("click", listener);
+    } else {
+      document.removeEventListener("click", listener);
     }
     return () => {
       document.removeEventListener("click", listener);
