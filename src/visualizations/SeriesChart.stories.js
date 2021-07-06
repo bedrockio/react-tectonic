@@ -5,7 +5,7 @@ import { SeriesChart } from "./SeriesChart";
 const data = [
   {
     timestamp: 1535932800000,
-    value: 14,
+    value: 0,
   },
   {
     timestamp: 1536537600000,
@@ -45,7 +45,7 @@ const data = [
   },
   {
     timestamp: 1541980800000,
-    value: 25,
+    value: 30,
   },
 ];
 
@@ -91,3 +91,6 @@ WithData.args = { data, status: "success" };
 
 export const WithoutData = Template.bind({});
 WithoutData.args = { data: [], status: "success" };
+
+export const BarChart = Template.bind({});
+BarChart.args = { data, chartType: "bar", status: "success" };

@@ -60,6 +60,7 @@ export const SeriesChart = ({
   enabledControls,
   exportFilename,
   axisColor,
+  height,
 }) => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
@@ -177,6 +178,8 @@ export const SeriesChart = ({
             bottom: 6,
           }}
         >
+          <Tooltip formatter={valueFormatter} labelFormatter={labelFormatter} />
+
           <ChartGraph
             type="monotoneX"
             dataKey={valueField}
@@ -186,11 +189,12 @@ export const SeriesChart = ({
             fill={["bar", "area"].includes(chartType) ? `${_color}` : undefined}
             fillOpacity={0.3}
             opacity={1}
-            activeDot={
-              disableDot ? { r: 0 } : { r: 6, strokeWidth: 2, fill: "#f5821f" }
-            }
+            {...(["line", "area"].includes(chartType)
+              ? {
+                  activeDot: disableDot ? { r: 0 } : { r: 6 },
+                }
+              : {})}
             dot={false}
-            barSize={30}
           />
           <XAxis
             dataKey="timestamp"
@@ -200,24 +204,16 @@ export const SeriesChart = ({
             tickLine={{ stroke: axisColor }}
             axisLine={{ stroke: axisColor }}
             tickMargin={5}
+            padding={{ left: 20, right: 9 }}
           />
           <YAxis
             tickFormatter={valueFormatter}
             tick={{ fill: axisColor, fontSize: "13" }}
             tickLine={{ fill: axisColor }}
-            tickMargin={4}
-            padding={{ bottom: 0 }}
-            type="number"
+            tickMargin={5}
+            padding={{ bottom: 10, top: 10 }}
             mirror
           />
-
-          {/* The bar chart blows up if there is tooltip? disabling for now */}
-          {chartType !== "bar" && (
-            <Tooltip
-              formatter={valueFormatter}
-              labelFormatter={labelFormatter}
-            />
-          )}
         </Chart>
       </ResponsiveContainer>
     </ChartContainer>
@@ -225,6 +221,7 @@ export const SeriesChart = ({
 };
 
 SeriesChart.propTypes = {
+  interval: PropTypes.string,
   title: PropTypes.node,
   valueFormatter: PropTypes.func,
   labelFormatter: PropTypes.func,

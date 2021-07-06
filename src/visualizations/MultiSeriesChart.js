@@ -157,7 +157,6 @@ export const MultiSeriesChart = ({
     validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];
 
   function handleAction(option) {
-    console.log(option);
     const action = option.value;
     if (action === "download-image") {
       //handleDownloadImage(svgChartRef.current);
@@ -223,8 +222,11 @@ export const MultiSeriesChart = ({
                 fillOpacity={0.3}
                 opacity={1}
                 dot={false}
-                activeDot={disableDot ? { r: 0 } : { r: 6 }}
-                stackId={chartType !== "line" && stacked ? 1 : undefined}
+                {...(["line", "area"].includes(chartType)
+                  ? {
+                      activeDot: disableDot ? { r: 0 } : { r: 6 },
+                    }
+                  : {})}
               />
             );
           })}
@@ -237,12 +239,14 @@ export const MultiSeriesChart = ({
             tickLine={{ stroke: "#6C767B" }}
             axisLine={{ stroke: "#6C767B" }}
             tickMargin={8}
+            padding={{ left: 20, right: 9 }}
           />
           <YAxis
             tickFormatter={valueFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
             tickMargin={8}
+            padding={{ bottom: 10, top: 10 }}
             mirror
           />
           {(chartType === "bar" || legend) && <Legend iconType="circle" />}
