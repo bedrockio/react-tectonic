@@ -12,10 +12,12 @@ export default {
 
 const defaultArgs = {
   collection: "bar-purchases",
-  aggField: "event.server.name",
+  aggField: "event.customer.name",
   field: "event.consumption.price",
+  aggFieldOrder: "desc",
   operation: "sum",
   termsSize: 10,
+  includeTopHit: true,
 };
 
 const defaultArgsWithToken = {

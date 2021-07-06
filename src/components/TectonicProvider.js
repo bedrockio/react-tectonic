@@ -208,16 +208,21 @@ TectonicProvider.defaultProps = {
         to: stats.to,
         from: startOfDay(
           new Date(
-            Math.max(stats.from.valueOf(), sub(stats.to, { days: 7 }).valueOf())
+            Math.max(
+              stats.from.valueOf(),
+              sub(stats.to, { hours: 12 }).valueOf()
+            )
           )
         ),
       };
     }
 
+    const hours = stats.to - stats.from / 1000 / 60 / 60;
     const timeRange = {
       to: "now",
-      from: "now-1h/d",
+      from: hours > 48 ? "now-1h/d" : stats.from,
     };
+
     return timeRange;
   },
 };

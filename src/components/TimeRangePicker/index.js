@@ -1,9 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { toDate } from "../../utils/date";
 import { TimeRangeType } from "../../utils/propTypes";
 import { Overlay } from "./Overlay";
 
 import { useTectonicContext } from "../TectonicProvider";
+
+function formatDate(date) {
+  if (date === "now") return "Now";
+  return toDate(date).toLocaleString();
+}
 
 function getTimeRangeForLabel(timeRange = {}, timeOptions = []) {
   if (timeRange?.label) {
@@ -20,7 +26,7 @@ function getTimeRangeForLabel(timeRange = {}, timeOptions = []) {
   }
 
   if (timeRange.from && timeRange.to) {
-    return `${timeRange.to.toLocaleDateString()}-${timeRange.from.toLocaleDateString()}`;
+    return `${formatDate(timeRange.from)} - ${formatDate(timeRange.to)}`;
   }
 
   return "Select Time Range";

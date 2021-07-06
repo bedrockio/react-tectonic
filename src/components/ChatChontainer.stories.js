@@ -2,7 +2,6 @@ import React from "react";
 
 import { ChartContainer } from "./ChartContainer";
 import { ResponsiveContainer } from "recharts";
-import { IconBarChart, IconLineChart } from "./Icons";
 
 export default {
   title: "Components/ChartContainer",
@@ -29,24 +28,9 @@ const Template = (args) => (
   </ChartContainer>
 );
 
-export const Basic = (args) => (
-  <Template
-    {...args}
-    intervals={[{ label: "1day" }]}
-    chartTypes={[
-      {
-        label: "line",
-        icon: IconLineChart,
-      },
-      {
-        label: "bar",
-        icon: IconBarChart,
-      },
-    ]}
-    actions={[{ label: "Download" }]}
-  />
-);
+export const Basic = Template.bind({});
 
-export const WithTitle = (args) => (
-  <Template {...args} title={<h3>title</h3>} />
-);
+export const WithTitle = Template.bind({});
+WithTitle.args = {
+  title: <h3>title</h3>,
+};

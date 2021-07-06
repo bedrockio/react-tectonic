@@ -166,7 +166,7 @@ export const SeriesChart = ({
       )}
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
-      <ResponsiveContainer height={400}>
+      <ResponsiveContainer height={height}>
         <Chart
           ref={svgChartRef}
           key={`${chartType}-${status.success}-${data.length}`}
@@ -221,6 +221,7 @@ export const SeriesChart = ({
 };
 
 SeriesChart.propTypes = {
+  height: PropTypes.number,
   interval: PropTypes.string,
   title: PropTypes.node,
   valueFormatter: PropTypes.func,
@@ -254,6 +255,7 @@ SeriesChart.defaultProps = {
   exportFilename: "export.csv",
   valueField: "value",
   valueFieldLabel: "Value",
+  height: 400,
   data: [],
   status: { success: true },
   chartType: "line",

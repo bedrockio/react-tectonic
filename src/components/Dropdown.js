@@ -76,6 +76,10 @@ export const Dropdown = ({
 };
 
 Dropdown.propTypes = {
+  classNames: PropTypes.arrayOf(PropTypes.string),
+  title: PropTypes.string,
+  value: PropTypes.any,
+  icon: PropTypes.any,
   options: PropTypes.arrayOf(OptionType),
   onChange: PropTypes.func,
   alignMenu: PropTypes.oneOf(["left", "right", "center"]),
