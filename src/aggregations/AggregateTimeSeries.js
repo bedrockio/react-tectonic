@@ -42,7 +42,7 @@ export const AggregateTimeSeries = ({
   async function fetchData() {
     setStatus({ loading: true });
     try {
-      const data = await request({
+      const { data } = await request({
         method: "POST",
         path: "/1/analytics/time-series",
         baseUrl,

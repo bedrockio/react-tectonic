@@ -26,7 +26,7 @@ export const AggregateStats = ({
   async function fetchData() {
     setStatus({ loading: true });
     try {
-      const data = await request({
+      const { data } = await request({
         method: "POST",
         path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
         baseUrl,

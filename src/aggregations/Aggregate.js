@@ -57,7 +57,7 @@ export const Aggregate = ({
               timeRange,
               ctx,
             }),
-          })
+          }).then(({ data }) => data)
         )
       );
       setStatus({ success: true });
