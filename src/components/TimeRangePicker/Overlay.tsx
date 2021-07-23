@@ -8,15 +8,15 @@ import { labelsToUnit } from "../../utils/date";
 
 export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   const [optionValue, setOptionValue] = React.useState();
-  const [option, setOption] = React.useState();
-  const [refreshKey, setRefreshKey] = React.useState();
+  const [option, setOption] = React.useState<any>(undefined);
+  const [refreshKey, setRefreshKey] = React.useState<number>();
 
   const [validTimeOptions, setValidTimeOptions] = React.useState(
     props.timeOptions
   );
 
   const handleReset = () => {
-    setOption();
+    setOption(undefined);
     setValidTimeOptions([...props.timeOptions]);
     setRefreshKey(Date.now());
   };

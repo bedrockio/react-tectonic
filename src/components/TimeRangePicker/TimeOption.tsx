@@ -2,7 +2,7 @@ import React from "react";
 
 export const TimeOption = ({ active, onSelect, ...props }) => {
   const [value, setValue] = React.useState(props.default);
-  const inputRef = React.useRef(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
   const { type, label, unit } = props;
 
   React.useEffect(() => {

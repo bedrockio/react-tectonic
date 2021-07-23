@@ -11,13 +11,13 @@ function formatDate(date) {
   return toDate(date).toLocaleString();
 }
 
-function getTimeRangeForLabel(timeRange = {}, timeOptions = []) {
+function getTimeRangeForLabel(timeRange: any = {}, timeOptions = []) {
   if (timeRange?.label) {
     return timeRange.label;
   }
 
-  const found = timeOptions.find(
-    (timeOption) =>
+  const found: any = timeOptions.find(
+    (timeOption: any) =>
       timeOption.from === timeRange.from && timeOption.to === timeRange.to
   );
 

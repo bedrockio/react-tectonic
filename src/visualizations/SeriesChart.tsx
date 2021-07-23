@@ -89,10 +89,10 @@ export const SeriesChart = ({
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");
 
-  const svgChartRef = React.createRef();
+  const svgChartRef = React.useRef(null);
 
-  let Chart = LineChart;
-  let ChartGraph = Line;
+  let Chart;
+  let ChartGraph;
 
   React.useEffect(() => {
     setChartType(propsChartType);
@@ -101,10 +101,12 @@ export const SeriesChart = ({
   if (chartType == "area") {
     Chart = AreaChart;
     ChartGraph = Area;
-  }
-  if (chartType === "bar") {
+  } else if (chartType === "bar") {
     Chart = BarChart;
     ChartGraph = Bar;
+  } else {
+    ChartGraph = Line
+    Chart = LineChart;
   }
 
   const tickFormatter = formatterForDataCadence(data);

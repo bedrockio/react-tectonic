@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const Message = ({ children, error, classNames = [] }) => {
+export const Message = ({ children, error, classNames = [] }: { children:React.ReactNode, error?: boolean, classNames?: string[]}) => {
   const classes = ["tnic-message", error && "error", ...classNames].filter(
     Boolean
   );
@@ -13,13 +13,15 @@ export const Message = ({ children, error, classNames = [] }) => {
   );
 };
 
+
+
 Message.propTypes = {
   children: PropTypes.node,
-  floating: PropTypes.bool,
+  boolean: PropTypes.bool,
   /**
    * Centers the text
    */
-  center: PropTypes.bool,
+   classNames: PropTypes.arrayOf(PropTypes.string),
 };
 
 Message.defaultProps = {

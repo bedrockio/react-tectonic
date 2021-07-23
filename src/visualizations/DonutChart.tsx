@@ -63,7 +63,7 @@ export const DonutChart = ({
 
   const labelFormatter = (item) => propsLabelFormatter(item[labelField]);
 
-  const svgChartRef = React.createRef();
+  const svgChartRef = React.useRef(null);
 
   let trimmedData = data;
   if (limit) {

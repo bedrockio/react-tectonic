@@ -20,3 +20,4 @@ generator
 secrets/
 .vscode
 yarn.lock
+esm

@@ -6,13 +6,13 @@ import {
 
 const ONE_HOUR = 1000 * 60 * 60;
 
-export const formatterForDataCadence = (data = []) => {
+export const formatterForDataCadence = (data: any[] = [], dateField="timestamp") => {
   if (!data[1]) {
     return () => "No Data";
   }
 
-  const delta = data[1].timestamp - data[0].timestamp;
-  const range = data[data.length - 1].timestamp - data[0].timestamp;
+  const delta = data[1][dateField] - data[0][dateField];
+  const range = data[data.length - 1][dateField] - data[0][dateField];
 
   if (range > 356 * 24 * ONE_HOUR) {
     const formatter = Intl.DateTimeFormat("en-US", {

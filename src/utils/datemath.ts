@@ -40,6 +40,7 @@ function startOrEndOf(start, date, unit) {
   if (unit === "y") {
     return start ? startOfYear(outDate) : endOfYear(outDate);
   }
+  throw Error(`Unknown unit ${unit}`);
 }
 
 export const unitsMap = {
@@ -62,7 +63,7 @@ export const unitsAsc = [...units].reverse();
 const isDate = (d) => Object.prototype.toString.call(d) === "[object Date]";
 const isValidDate = (d) => isDate(d) && !isNaN(d.valueOf());
 
-export function parse(input, options = {}) {
+export function parse(input, options: { roundUp?: boolean, forceNow?: Date } = {}) {
   const text = input;
   const { roundUp = false, forceNow = new Date() } = options;
 

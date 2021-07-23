@@ -117,8 +117,8 @@ export const MultiSeriesChart = ({
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");
 
-  let Chart = LineChart;
-  let ChartGraph = Line;
+  let Chart;
+  let ChartGraph;
 
   React.useEffect(() => {
     setChartType(propsChartType);
@@ -127,10 +127,12 @@ export const MultiSeriesChart = ({
   if (chartType == "area") {
     Chart = AreaChart;
     ChartGraph = Area;
-  }
-  if (chartType === "bar") {
+  } else if (chartType === "bar") {
     Chart = BarChart;
     ChartGraph = Bar;
+  } else {
+    Chart = LineChart;
+    ChartGraph = Line;
   }
 
   const fusedData = fuse(data, valueField);

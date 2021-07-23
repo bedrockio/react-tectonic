@@ -50,8 +50,6 @@ export const Calendar = ({
     }
   }, [range]);
 
-  const [isLocalTzChecked, setIsLocalTzChecked] = React.useState(true);
-
   React.useEffect(() => {
     if (range.to && range.from) {
       onChange(mergeRanges(range, time));

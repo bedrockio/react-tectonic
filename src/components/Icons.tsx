@@ -92,7 +92,6 @@ export const IconChevronRight = () => {
         height="100%"
         viewBox="0 0 24 24"
         width="100%"
-        fit=""
         preserveAspectRatio="xMidYMid meet"
         focusable="false"
       >

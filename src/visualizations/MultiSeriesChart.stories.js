@@ -121,11 +121,11 @@ export default {
   },
 };
 
-const TemplateWithProvider = (args) => (
+const TemplateWithProvider = (args) =>
   <TectonicProvider disableInitialization>
     <MultiSeriesChart {...args} />
   </TectonicProvider>
-);
+;
 
 export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = {

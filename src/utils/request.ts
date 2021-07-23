@@ -1,4 +1,4 @@
-import { version } from "../../package.json";
+const version ="0.1.0";
 class CustomError extends Error {
   get name() {
     return this.constructor.name;
@@ -6,6 +6,9 @@ class CustomError extends Error {
 }
 
 class ApiError extends CustomError {
+  status: number;
+  details: any;
+
   constructor(message, status, details) {
     super(message);
     this.status = status;
@@ -43,8 +46,7 @@ export const request = async (options) => {
   );
 
   const url = new URL(path, baseUrl);
-
-  url.search = new URLSearchParams(params);
+  url.search = (new URLSearchParams(params)).toString();
 
   if (files) {
     const data = new FormData();
@@ -52,7 +54,7 @@ export const request = async (options) => {
       data.append("file", file);
     });
     for (let [key, value] of Object.entries(body || {})) {
-      data.append(key, value);
+      data.append(key, value as any);
     }
     body = data;
   } else if (!(body instanceof FormData)) {
@@ -60,7 +62,7 @@ export const request = async (options) => {
     headers["Content-Type"] = "application/json";
   }
 
-  const res = await fetch(url, {
+  const res = await fetch(url.toString(), {
     method,
     headers,
     body,

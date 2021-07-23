@@ -3,9 +3,23 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
-import { version } from "../../package.json";
+const version ="0.1.0";
 
-const TectonicContext = React.createContext({});
+interface IContextProps {
+  primaryColor: string,
+  token?: string,
+  setToken: (token: string) => void,
+  setBaseUrl: (url: string) => void,
+  timeRange: {
+    from: Date | string,
+    to: Date | string,
+  },
+  setTimeRange:(any)=> void,
+  stats: any
+}
+
+
+const TectonicContext = React.createContext({} as IContextProps );
 
 const aDay = 24 * 60 * 60 * 1000;
 

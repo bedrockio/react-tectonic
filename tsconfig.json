@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ES2015",
+    "esModuleInterop": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "removeComments": true,
+    "declaration": true,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "noEmit": false,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "esm",
+    "declarationDir": "esm",
+    "lib": ["es2017", "dom"],
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "include": ["./src/index.ts"]
+}
