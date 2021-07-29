@@ -4,6 +4,8 @@ import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { determineInterval } from "../utils/intervals";
 import { TimeRangeType } from "../utils/propTypes";
+import{ IStatus } from '../types';
+
 
 export const Aggregate = ({
   timeRange,
@@ -38,8 +40,8 @@ export const Aggregate = ({
 
   const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
-  const [data, setData] = React.useState([]);
-  const [status, setStatus] = React.useState({ loading: true });
+  const [data, setData] = React.useState<any[]>([]);
+  const [status, setStatus] = React.useState<IStatus>({ loading: true });
 
   async function fetchData() {
     setStatus({ loading: true });

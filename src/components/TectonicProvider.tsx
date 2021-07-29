@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
+import { ITimeRange } from '../types';
+
 const version ="0.1.0";
 
 interface IContextProps {
@@ -10,25 +12,37 @@ interface IContextProps {
   token?: string,
   setToken: (token: string) => void,
   setBaseUrl: (url: string) => void,
-  timeRange: {
-    from: Date | string,
-    to: Date | string,
-  },
-  setTimeRange:(any)=> void,
+  isReady: boolean,
+  timeRange: ITimeRange
+  setTimeRange:(timeRange: any)=> void,
   stats: any
+  baseUrl: string,
 }
-
 
 const TectonicContext = React.createContext({} as IContextProps );
 
 const aDay = 24 * 60 * 60 * 1000;
 
+interface ITectonicProviderProps {
+  disableInitialization?: boolean,
+  getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange, 
+  children: React.ReactNode
+  token?: string,
+  baseUrl?: string,
+  timeZone?: string,
+  timeRange?: string,
+  dateField?: string,
+  collection?: string,
+  primaryColor?: string,
+}
+
 const TectonicProvider = ({
   disableInitialization,
   getTimeRangeFromCollectionStats,
   children,
+  
   ...props
-}) => {
+}: ITectonicProviderProps) => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeZone, setTimeZone] = React.useState(props.timeZone);
