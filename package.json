@@ -11,7 +11,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build": "rm -rf lib && BABEL_ENV=esm babel src/ -d lib/ && cp src/styles.css lib/styles.css",
-    "deploy": "storybook-to-ghpages"
+    "deploy": "storybook-to-ghpages",
+    "prerelease": "npm run build"
   },
   "repository": {
     "type": "git",
