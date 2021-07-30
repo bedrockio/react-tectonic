@@ -71,7 +71,7 @@ const TectonicProvider = ({
     }
 
     try {
-      const data = await request({
+      const { data } = await request({
         method: "POST",
         path: "/1/analytics/stats",
         baseUrl,
