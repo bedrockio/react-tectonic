@@ -11,3 +11,16 @@ export interface IStatus {
     message: string,
   }
 }
+
+export interface IAggregateFilterType {
+  from?: number,
+  size?: number,
+  terms: any[],
+  range?: any,
+  notExists?: string,
+  exists?: string,
+  minTimestamp?: number,
+  q?: string,
+}
+
+

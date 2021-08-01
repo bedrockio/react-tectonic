@@ -14,6 +14,7 @@ import { exportToCsv, downloadImage } from "../utils/exporters";
 import { startCase } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors, defaultActions } from "../utils/visualization";
+import { IStatus } from '../types';
 
 import {
   Message,
@@ -21,17 +22,46 @@ import {
   useTectonicContext,
 } from "../components";
 
-/**
- * Primary UI component for user interaction
- */
+
+const defaultProps = {
+  exportFilename: "export.csv",
+  status: { success: true },
+  data: [],
+  colors: defaultColors,
+  chartContainer: DefaultChartContainer,
+  enabledControls: ["actions"],
+  labelFormatter: (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  valueFormatter: (value) => {
+    return numberWithCommas(value);
+  },
+  labelField: "key",
+  valueField: "count",
+}
+
+type DonutChartProps = {
+  status?: IStatus,
+  title?: JSX.Element,
+  limit?: number,
+  labelFormatter?: (label: string) => string,
+  valueFormatter?: (value: number) => string,
+  valueField: string, 
+  labelField?: string,
+  procent?: boolean,
+  precision?: number,
+  colorFn?: (entry: any, index: number) => string,
+  data: any[],
+  colors?: string[],
+  chartContainer?: React.ElementType,
+  enabledControls?: ["actions"],
+  exportFilename?: string
+};
+
 export const DonutChart = ({
   status,
   data,
   labelField,
-  // eslint-disable-next-line react/prop-types
-  keyField,
-  // eslint-disable-next-line react/prop-types
-  keyFormatter,
   labelFormatter: propsLabelFormatter,
   valueFormatter,
   valueField,
@@ -44,28 +74,15 @@ export const DonutChart = ({
   colors,
   colorFn,
   exportFilename,
-}) => {
+}: DonutChartProps & typeof defaultProps) => {
+
   const ctx = useTectonicContext();
-
-  if (keyField) {
-    // eslint-disable-next-line no-console
-    console.warn("[DonutChartChart] keyField is deprecated use labelField");
-    labelField = keyField;
-  }
-
-  if (keyFormatter) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[DonutChartChart] keyFormatter is deprecated use labelFormatter"
-    );
-    propsLabelFormatter = keyFormatter;
-  }
 
   const labelFormatter = (item) => propsLabelFormatter(item[labelField]);
 
   const svgChartRef = React.useRef(null);
 
-  let trimmedData = data;
+  let trimmedData: any[] = data;
   if (limit) {
     const other = { key: "Other", count: 0, value: 0 };
     data.slice(limit - 1).forEach((item) => {
@@ -139,7 +156,7 @@ export const DonutChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
 
       <ResponsiveContainer height={height}>
-        <PieChart ref={svgChartRef} data={trimmedData} key={status.success}>
+        <PieChart ref={svgChartRef} data={trimmedData} key={status.success + ''}>
           <Pie
             data={trimmedData}
             innerRadius={Math.round(height * 0.2)}
@@ -194,7 +211,7 @@ DonutChart.propTypes = {
   valueField: PropTypes.string,
   labelField: PropTypes.string,
   procent: PropTypes.bool,
-  precision: PropTypes.bool,
+  precision: PropTypes.number,
   colorFn: PropTypes.func,
   data: PropTypes.array,
   colors: PropTypes.arrayOf(PropTypes.string),
@@ -203,19 +220,4 @@ DonutChart.propTypes = {
   exportFilename: PropTypes.string,
 };
 
-DonutChart.defaultProps = {
-  exportFilename: "export.csv",
-  status: { success: true },
-  data: [],
-  colors: defaultColors,
-  chartContainer: DefaultChartContainer,
-  enabledControls: ["actions"],
-  labelFormatter: (label) => {
-    return startCase(label.toString().toLowerCase());
-  },
-  valueFormatter: (value) => {
-    return numberWithCommas(value);
-  },
-  labelField: "key",
-  valueField: "count",
-};
+DonutChart.defaultProps = defaultProps;

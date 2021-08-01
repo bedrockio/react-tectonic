@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-interface ButtonPropType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children:React.ReactNode,
   icon?: boolean,
   disabled?: boolean,
@@ -10,7 +10,6 @@ interface ButtonPropType extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   compact?: boolean,
   basic?: boolean,
 }
-
 
 export const Button = ({
   children,
@@ -21,7 +20,7 @@ export const Button = ({
   compact,
   basic,
   ...props
-}: ButtonPropType) => {
+}: ButtonProps) => {
   const className = [
     "tnic-button",
     primary && "tnic-button--primary",

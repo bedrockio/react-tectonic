@@ -9,6 +9,40 @@ import {
 } from "../components";
 
 import { exportToCsv } from "../utils/exporters";
+import { IStatus } from "types";
+
+const defaultProps = {
+  exportFilename: "export.csv",
+  status: { success: true },
+  data: [],
+  chartContainer: DefaultChartContainer,
+  valueFieldName: "Value",
+  labelFieldName: "Name",
+  labelField: "key",
+  valueField: "value",
+  labelFormatter: (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  valueFormatter: (value) => {
+    return numberWithCommas(value);
+  },
+  enabledControls: ["actions"],
+};
+
+type TableProps = {
+  status?: IStatus;
+  title?: JSX.Element;
+  labelFormatter?: (label: string) => string;
+  valueFormatter?: (value: number) => string;
+  valueField?: string;
+  labelField?: string;
+  valueFieldName?: string;
+  labelFieldName?: string;
+  data: any[];
+  chartContainer?: React.ElementType;
+  enabledControls?: ["actions"];
+  exportFilename?: string;
+};
 
 export const Table = ({
   status,
@@ -23,7 +57,7 @@ export const Table = ({
   chartContainer: ChartContainer,
   enabledControls,
   exportFilename,
-}) => {
+}: TableProps & typeof defaultProps) => {
   const noData = !data || !data.length;
 
   function handleAction(option) {
@@ -93,21 +127,4 @@ Table.propTypes = {
   exportFilename: PropTypes.string,
 };
 
-Table.defaultProps = {
-  exportFilename: "export.csv",
-  status: { success: true },
-  data: [],
-  chartContainer: DefaultChartContainer,
-  valueFieldName: "Value",
-  labelFieldName: "Name",
-  labelField: "key",
-  valueField: "value",
-  labelFormatter: (label) => {
-    return startCase(label.toString().toLowerCase());
-  },
-  valueFormatter: (value) => {
-    return numberWithCommas(value);
-  },
-
-  enabledControls: ["actions"],
-};
+Table.defaultProps = defaultProps;

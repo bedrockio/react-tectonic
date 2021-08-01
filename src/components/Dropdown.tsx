@@ -1,7 +1,28 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { ReactNode } from "react";
 import { Button } from "./Button";
-import { OptionType } from "../utils/propTypes";
+
+const defaultProps = {
+  onChange: (option) => {},
+  alignMenu: "center",
+  options: [],
+  classNames: [],
+};
+
+type OptionType = {
+  icon?: React.ElementType;
+  value?: string;
+  label: string;
+};
+
+type DropdownType = {
+  icon?: React.ElementType;
+  alignMenu?: "center" | "right" | "left";
+  onChange?: (option: OptionType) => void;
+  title?: ReactNode;
+  classNames: string[];
+  value?: any;
+  options: OptionType[];
+};
 
 export const Dropdown = ({
   icon: Icon,
@@ -11,7 +32,7 @@ export const Dropdown = ({
   options,
   onChange,
   classNames,
-}) => {
+}: DropdownType & typeof defaultProps) => {
   const [open, setOpen] = React.useState(false);
 
   const classes = [
@@ -75,19 +96,4 @@ export const Dropdown = ({
   );
 };
 
-Dropdown.propTypes = {
-  classNames: PropTypes.arrayOf(PropTypes.string),
-  title: PropTypes.string,
-  value: PropTypes.any,
-  icon: PropTypes.any,
-  options: PropTypes.arrayOf(OptionType),
-  onChange: PropTypes.func,
-  alignMenu: PropTypes.oneOf(["left", "right", "center"]),
-};
-
-Dropdown.defaultProps = {
-  onChange: () => {},
-  alignMenu: "center",
-  options: [],
-  classNames: [],
-};
+Dropdown.defaultProps = defaultProps;

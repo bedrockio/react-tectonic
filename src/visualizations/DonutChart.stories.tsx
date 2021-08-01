@@ -46,7 +46,7 @@ WithProvider.args = {
   status: "success",
 };
 
-const Template = (args) => <DonutChart {...args} />;
+const Template = (args) => <DonutChart  {...args} />;
 
 export const DonutChartWithData = Template.bind({});
 DonutChartWithData.args = {

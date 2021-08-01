@@ -21,3 +21,4 @@ secrets/
 .vscode
 yarn.lock
 esm
+package-lock.json

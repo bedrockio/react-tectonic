@@ -1,4 +1,7 @@
-const version ="0.1.0";
+import { ITimeRange } from "../types";
+import metadata from "../metadata.json";
+const version = (metadata as any).version;
+
 class CustomError extends Error {
   get name() {
     return this.constructor.name;
@@ -46,7 +49,7 @@ export const request = async (options) => {
   );
 
   const url = new URL(path, baseUrl);
-  url.search = (new URLSearchParams(params)).toString();
+  url.search = new URLSearchParams(params).toString();
 
   if (files) {
     const data = new FormData();
@@ -97,7 +100,17 @@ export const request = async (options) => {
   }
 };
 
-export function getAnalyticsRequestBody({ params, timeRange, ctx, type }) {
+export function getAnalyticsRequestBody({
+  params,
+  timeRange,
+  ctx,
+  type,
+}: {
+  params: any;
+  type?: string;
+  timeRange?: ITimeRange;
+  ctx: any;
+}) {
   const dateField = params.dateField || ctx.dateField;
 
   if (!timeRange) {
@@ -105,9 +118,10 @@ export function getAnalyticsRequestBody({ params, timeRange, ctx, type }) {
       collection: ctx.collection,
       dateField: type === "time-series" ? dateField : undefined,
       ...params,
-      interval: ["stats", "cardinality"].includes(type)
-        ? undefined
-        : params.interval,
+      interval:
+        type && ["stats", "cardinality"].includes(type)
+          ? undefined
+          : params.interval,
     };
   }
 

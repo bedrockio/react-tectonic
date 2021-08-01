@@ -107,4 +107,4 @@ const TemplateTermsAggregated = (args) => (
   </TectonicProvider>
 );
 
-export const TermsAggregated = TemplateTermsAggregated.bind();
+export const TermsAggregated = TemplateTermsAggregated.bind({});

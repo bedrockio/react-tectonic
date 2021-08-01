@@ -1,11 +1,26 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
-import { determineInterval } from "../utils/intervals";
+import { determineInterval, IntervalType } from "../utils/intervals";
 import { TimeRangeType } from "../utils/propTypes";
-import{ IStatus } from '../types';
+import { IStatus, ITimeRange } from "../types";
 
+const defaultProps = {
+  interval: "auto",
+  onIntervalChange: () => {},
+};
+
+interface AggregatePropType {
+  timeRange?: ITimeRange;
+  baseUrl?: string;
+  token?: string;
+  requests: any[];
+  type: string;
+  children: ReactNode;
+  interval?: IntervalType;
+  onIntervalChange?: (interval: IntervalType) => void;
+}
 
 export const Aggregate = ({
   timeRange,
@@ -16,20 +31,24 @@ export const Aggregate = ({
   onIntervalChange,
   type,
   children,
-}) => {
+}: AggregatePropType & typeof defaultProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
 
-  const [interval, setInterval] = React.useState(propsInterval);
+  const [interval, setInterval] = React.useState<IntervalType | undefined>(
+    propsInterval
+  );
 
   React.useEffect(() => {
     setInterval(propsInterval);
   }, [propsInterval]);
 
   React.useEffect(() => {
-    onIntervalChange(interval);
+    if (interval) {
+      onIntervalChange(interval);
+    }
   }, [interval]);
 
   React.useEffect(() => {
@@ -81,7 +100,7 @@ export const Aggregate = ({
     return children({ data, status, timeRange, setInterval });
   }
 
-  return React.Children.map(children, (child) =>
+  return React.Children.map(children, (child: any) =>
     React.cloneElement(child, {
       data,
       status,
@@ -100,7 +119,4 @@ Aggregate.propTypes = {
   timeRange: TimeRangeType,
 };
 
-Aggregate.defaultProps = {
-  interval: "1d",
-  onIntervalChange: () => {},
-};
+Aggregate.defaultProps = defaultProps;

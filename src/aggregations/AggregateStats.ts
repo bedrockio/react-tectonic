@@ -1,8 +1,22 @@
-import React from "react";
+import { ReactNode, useState, useEffect, Children, cloneElement } from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
-import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
+import { AggregateFilterType } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
+
+import { TimeRangeType } from "../utils/propTypes";
+import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
+
+interface AggregateStateProps {
+  timeRange?: ITimeRange;
+  baseUrl?: string;
+  token?: string;
+  cardinality?: boolean;
+  children: ReactNode;
+  collection?: string;
+  fields: string[];
+  filter?: IAggregateFilterType;
+}
 
 export const AggregateStats = ({
   baseUrl,
@@ -10,9 +24,8 @@ export const AggregateStats = ({
   timeRange,
   cardinality,
   children,
-  dateField,
   ...params
-}) => {
+}: AggregateStateProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
@@ -20,8 +33,8 @@ export const AggregateStats = ({
 
   const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
-  const [data, setData] = React.useState({});
-  const [status, setStatus] = React.useState({ loading: true });
+  const [data, setData] = useState({});
+  const [status, setStatus] = useState<IStatus>({ loading: true });
 
   async function fetchData() {
     setStatus({ loading: true });
@@ -44,7 +57,7 @@ export const AggregateStats = ({
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isReady) {
       fetchData();
     } else if (!token) {
@@ -63,8 +76,8 @@ export const AggregateStats = ({
     return children({ data, status });
   }
 
-  return React.Children.map(children, (child) =>
-    React.cloneElement(child, { data, status })
+  return Children.map(children, (child: any) =>
+    cloneElement(child, { data, status })
   );
 };
 

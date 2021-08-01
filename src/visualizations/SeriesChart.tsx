@@ -18,7 +18,11 @@ import {
   useTectonicContext,
 } from "../components";
 
-import { validIntervals, intervalToLabel } from "../utils/intervals";
+import {
+  validIntervals,
+  intervalToLabel,
+  IntervalType,
+} from "../utils/intervals";
 import { toDate } from "../utils/date";
 
 import {
@@ -34,23 +38,57 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { IStatus, ITimeRange } from "../types";
+
 import { defaultColors } from "../utils/visualization";
+
+const defaultProps = {
+  exportFilename: "export.csv",
+  valueField: "value",
+  valueFieldLabel: "Value",
+  height: 400,
+  data: [],
+  status: { success: true },
+  chartType: "line",
+  chartContainer: DefaultChartContainer,
+  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
+  valueFormatter: (value) => numberWithCommas(value),
+  enabledControls: ["intervals", "chartTypes", "actions"],
+  axisColor: "#363B3D",
+};
+
+type SeriesChartProps = {
+  height?: number;
+  interval?: IntervalType;
+  title?: JSX.Element;
+  labelFormatter?: (label: string) => string;
+  valueFormatter?: (value: number) => string;
+  valueField?: string;
+  labelField?: string;
+  valueFieldLabel?: string;
+  chartType?: "line" | "bar" | "area";
+  status: IStatus;
+  onIntervalChange?: (interval: IntervalType) => void;
+  timeRange?: ITimeRange;
+  enabledControls?: ["intervals" | "chartTypes" | "actions"];
+  data?: any[];
+  axisColor?: string;
+  color?: string;
+  legend?: boolean;
+  disableDot?: boolean;
+  chartContainer?: React.ElementType;
+  exportFilename?: string;
+};
 
 export const SeriesChart = ({
   status,
   data,
   valueField,
-  // eslint-disable-next-line react/prop-types
-  valueFieldName,
   valueFieldLabel,
-  // eslint-disable-next-line react/prop-types
-  valueFieldFormatter,
   valueFormatter,
   labelFormatter,
   chartContainer: ChartContainer,
   title,
-  // eslint-disable-next-line react/prop-types
-  variant,
   chartType: propsChartType,
   disableDot,
   onIntervalChange,
@@ -61,31 +99,9 @@ export const SeriesChart = ({
   exportFilename,
   axisColor,
   height,
-}) => {
+}: SeriesChartProps & typeof defaultProps) => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
-
-  if (valueFieldName) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[SeriesChart] valueFieldName is deprecated use valueFieldLabel"
-    );
-    valueFieldLabel = valueFieldName;
-  }
-
-  if (variant) {
-    // eslint-disable-next-line no-console
-    console.warn("[SeriesChart] varient is deprecated use chartType");
-    propsChartType = variant;
-  }
-
-  if (valueFieldFormatter) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[SeriesChart] valueFieldFormatter is deprecated use valueFormatter"
-    );
-    valueFormatter = valueFieldFormatter;
-  }
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");
 
@@ -105,7 +121,7 @@ export const SeriesChart = ({
     Chart = BarChart;
     ChartGraph = Bar;
   } else {
-    ChartGraph = Line
+    ChartGraph = Line;
     Chart = LineChart;
   }
 
@@ -253,17 +269,4 @@ SeriesChart.propTypes = {
   exportFilename: PropTypes.string,
 };
 
-SeriesChart.defaultProps = {
-  exportFilename: "export.csv",
-  valueField: "value",
-  valueFieldLabel: "Value",
-  height: 400,
-  data: [],
-  status: { success: true },
-  chartType: "line",
-  chartContainer: DefaultChartContainer,
-  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
-  valueFormatter: (value) => numberWithCommas(value),
-  enabledControls: ["intervals", "chartTypes", "actions"],
-  axisColor: "#363B3D",
-};
+SeriesChart.defaultProps = defaultProps;

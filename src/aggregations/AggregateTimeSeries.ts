@@ -1,9 +1,28 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
-import { determineInterval } from "../utils/intervals";
+import { determineInterval, IntervalType } from "../utils/intervals";
 import { useTectonicContext } from "../components/TectonicProvider";
+
+import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
+
+const defaultProps = {
+  onIntervalChange: () => {},
+};
+
+interface AggregateTimeSeriesProps {
+  baseUrl?: string;
+  token?: string;
+  timeRange?: ITimeRange;
+  children?: ReactNode;
+  interval?: IntervalType;
+  onIntervalChange?: (interval: IntervalType) => void;
+  dateField?: string;
+  collection?: string;
+  operation: string;
+  filter?: IAggregateFilterType;
+}
 
 export const AggregateTimeSeries = ({
   baseUrl,
@@ -13,7 +32,7 @@ export const AggregateTimeSeries = ({
   interval: propsInterval,
   onIntervalChange,
   ...params
-}) => {
+}: AggregateTimeSeriesProps & typeof defaultProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
@@ -27,7 +46,9 @@ export const AggregateTimeSeries = ({
   }, [propsInterval]);
 
   React.useEffect(() => {
-    onIntervalChange(interval);
+    if (interval) {
+      onIntervalChange(interval);
+    }
   }, [interval]);
 
   React.useEffect(() => {
@@ -37,10 +58,14 @@ export const AggregateTimeSeries = ({
   }, [timeRange]);
 
   const [data, setData] = React.useState([]);
-  const [status, setStatus] = React.useState({ loading: true });
+  const [status, setStatus] = React.useState<IStatus>({ loading: true });
 
   async function fetchData() {
     setStatus({ loading: true });
+    let _interval = interval;
+    if (!_interval && timeRange) {
+      _interval = determineInterval(timeRange);
+    }
     try {
       const { data } = await request({
         method: "POST",
@@ -51,8 +76,7 @@ export const AggregateTimeSeries = ({
           params: {
             ...params,
             dateField: params.dateField || ctx.dateField,
-            interval:
-              interval === "auto" ? determineInterval(timeRange) : interval,
+            interval: _interval,
           },
           timeRange,
           ctx,
@@ -77,7 +101,7 @@ export const AggregateTimeSeries = ({
     return children({ data, status, timeRange, setInterval, interval });
   }
 
-  return React.Children.map(children, (child) =>
+  return React.Children.map(children, (child: any) =>
     React.cloneElement(child, {
       data,
       status,
@@ -88,10 +112,7 @@ export const AggregateTimeSeries = ({
   );
 };
 
-AggregateTimeSeries.defaultProps = {
-  interval: "auto",
-  onIntervalChange: () => {},
-};
+AggregateTimeSeries.defaultProps = defaultProps;
 
 AggregateTimeSeries.propTypes = {
   token: PropTypes.string,

@@ -1,4 +1,7 @@
 import { toDate } from "./date";
+import { ITimeRange } from '../types'
+
+export type IntervalType = "1s" | "10s" | "1m" | "5m" | "10m" | "15m" | "30m" | "1h" | "1d" | "1w" | "1M" | "1y";
 
 const intervals = {
   "1s": 1,
@@ -39,7 +42,7 @@ const intervalList = Object.keys(intervals).map((key) => {
 
 const maxBucketSize = 700;
 
-export function validIntervals(from, to) {
+export function validIntervals(from, to): IntervalType[] {
   const durationSeconds = (to - from) / 1000;
 
   const validIntervals = intervalList
@@ -47,16 +50,16 @@ export function validIntervals(from, to) {
       const numberOfBuckets = Math.floor(durationSeconds / item.duration);
       return numberOfBuckets > 1 && maxBucketSize > numberOfBuckets;
     })
-    .map((item) => item.key);
+    .map((item) => item.key as IntervalType);
 
   return validIntervals;
 }
 
-export function intervalToLabel(interval) {
+export function intervalToLabel(interval : IntervalType): string {
   return intervalsLabel[interval];
 }
 
-export function determineInterval(timeRange) {
+export function determineInterval(timeRange: ITimeRange): IntervalType {
   const from = toDate(timeRange.from);
   const to = toDate(timeRange.to);
   const durationSeconds = (to - from) / 1000;

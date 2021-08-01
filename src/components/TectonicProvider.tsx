@@ -3,46 +3,76 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
-import { ITimeRange } from '../types';
+import { ITimeRange } from "../types";
+import metadata from "../metadata.json";
 
-const version ="0.1.0";
+const version = (metadata as any).version;
+
+const defaultProps = {
+  primaryColor: "#77a741",
+  dateField: "ingestedAt",
+  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  getTimeRangeFromCollectionStats: (stats) => {
+    if (stats.isHistorical) {
+      return {
+        to: stats.to,
+        from: startOfDay(
+          new Date(
+            Math.max(
+              stats.from.valueOf(),
+              sub(stats.to, { hours: 12 }).valueOf()
+            )
+          )
+        ),
+      };
+    }
+
+    const hours = stats.to - stats.from / 1000 / 60 / 60;
+    const timeRange = {
+      to: "now",
+      from: hours > 48 ? "now-1h/d" : stats.from,
+    };
+
+    return timeRange;
+  },
+};
 
 interface IContextProps {
-  primaryColor: string,
-  token?: string,
-  setToken: (token: string) => void,
-  setBaseUrl: (url: string) => void,
-  isReady: boolean,
-  timeRange: ITimeRange
-  setTimeRange:(timeRange: any)=> void,
-  stats: any
-  baseUrl: string,
+  primaryColor: string;
+  token?: string;
+  setToken: (token: string) => void;
+  setBaseUrl: (url: string) => void;
+  isReady: boolean;
+  timeRange?: ITimeRange;
+  setTimeRange: (timeRange: ITimeRange) => void;
+  stats: any;
+  baseUrl?: string;
+  dateField: string;
 }
 
-const TectonicContext = React.createContext({} as IContextProps );
+const TectonicContext = React.createContext({} as IContextProps);
 
 const aDay = 24 * 60 * 60 * 1000;
 
 interface ITectonicProviderProps {
-  disableInitialization?: boolean,
-  getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange, 
-  children: React.ReactNode
-  token?: string,
-  baseUrl?: string,
-  timeZone?: string,
-  timeRange?: string,
-  dateField?: string,
-  collection?: string,
-  primaryColor?: string,
+  disableInitialization?: boolean;
+  getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange;
+  children: React.ReactNode;
+  token?: string;
+  baseUrl?: string;
+  timeZone?: string;
+  timeRange?: ITimeRange;
+  dateField?: string;
+  collection?: string;
+  primaryColor?: string;
 }
 
 const TectonicProvider = ({
   disableInitialization,
   getTimeRangeFromCollectionStats,
   children,
-  
   ...props
-}: ITectonicProviderProps) => {
+}: ITectonicProviderProps & typeof defaultProps) => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeZone, setTimeZone] = React.useState(props.timeZone);
@@ -53,7 +83,7 @@ const TectonicProvider = ({
     isHistorical: false,
   });
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
-  const [isReady, setIsReady] = React.useState(disableInitialization);
+  const [isReady, setIsReady] = React.useState(disableInitialization || false);
 
   React.useEffect(() => {
     setToken(props.token);
@@ -99,7 +129,7 @@ const TectonicProvider = ({
     }
 
     try {
-      const data = await request({
+      const { data } = await request({
         method: "POST",
         path: "/1/analytics/stats",
         baseUrl,
@@ -226,34 +256,7 @@ TectonicProvider.propTypes = {
   children: PropTypes.node,
 };
 
-TectonicProvider.defaultProps = {
-  primaryColor: "#77a741",
-  dateField: "ingestedAt",
-  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  getTimeRangeFromCollectionStats: (stats) => {
-    if (stats.isHistorical) {
-      return {
-        to: stats.to,
-        from: startOfDay(
-          new Date(
-            Math.max(
-              stats.from.valueOf(),
-              sub(stats.to, { hours: 12 }).valueOf()
-            )
-          )
-        ),
-      };
-    }
-
-    const hours = stats.to - stats.from / 1000 / 60 / 60;
-    const timeRange = {
-      to: "now",
-      from: hours > 48 ? "now-1h/d" : stats.from,
-    };
-
-    return timeRange;
-  },
-};
+TectonicProvider.defaultProps = defaultProps;
 
 const useTectonicContext = () => {
   const context = React.useContext(TectonicContext);

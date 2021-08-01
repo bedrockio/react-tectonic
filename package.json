@@ -1,8 +1,9 @@
 {
   "name": "react-tectonic",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "description": "",
   "module": "esm/index.js",
+  "types": "esm/types.d.ts",
   "files": [
     "esm"
   ],
@@ -10,8 +11,9 @@
     "start": "start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "rm -rf esm && tsc && cp src/styles.css lib/styles.css",
-    "deploy": "storybook-to-ghpages"
+    "build": "rm -rf esm && tsc && node scripts/write-metadata && cp src/styles.css esm/styles.css",
+    "deploy": "storybook-to-ghpages",
+    "prerelease": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -38,16 +40,20 @@
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
     "@babel/preset-react": "^7.13.13",
-    "@storybook/addon-actions": "^6.3.5",
-    "@storybook/addon-essentials": "^6.3.5",
-    "@storybook/addon-links": "^6.3.5",
-    "@storybook/react": "^6.3.5",
+    "@storybook/addon-actions": "^6.3.6",
+    "@storybook/addon-essentials": "^6.3.6",
+    "@storybook/addon-links": "^6.3.6",
+    "@storybook/addon-storyshots": "^6.3.6",
+    "@storybook/react": "^6.3.6",
     "@storybook/storybook-deployer": "^2.8.10",
+    "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.171",
     "@types/react": "^17.0.14",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
     "babel-loader": "^8.2.2",
     "date-fns": "^2.22.1",
-    "eslint": "^7.26.0",
+    "eslint": "^7.32.0",
     "eslint-plugin-bedrock": "^1.0.7",
     "jest": "^27.0.4",
     "prettier": "^2.3.0",
@@ -55,6 +61,7 @@
     "react": "^17.0.2",
     "react-day-picker": "^7.4.10",
     "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
     "typescript": "^4.3.5"
   },
   "dependencies": {

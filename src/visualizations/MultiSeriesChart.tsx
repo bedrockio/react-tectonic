@@ -14,9 +14,14 @@ import {
 } from "../components";
 import { useTectonicContext } from "../components/TectonicProvider";
 
-import { validIntervals, intervalToLabel } from "../utils/intervals";
+import {
+  validIntervals,
+  intervalToLabel,
+  IntervalType,
+} from "../utils/intervals";
 
 import { toDate, toCsvDateFormat } from "../utils/date";
+import { IStatus, ITimeRange } from "../types";
 
 import {
   AreaChart,
@@ -65,14 +70,43 @@ const fuse = (series, valueField) => {
   });
 };
 
-export const MultiSeriesChart = ({
-  // eslint-disable-next-line react/prop-types
-  valueFieldFormatter,
-  // eslint-disable-next-line react/prop-types
-  variant,
-  // eslint-disable-next-line react/prop-types
-  valueFieldNames,
+const defaultProps = {
+  exportFilename: "export.csv",
+  data: [],
+  status: { success: true },
+  colors: defaultColors,
+  chartType: "line",
+  chartContainer: DefaultChartContainer,
+  valueField: "value",
+  valueFormatter: (value) => numberWithCommas(value),
+  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
+  enabledControls: ["intervals", "chartTypes", "actions"],
+  stacked: true,
+  labels: [],
+};
 
+type MultiSeriesChartProps = {
+  onIntervalChange?: (interval: IntervalType) => void;
+  labels?: string[];
+  status?: IStatus;
+  title?: JSX.Element;
+  legend?: boolean;
+  stacked?: boolean;
+  timeRange?: ITimeRange;
+  data?: any[];
+  chartType?: "line" | "bar" | "area";
+  colors?: string[];
+  chartContainer?: React.ElementType;
+  valueField?: string;
+  labelFormatter?: (label: string) => string;
+  valueFormatter?: (value: number) => string;
+  disableDot?: boolean;
+  enabledControls?: ["intervals" | "chartTypes" | "actions"];
+  exportFilename?: string;
+  interval?: IntervalType;
+};
+
+export const MultiSeriesChart = ({
   data,
   timeRange,
   chartType: propsChartType,
@@ -90,30 +124,9 @@ export const MultiSeriesChart = ({
   chartContainer: ChartContainer,
   labels,
   exportFilename,
-  // eslint-disable-next-line react/prop-types
-  interval, //interval
-}) => {
+  interval,
+}: MultiSeriesChartProps & typeof defaultProps) => {
   const ctx = useTectonicContext();
-
-  if (variant) {
-    // eslint-disable-next-line no-console
-    console.warn("[MultiSeriesChart] varient is deprecated use chartType");
-    propsChartType = variant;
-  }
-
-  if (valueFieldFormatter) {
-    // eslint-disable-next-line no-console
-    console.warn(
-      "[MultiSeriesChart] valueFieldFormatter is deprecated use valueFormatter"
-    );
-    valueFormatter = valueFieldFormatter;
-  }
-
-  if (valueFieldNames) {
-    // eslint-disable-next-line no-console
-    console.warn("[MultiSeriesChart] valueFieldNames is deprecated use labels");
-    labels = valueFieldFormatter;
-  }
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");
 
@@ -287,17 +300,4 @@ MultiSeriesChart.propTypes = {
   exportFilename: PropTypes.string,
 };
 
-MultiSeriesChart.defaultProps = {
-  exportFilename: "export.csv",
-  data: [],
-  status: { success: true },
-  colors: defaultColors,
-  chartType: "line",
-  chartContainer: DefaultChartContainer,
-  valueField: "value",
-  valueFormatter: (value) => numberWithCommas(value),
-  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
-  enabledControls: ["intervals", "chartTypes", "actions"],
-  stacked: true,
-  labels: [],
-};
+MultiSeriesChart.defaultProps = defaultProps;
