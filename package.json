@@ -1,17 +1,17 @@
 {
   "name": "react-tectonic",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "",
-  "module": "esm/index.js",
-  "types": "esm/types.d.ts",
+  "module": "lib/index.js",
+  "types": "types/index.d.ts",
   "files": [
-    "esm"
+    "lib"
   ],
   "scripts": {
     "start": "start-storybook -p 6006",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build": "rm -rf esm && tsc && node scripts/write-metadata && cp src/styles.css esm/styles.css",
+    "build": "rm -rf lib && tsc && node scripts/write-metadata && cp src/styles.css lib/styles.css",
     "deploy": "storybook-to-ghpages",
     "prerelease": "npm run build"
   },
