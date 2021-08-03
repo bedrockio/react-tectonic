@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
-import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
+// import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { determineInterval, IntervalType } from "../utils/intervals";
 import { useTectonicContext } from "../components/TectonicProvider";
 
@@ -114,6 +114,7 @@ export const AggregateTimeSeries = ({
 
 AggregateTimeSeries.defaultProps = defaultProps;
 
+/*
 AggregateTimeSeries.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
@@ -126,3 +127,4 @@ AggregateTimeSeries.propTypes = {
   filter: AggregateFilterType,
   timeRange: TimeRangeType,
 };
+*/
