@@ -20,7 +20,7 @@ interface AggregateTimeSeriesProps {
   onIntervalChange?: (interval: IntervalType) => void;
   dateField?: string;
   collection?: string;
-  operation: string;
+  operation?: string;
   filter?: IAggregateFilterType;
 }
 

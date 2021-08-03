@@ -159,6 +159,7 @@ const TectonicProvider = ({
       console.error(
         `["TectonicProvider"] Failed to look up collection (${collection}) stats ${e.message}`
       );
+      console.error(e);
     }
   }
 

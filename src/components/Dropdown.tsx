@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Button } from "./Button";
 
 const defaultProps = {
-  onChange: (option) => {},
+  onChange: (option: OptionType) => {},
   alignMenu: "center",
   options: [],
   classNames: [],
@@ -70,7 +70,6 @@ export const Dropdown = ({
         {Icon && <Icon />}
         {title}
       </Button>
-      <i aria-hidden="true" className="dropdown icon"></i>
       <div className="tnic-dropdown--menu">
         {options.map((option) => {
           const Icon = option.icon;
