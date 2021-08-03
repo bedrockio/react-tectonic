@@ -14,14 +14,13 @@ import { exportToCsv, downloadImage } from "../utils/exporters";
 import { startCase } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors, defaultActions } from "../utils/visualization";
-import { IStatus } from '../types';
+import { IStatus } from "../types";
 
 import {
   Message,
   ChartContainer as DefaultChartContainer,
   useTectonicContext,
 } from "../components";
-
 
 const defaultProps = {
   exportFilename: "export.csv",
@@ -38,24 +37,24 @@ const defaultProps = {
   },
   labelField: "key",
   valueField: "count",
-}
+};
 
 type DonutChartProps = {
-  status?: IStatus,
-  title?: JSX.Element,
-  limit?: number,
-  labelFormatter?: (label: string) => string,
-  valueFormatter?: (value: number) => string,
-  valueField: string, 
-  labelField?: string,
-  procent?: boolean,
-  precision?: number,
-  colorFn?: (entry: any, index: number) => string,
-  data: any[],
-  colors?: string[],
-  chartContainer?: React.ElementType,
-  enabledControls?: ["actions"],
-  exportFilename?: string
+  status?: IStatus;
+  title?: JSX.Element;
+  limit?: number;
+  labelFormatter?: (label: string) => string;
+  valueFormatter?: (value: number) => string;
+  valueField: string;
+  labelField?: string;
+  procent?: boolean;
+  precision?: number;
+  colorFn?: (entry: any, index: number) => string;
+  data: any[];
+  colors?: string[];
+  chartContainer?: React.ElementType;
+  enabledControls?: ["actions"];
+  exportFilename?: string;
 };
 
 export const DonutChart = ({
@@ -74,8 +73,7 @@ export const DonutChart = ({
   colors,
   colorFn,
   exportFilename,
-}: DonutChartProps & typeof defaultProps) => {
-
+}: DonutChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
 
   const labelFormatter = (item) => propsLabelFormatter(item[labelField]);
@@ -156,7 +154,11 @@ export const DonutChart = ({
       {status.error && <Message error>{status.error.message}</Message>}
 
       <ResponsiveContainer height={height}>
-        <PieChart ref={svgChartRef} data={trimmedData} key={status.success + ''}>
+        <PieChart
+          ref={svgChartRef}
+          data={trimmedData}
+          key={status.success + ""}
+        >
           <Pie
             data={trimmedData}
             innerRadius={Math.round(height * 0.2)}

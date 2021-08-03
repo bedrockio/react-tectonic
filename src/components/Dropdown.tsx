@@ -32,7 +32,7 @@ export const Dropdown = ({
   options,
   onChange,
   classNames,
-}: DropdownType & typeof defaultProps) => {
+}: DropdownType & typeof defaultProps): JSX.Element => {
   const [open, setOpen] = React.useState(false);
 
   const classes = [

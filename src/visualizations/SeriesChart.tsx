@@ -99,7 +99,7 @@ export const SeriesChart = ({
   exportFilename,
   axisColor,
   height,
-}: SeriesChartProps & typeof defaultProps) => {
+}: SeriesChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
 

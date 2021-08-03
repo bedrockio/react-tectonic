@@ -72,7 +72,7 @@ const TectonicProvider = ({
   getTimeRangeFromCollectionStats,
   children,
   ...props
-}: ITectonicProviderProps & typeof defaultProps) => {
+}: ITectonicProviderProps & typeof defaultProps): JSX.Element => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeZone, setTimeZone] = React.useState(props.timeZone);

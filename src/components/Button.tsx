@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children:React.ReactNode,
-  icon?: boolean,
-  disabled?: boolean,
-  primary?: boolean,
-  secondary?: boolean,
-  compact?: boolean,
-  basic?: boolean,
+  children: React.ReactNode;
+  icon?: boolean;
+  disabled?: boolean;
+  primary?: boolean;
+  secondary?: boolean;
+  compact?: boolean;
+  basic?: boolean;
 }
 
 export const Button = ({
@@ -20,7 +20,7 @@ export const Button = ({
   compact,
   basic,
   ...props
-}: ButtonProps) => {
+}: ButtonProps): JSX.Element => {
   const className = [
     "tnic-button",
     primary && "tnic-button--primary",

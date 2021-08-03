@@ -18,7 +18,7 @@ export const ChartContainer = ({
   onActionChange,
   classNames,
   enabledControls,
-}) => {
+}): JSX.Element => {
   const classes = [
     "tnic-chartContainer",
     !title?.length && "tnic-chartContainer__no-title",

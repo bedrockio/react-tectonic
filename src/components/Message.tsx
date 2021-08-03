@@ -1,7 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const Message = ({ children, error, classNames = [] }: { children:React.ReactNode, error?: boolean, classNames?: string[]}) => {
+export const Message = ({
+  children,
+  error,
+  classNames = [],
+}: {
+  children: React.ReactNode;
+  error?: boolean;
+  classNames?: string[];
+}): JSX.Element => {
   const classes = ["tnic-message", error && "error", ...classNames].filter(
     Boolean
   );
@@ -13,15 +21,13 @@ export const Message = ({ children, error, classNames = [] }: { children:React.R
   );
 };
 
-
-
 Message.propTypes = {
   children: PropTypes.node,
   boolean: PropTypes.bool,
   /**
    * Centers the text
    */
-   classNames: PropTypes.arrayOf(PropTypes.string),
+  classNames: PropTypes.arrayOf(PropTypes.string),
 };
 
 Message.defaultProps = {

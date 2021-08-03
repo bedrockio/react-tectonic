@@ -125,7 +125,7 @@ export const MultiSeriesChart = ({
   labels,
   exportFilename,
   interval,
-}: MultiSeriesChartProps & typeof defaultProps) => {
+}: MultiSeriesChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
 
   const [chartType, setChartType] = React.useState(propsChartType || "line");

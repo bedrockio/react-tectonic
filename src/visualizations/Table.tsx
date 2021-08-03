@@ -57,7 +57,7 @@ export const Table = ({
   chartContainer: ChartContainer,
   enabledControls,
   exportFilename,
-}: TableProps & typeof defaultProps) => {
+}: TableProps & typeof defaultProps): JSX.Element => {
   const noData = !data || !data.length;
 
   function handleAction(option) {
