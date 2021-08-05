@@ -11,6 +11,8 @@ const defaultProps = {
   onIntervalChange: () => {},
 };
 
+type OperationType = string;
+
 interface AggregateTimeSeriesProps {
   baseUrl?: string;
   token?: string;
@@ -20,7 +22,7 @@ interface AggregateTimeSeriesProps {
   onIntervalChange?: (interval: IntervalType) => void;
   dateField?: string;
   collection?: string;
-  operation?: string;
+  operation?: OperationType;
   filter?: IAggregateFilterType;
 }
 
@@ -82,8 +84,8 @@ export const AggregateTimeSeries = ({
           ctx,
         }),
       });
-      setStatus({ success: true });
       setData(data);
+      setStatus({ success: true });
     } catch (error) {
       setStatus({ error });
     }

@@ -5,8 +5,22 @@ import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
 import { ITimeRange } from "../types";
 import metadata from "../metadata.json";
+import { IAggregateFilterType } from "../types";
 
 const version = (metadata as any).version;
+
+interface IContextProps {
+  primaryColor: string;
+  token?: string;
+  setToken: (token: string) => void;
+  setBaseUrl: (url: string) => void;
+  isReady: boolean;
+  timeRange?: ITimeRange;
+  setTimeRange: (timeRange: ITimeRange) => void;
+  stats: any;
+  baseUrl?: string;
+  dateField: string;
+}
 
 const defaultProps = {
   primaryColor: "#77a741",
@@ -26,7 +40,6 @@ const defaultProps = {
         ),
       };
     }
-
     const hours = stats.to - stats.from / 1000 / 60 / 60;
     const timeRange = {
       to: "now",
@@ -36,19 +49,6 @@ const defaultProps = {
     return timeRange;
   },
 };
-
-interface IContextProps {
-  primaryColor: string;
-  token?: string;
-  setToken: (token: string) => void;
-  setBaseUrl: (url: string) => void;
-  isReady: boolean;
-  timeRange?: ITimeRange;
-  setTimeRange: (timeRange: ITimeRange) => void;
-  stats: any;
-  baseUrl?: string;
-  dateField: string;
-}
 
 const TectonicContext = React.createContext({} as IContextProps);
 
@@ -65,6 +65,7 @@ interface ITectonicProviderProps {
   dateField?: string;
   collection?: string;
   primaryColor?: string;
+  statsFilter?: IAggregateFilterType;
 }
 
 const TectonicProvider = ({
@@ -136,6 +137,7 @@ const TectonicProvider = ({
         token,
         body: {
           collection,
+          filter: props.statsFilter,
           fields: [dateField],
         },
       });

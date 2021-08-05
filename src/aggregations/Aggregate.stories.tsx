@@ -32,6 +32,7 @@ const TemplateWithProvider = (args) => (
   <TectonicProvider
     collection={window.sessionStorage.getItem("collection")}
     token={window.sessionStorage.getItem("token")}
+    baseUrl={window.sessionStorage.getItem("baseUrl")}
     disableInitialization
     dateField="event.orderedAt"
   >

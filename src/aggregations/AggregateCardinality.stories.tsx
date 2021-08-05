@@ -1,11 +1,11 @@
 import React from "react";
 import { TectonicProvider } from "../components/TectonicProvider";
 
-import { AggregateStats } from "./AggregateStats";
+import { AggregateCardinality } from "./AggregateCardinality";
 
 export default {
-  title: "Aggregations/AggregateStats",
-  component: AggregateStats,
+  title: "Aggregations/AggregateCardinality",
+  component: AggregateCardinality,
 };
 
 const defaultArgs = {
@@ -20,7 +20,7 @@ const TemplateWithProvider = (args) => (
     token={window.sessionStorage.getItem("token")}
     disableInitialization
   >
-    <AggregateStats {...args}>
+    <AggregateCardinality {...args}>
       {({ data = {}, status }) => {
         return (
           <div>
@@ -31,7 +31,7 @@ const TemplateWithProvider = (args) => (
           </div>
         );
       }}
-    </AggregateStats>
+    </AggregateCardinality>
   </TectonicProvider>
 );
 
@@ -39,7 +39,10 @@ export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = defaultArgs;
 
 const TemplateAsFunction = (args) => (
-  <AggregateStats token={window.sessionStorage.getItem("token")} {...args}>
+  <AggregateCardinality
+    token={window.sessionStorage.getItem("token")}
+    {...args}
+  >
     {({ data = {}, status }) => {
       return (
         <div>
@@ -52,7 +55,7 @@ const TemplateAsFunction = (args) => (
         </div>
       );
     }}
-  </AggregateStats>
+  </AggregateCardinality>
 );
 
 export const AsFunction = TemplateAsFunction.bind({});

@@ -25,6 +25,8 @@ export const ChartContainer = ({
     classNames,
   ].filter(Boolean);
 
+  const hasActions = enabledControls.includes("actions") && actions.length > 0;
+
   return (
     <div style={{ height: `${height}px` }} className={classes.join(" ")}>
       <div className="tnic-chartContainer--container">
@@ -42,11 +44,12 @@ export const ChartContainer = ({
             <Dropdown
               value={activeInterval}
               title="Interval"
+              alignMenu={!hasActions ? "right" : undefined}
               options={intervals}
               onChange={(option) => onIntervalChange(option.value)}
             />
           )}
-          {enabledControls.includes("actions") && actions.length > 0 && (
+          {hasActions && (
             <Dropdown
               icon={IconMore}
               alignMenu="right"

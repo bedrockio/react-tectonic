@@ -52,8 +52,8 @@ export const AggregateTerms = ({
           ctx,
         }),
       });
-      setStatus({ success: true });
       setData(data);
+      setStatus({ success: true });
     } catch (error) {
       setStatus({ error });
     }

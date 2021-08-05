@@ -39,6 +39,8 @@ const defaultProps = {
   valueField: "count",
 };
 
+type EnabledControlType = "actions";
+
 type DonutChartProps = {
   status?: IStatus;
   title?: JSX.Element;
@@ -47,13 +49,13 @@ type DonutChartProps = {
   valueFormatter?: (value: number) => string;
   valueField: string;
   labelField?: string;
-  procent?: boolean;
+  percent?: boolean;
   precision?: number;
   colorFn?: (entry: any, index: number) => string;
   data: any[];
   colors?: string[];
   chartContainer?: React.ElementType;
-  enabledControls?: ["actions"];
+  enabledControls?: EnabledControlType[];
   exportFilename?: string;
 };
 
@@ -65,7 +67,7 @@ export const DonutChart = ({
   valueFormatter,
   valueField,
   limit,
-  procent,
+  percent,
   precision,
   title,
   enabledControls,
@@ -165,7 +167,7 @@ export const DonutChart = ({
             outerRadius={Math.round(height * 0.36)}
             fill="#8884d8"
             paddingAngle={5}
-            nameKey={labelFormatter}
+            nameKey={labelField}
             dataKey={valueField}
           >
             {trimmedData.map((entry, index) => (
@@ -183,8 +185,8 @@ export const DonutChart = ({
           <Legend />
           {!noData && (
             <Tooltip
-              formatter={(value) => {
-                if (procent) {
+              formatter={(value, other, props) => {
+                if (percent) {
                   if (precision) {
                     return `${
                       Math.round((value / total) * (10 * precision) * 100) /

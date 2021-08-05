@@ -72,7 +72,7 @@ const fuse = (series, valueField) => {
 
 const defaultProps = {
   exportFilename: "export.csv",
-  data: [],
+  data: [] as any[],
   status: { success: true },
   colors: defaultColors,
   chartType: "line",
@@ -82,17 +82,21 @@ const defaultProps = {
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
   stacked: true,
-  labels: [],
+  labels: [] as string[],
+  height: 400,
 };
+
+type EnabledControlType = "intervals" | "chartTypes" | "actions";
 
 type MultiSeriesChartProps = {
   onIntervalChange?: (interval: IntervalType) => void;
-  labels?: string[];
+  labels: string[];
   status?: IStatus;
   title?: JSX.Element;
   legend?: boolean;
   stacked?: boolean;
   timeRange?: ITimeRange;
+  height?: number;
   data?: any[];
   chartType?: "line" | "bar" | "area";
   colors?: string[];
@@ -101,7 +105,7 @@ type MultiSeriesChartProps = {
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   disableDot?: boolean;
-  enabledControls?: ["intervals" | "chartTypes" | "actions"];
+  enabledControls?: EnabledControlType[];
   exportFilename?: string;
   interval?: IntervalType;
 };
@@ -115,6 +119,7 @@ export const MultiSeriesChart = ({
   labelFormatter,
   valueFormatter,
   legend,
+  height,
   stacked,
   colors,
   disableDot,
@@ -213,7 +218,7 @@ export const MultiSeriesChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <ResponsiveContainer height={400}>
+      <ResponsiveContainer height={height}>
         <Chart
           key={`${chartType}-${status.success}`}
           data={fusedData}
@@ -231,7 +236,7 @@ export const MultiSeriesChart = ({
                 type="monotone"
                 key={`${index}-value`}
                 dataKey={`${index}-value`}
-                name={labels ? labels[index] : `Metric ${index + 1}`}
+                name={labels[index] ? labels[index] : `Metric ${index + 1}`}
                 stroke={color}
                 fill={["area", "bar"].includes(chartType) ? color : undefined}
                 fillOpacity={0.3}

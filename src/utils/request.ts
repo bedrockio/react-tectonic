@@ -136,6 +136,8 @@ export function getAnalyticsRequestBody({
     }
   }
 
+  console.log("timeRange", timeRange);
+
   return {
     collection: ctx.collection,
     ...params,

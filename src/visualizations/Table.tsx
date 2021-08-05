@@ -26,12 +26,23 @@ const defaultProps = {
   valueFormatter: (value) => {
     return numberWithCommas(value);
   },
+  rowFormatter: (item, label, value) => {
+    return (
+      <>
+        <td>{label}</td>
+        <td>{value}</td>
+      </>
+    );
+  },
   enabledControls: ["actions"],
 };
+
+type EnabledControlType = "actions";
 
 type TableProps = {
   status?: IStatus;
   title?: JSX.Element;
+  rowFormatter?: (item: any, label: string, value: string) => JSX.Element;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   valueField?: string;
@@ -40,7 +51,7 @@ type TableProps = {
   labelFieldName?: string;
   data: any[];
   chartContainer?: React.ElementType;
-  enabledControls?: ["actions"];
+  enabledControls?: EnabledControlType[];
   exportFilename?: string;
 };
 
@@ -54,6 +65,7 @@ export const Table = ({
   data,
   labelFormatter,
   valueFormatter,
+  rowFormatter,
   chartContainer: ChartContainer,
   enabledControls,
   exportFilename,
@@ -98,8 +110,11 @@ export const Table = ({
           {data.map((item) => {
             return (
               <tr key={item[labelField]}>
-                <td>{labelFormatter(item[labelField])}</td>
-                <td>{valueFormatter(item[valueField])}</td>
+                {rowFormatter(
+                  item,
+                  labelFormatter(item[labelField]),
+                  valueFormatter(item[valueField])
+                )}
               </tr>
             );
           })}

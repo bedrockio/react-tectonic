@@ -7,28 +7,23 @@ import { useTectonicContext } from "../components/TectonicProvider";
 import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
 
-interface AggregateStateProps {
+interface AggregateCardinalityProps {
   timeRange?: ITimeRange;
   baseUrl?: string;
   token?: string;
-  /**
-   * @deprecated Use AggregateCardinality instead of AggregateStats
-   */
-  cardinality?: boolean;
   children: ReactNode;
   collection?: string;
   fields: string[];
   filter?: IAggregateFilterType;
 }
 
-export const AggregateStats = ({
+export const AggregateCardinality = ({
   baseUrl,
   token,
   timeRange,
-  cardinality,
   children,
   ...params
-}: AggregateStateProps) => {
+}: AggregateCardinalityProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
@@ -39,18 +34,12 @@ export const AggregateStats = ({
   const [data, setData] = useState({});
   const [status, setStatus] = useState<IStatus>({ loading: true });
 
-  if (cardinality) {
-    console.warn(
-      "The cardinality option is deprecated use AggregateCardinality instead of AggregateStats"
-    );
-  }
-
   async function fetchData() {
     setStatus({ loading: true });
     try {
       const { data } = await request({
         method: "POST",
-        path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
+        path: "/1/analytics/cardinality",
         baseUrl,
         token,
         body: getAnalyticsRequestBody({
@@ -72,14 +61,7 @@ export const AggregateStats = ({
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [
-    token,
-    baseUrl,
-    isReady,
-    cardinality,
-    timeRange,
-    ...Object.values(params),
-  ]);
+  }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     return children({ data, status });
@@ -90,7 +72,7 @@ export const AggregateStats = ({
   );
 };
 
-AggregateStats.propTypes = {
+AggregateCardinality.propTypes = {
   token: PropTypes.string,
   baseUrl: PropTypes.string,
   collection: PropTypes.string,

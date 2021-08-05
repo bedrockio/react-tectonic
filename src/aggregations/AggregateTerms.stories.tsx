@@ -27,6 +27,7 @@ const defaultArgsWithToken = {
 
 const TemplateWithProvider = (args) => (
   <TectonicProvider
+    baseUrl={window.sessionStorage.getItem("baseUrl")}
     collection={window.sessionStorage.getItem("collection")}
     token={window.sessionStorage.getItem("token")}
     disableInitialization

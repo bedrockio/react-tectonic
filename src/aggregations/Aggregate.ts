@@ -16,7 +16,7 @@ interface AggregatePropType {
   baseUrl?: string;
   token?: string;
   requests: any[];
-  type: string;
+  type: "stats" | "time-series" | "cardinality" | "terms" | "search";
   children: ReactNode;
   interval?: IntervalType;
   onIntervalChange?: (interval: IntervalType) => void;
@@ -60,14 +60,18 @@ export const Aggregate = ({
   const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
   const [data, setData] = React.useState<any[]>([]);
-  const [status, setStatus] = React.useState<IStatus>({ loading: true });
+  // if there is no requests set the status to success => to trigger no data message
+  const [status, setStatus] = React.useState<IStatus>(
+    requests.length ? { loading: true } : { success: true }
+  );
 
   async function fetchData() {
     setStatus({ loading: true });
     try {
       const data = await Promise.all(
-        requests.map((params) =>
-          request({
+        requests.map((requestProps) => {
+          const { timeRange: paramTimeRange = {}, ...params } = requestProps;
+          return request({
             method: "POST",
             path: `/1/analytics/${type}`,
             baseUrl,
@@ -75,14 +79,16 @@ export const Aggregate = ({
             body: getAnalyticsRequestBody({
               type,
               params: { ...params, interval },
-              timeRange,
+              timeRange: paramTimeRange
+                ? { ...timeRange, ...paramTimeRange }
+                : timeRange,
               ctx,
             }),
-          }).then(({ data }) => data)
-        )
+          });
+        })
       );
+      setData(data.map(({ data }) => data));
       setStatus({ success: true });
-      setData(data);
     } catch (error) {
       setStatus({ error });
     }

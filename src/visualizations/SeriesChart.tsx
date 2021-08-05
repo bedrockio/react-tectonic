@@ -42,6 +42,8 @@ import { IStatus, ITimeRange } from "../types";
 
 import { defaultColors } from "../utils/visualization";
 
+type EnabledControlType = "intervals" | "chartTypes" | "actions";
+
 const defaultProps = {
   exportFilename: "export.csv",
   valueField: "value",
@@ -70,7 +72,7 @@ type SeriesChartProps = {
   status: IStatus;
   onIntervalChange?: (interval: IntervalType) => void;
   timeRange?: ITimeRange;
-  enabledControls?: ["intervals" | "chartTypes" | "actions"];
+  enabledControls?: EnabledControlType[];
   data?: any[];
   axisColor?: string;
   color?: string;
