@@ -6,7 +6,14 @@ import { Button } from "../Button";
 import { TimeOptions } from "./TimeOptions";
 import { labelsToUnit } from "../../utils/date";
 
-export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
+export const Overlay = ({
+  onChange,
+  onClose,
+  align,
+  stats,
+  timeRange,
+  ...props
+}) => {
   const [optionValue, setOptionValue] = React.useState();
   const [option, setOption] = React.useState<any>(undefined);
   const [refreshKey, setRefreshKey] = React.useState<number>();
@@ -43,7 +50,7 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
   };
 
   return (
-    <div className="tnic-overlay">
+    <div className="tnic-overlay" style={align ? { [align]: 0 } : {}}>
       <div className="tnic-header">
         <div className="tnic-title">Select time range</div>
         <div style={{ display: "flex", alignItems: "center" }}>
@@ -58,8 +65,9 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
       <div
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: align === "right" ? "row-reverse" : "row",
           justifyContent: "space-between",
+
           flex: 1,
         }}
       >
@@ -67,6 +75,7 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
           <div className="tnic-overlay--container">
             <TimeOptions
               key={refreshKey}
+              align={align}
               timeOptions={validTimeOptions}
               onSelect={(option, value) => {
                 setOptionValue(value);
@@ -81,13 +90,21 @@ export const Overlay = ({ onChange, onClose, stats, timeRange, ...props }) => {
             style={{
               float: "right",
               flex: 1,
-              borderLeft: "1px solid #ccc",
+              width: "550px",
+              ...(align === "right"
+                ? {
+                    borderRight: "1px solid #ccc",
+                  }
+                : {
+                    borderLeft: "1px solid #ccc",
+                  }),
             }}
           >
             <Calendar
               timeRange={timeRange}
               minDate={stats.from}
               maxDate={stats.isHistorical ? stats.to : undefined}
+              numberOfMonths={2}
               onChange={(range) => {
                 setOption({
                   ...option,

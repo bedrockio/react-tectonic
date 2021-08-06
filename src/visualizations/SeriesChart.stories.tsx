@@ -87,10 +87,24 @@ export default {
 const Template = (args) => <SeriesChart {...args} />;
 
 export const WithData = Template.bind({});
-WithData.args = { data, status: "success" };
+WithData.args = {
+  data,
+  status: "success",
+  annotations: [
+    {
+      type: "live",
+      label: "annotation",
+      timestamp: new Date(1538352000000),
+      color: "blue",
+    },
+  ],
+};
 
 export const WithoutData = Template.bind({});
-WithoutData.args = { data: [], status: "success" };
+WithoutData.args = {
+  data: [],
+  status: "success",
+};
 
 export const BarChart = Template.bind({});
 BarChart.args = { data, chartType: "bar", status: "success" };

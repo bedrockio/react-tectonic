@@ -67,59 +67,56 @@ export const Calendar = ({
 
   return (
     <div>
-      <DayPicker
-        className="tnic-dayPicker"
-        numberOfMonths={numberOfMonths}
-        selectedDays={[from, { from, to }]}
-        modifiers={modifiers}
-        onDayClick={handleDayClick}
-        initialMonth={range.from}
-        disabledDays={{
-          after: maxDate,
-          before: minDate,
-        }}
-      />
+      <div style={{ height: "288px" }}>
+        <DayPicker
+          className="tnic-dayPicker"
+          numberOfMonths={numberOfMonths}
+          selectedDays={[from, { from, to }]}
+          modifiers={modifiers}
+          onDayClick={handleDayClick}
+          initialMonth={range.from}
+          disabledDays={{
+            after: maxDate,
+            before: minDate,
+          }}
+        />
+      </div>
 
       <div
         style={{
-          padding: "1em",
+          display: "flex",
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "space-around",
           borderTop: "1px solid #ccc",
+          paddingTop: "10px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "row",
-            marginTop: "0.5em",
-            alignItems: "baseline",
-          }}
-        >
-          <div style={{ flex: 1 }}>
-            From:
-            <input
-              value={time.from}
-              style={{ paddingLeft: "0.5em" }}
-              className="tnic-input"
-              type="time"
-              onChange={(e) => {
-                setTime({ ...time, from: e.target.value });
-              }}
-            />
-          </div>
-          <div style={{ flex: 1 }}>
-            To:
-            <input
-              value={time.to}
-              style={{ paddingLeft: "0.5em" }}
-              className="tnic-input"
-              type="time"
-              onChange={(e) => {
-                setTime({ ...time, to: e.target.value });
-              }}
-            />
-          </div>
-
+        <div>
+          From:
+          <input
+            value={time.from}
+            style={{ paddingLeft: "0.5em" }}
+            className="tnic-input"
+            type="time"
+            onChange={(e) => {
+              setTime({ ...time, from: e.target.value });
+            }}
+          />
+        </div>
+        <div>
+          To:
+          <input
+            value={time.to}
+            style={{ paddingLeft: "0.5em" }}
+            className="tnic-input"
+            type="time"
+            onChange={(e) => {
+              setTime({ ...time, to: e.target.value });
+            }}
+          />
+        </div>
+        {/*
           <div
             style={{
               flex: 1,
@@ -130,7 +127,7 @@ export const Calendar = ({
             }}
             title="Uncheck if you want to use UTC/GMT"
           >
-            {/*
+         
             <label>
               Use local timezone
               <input
@@ -139,9 +136,8 @@ export const Calendar = ({
                 type="checkbox"
               />
             </label>
-               */}
           </div>
-        </div>
+           */}
       </div>
     </div>
   );

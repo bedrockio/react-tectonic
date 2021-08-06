@@ -129,8 +129,7 @@ body {
 .tnic-overlay {
   position: absolute;
   top: 110%;
-  box-shadow: 0px 2px 3px 0px rgb(60 64 67 / 30%),
-    0px 6px 10px 4px rgb(60 64 67 / 15%);
+  box-shadow: 0px 2px 3px 0px #ccc, 0px 6px 10px 4px #ccc;
   background-color: #fff;
   z-index: 100;
 }
@@ -140,7 +139,6 @@ body {
   width: 300px;
   height: 336px;
   overflow: auto;
-  border-top: 1px solid #ccc;
 }
 
 /*** Icon ***/
@@ -296,6 +294,10 @@ body {
 }
 
 /*** Header/Footer ***/
+.tnic-header {
+  border-bottom: 1px solid #ccc;
+}
+
 .tnic-header,
 .tnic-footer {
   display: flex;
@@ -354,6 +356,10 @@ body {
 .tnic-dayPicker .DayPicker-Day--end {
   border-top-right-radius: 50% !important;
   border-bottom-right-radius: 50% !important;
+}
+
+.tnic-dayPicker .DayPicker-Caption > div {
+  font-size: 1em;
 }
 
 /*** Dropdown ***/

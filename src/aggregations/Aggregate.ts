@@ -69,8 +69,7 @@ export const Aggregate = ({
     setStatus({ loading: true });
     try {
       const data = await Promise.all(
-        requests.map((requestProps) => {
-          const { timeRange: paramTimeRange = {}, ...params } = requestProps;
+        requests.map((params) => {
           return request({
             method: "POST",
             path: `/1/analytics/${type}`,
@@ -79,9 +78,7 @@ export const Aggregate = ({
             body: getAnalyticsRequestBody({
               type,
               params: { ...params, interval },
-              timeRange: paramTimeRange
-                ? { ...timeRange, ...paramTimeRange }
-                : timeRange,
+              timeRange: timeRange,
               ctx,
             }),
           });

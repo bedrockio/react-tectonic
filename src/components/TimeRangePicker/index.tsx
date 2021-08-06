@@ -3,81 +3,12 @@ import PropTypes from "prop-types";
 import { toDate } from "../../utils/date";
 import { TimeRangeType } from "../../utils/propTypes";
 import { Overlay } from "./Overlay";
+import { ITimeRange } from "../../types";
 
 import { useTectonicContext } from "../TectonicProvider";
 
-function formatDate(date) {
-  if (date === "now") return "Now";
-  return toDate(date).toLocaleString();
-}
-
-function getTimeRangeForLabel(timeRange: any = {}, timeOptions = []) {
-  if (timeRange?.label) {
-    return timeRange.label;
-  }
-
-  const found: any = timeOptions.find(
-    (timeOption: any) =>
-      timeOption.from === timeRange.from && timeOption.to === timeRange.to
-  );
-
-  if (found?.label) {
-    return found.label;
-  }
-
-  if (timeRange.from && timeRange.to) {
-    return `${formatDate(timeRange.from)} - ${formatDate(timeRange.to)}`;
-  }
-
-  return "Select Time Range";
-}
-
-export const TimeRangePicker = ({
-  renderButton,
-  classNames = [],
-  timeOptions = [],
-  ...props
-}) => {
-  const ctx = useTectonicContext();
-
-  const classes = ["tnic-timeRP", ...classNames].filter(Boolean);
-  const [open, setOpen] = React.useState(false);
-
-  const timeRange = props.timeRange ||
-    ctx.timeRange || { to: new Date(), from: new Date() };
-
-  return (
-    <div className={classes.join(" ")}>
-      {renderButton(getTimeRangeForLabel(timeRange, timeOptions), () =>
-        setOpen(!open)
-      )}
-      {open && (
-        <Overlay
-          stats={ctx.stats || {}}
-          timeOptions={timeOptions}
-          timeRange={timeRange}
-          onClose={() => setOpen(false)}
-          onChange={(newTimeRange) => {
-            if (ctx.setTimeRange) ctx.setTimeRange(newTimeRange);
-            props.onChange(newTimeRange);
-          }}
-        />
-      )}
-    </div>
-  );
-};
-
-TimeRangePicker.propTypes = {
-  timeRange: TimeRangeType,
-  renderButton: PropTypes.func,
-  classNames: PropTypes.arrayOf(PropTypes.string),
-  timeOptions: PropTypes.array,
-  onChange: PropTypes.func,
-};
-
-TimeRangePicker.defaultProps = {
-  onChange: () => {},
-  renderButton: () => {},
+const defaultProps = {
+  classNames: [],
   timeOptions: [
     {
       type: "fixed",
@@ -114,3 +45,103 @@ TimeRangePicker.defaultProps = {
     },
   ],
 };
+
+type InputTimeOption = {
+  type: "input";
+  unit: "minutes" | "hours" | "days" | "weeks" | "months" | "years";
+  default: number;
+};
+type FixedTimeOption = {
+  type: "fixed";
+  label: string;
+  to: string | Date;
+  from: string | Date;
+};
+
+type TimeOption = InputTimeOption | FixedTimeOption;
+
+interface TimeRangePickerProps {
+  renderButton: (label: string, onClick: () => void) => JSX.Element;
+  classNames: string[];
+  timeOptions: TimeOption[];
+  align?: "left" | "right";
+  timeRange?: ITimeRange;
+  onChange?: (timeRange: ITimeRange) => void;
+}
+
+function formatDate(date) {
+  if (date === "now") return "Now";
+  return toDate(date).toLocaleString();
+}
+
+function getTimeRangeForLabel(
+  timeRange: ITimeRange,
+  timeOptions: TimeOption[]
+) {
+  if (timeRange?.label) {
+    return timeRange.label;
+  }
+
+  const found: any = timeOptions.find(
+    (timeOption: any) =>
+      timeOption.from === timeRange.from && timeOption.to === timeRange.to
+  );
+
+  if (found?.label) {
+    return found.label;
+  }
+
+  if (timeRange.from && timeRange.to) {
+    return `${formatDate(timeRange.from)} - ${formatDate(timeRange.to)}`;
+  }
+
+  return "Select Time Range";
+}
+
+export const TimeRangePicker = ({
+  renderButton,
+  classNames = [],
+  timeOptions = [],
+  align,
+  onChange = () => {},
+  ...props
+}: TimeRangePickerProps) => {
+  const ctx = useTectonicContext();
+
+  const classes = ["tnic-timeRP", ...classNames].filter(Boolean);
+  const [open, setOpen] = React.useState(false);
+
+  const timeRange = props.timeRange ||
+    ctx.timeRange || { to: new Date(), from: new Date() };
+
+  return (
+    <div className={classes.join(" ")}>
+      {renderButton(getTimeRangeForLabel(timeRange, timeOptions), () =>
+        setOpen(!open)
+      )}
+      {open && (
+        <Overlay
+          align={align}
+          stats={ctx.stats || {}}
+          timeOptions={timeOptions}
+          timeRange={timeRange}
+          onClose={() => setOpen(false)}
+          onChange={(newTimeRange) => {
+            if (ctx.setTimeRange) ctx.setTimeRange(newTimeRange);
+            onChange(newTimeRange);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+TimeRangePicker.propTypes = {
+  timeRange: TimeRangeType,
+  renderButton: PropTypes.func,
+  classNames: PropTypes.arrayOf(PropTypes.string),
+  timeOptions: PropTypes.array,
+  onChange: PropTypes.func,
+};
+
+TimeRangePicker.defaultProps = defaultProps;

@@ -2,7 +2,7 @@ import React from "react";
 import { IconCalendar, IconChevronRight } from "../Icons";
 import { TimeOption } from "./TimeOption";
 
-export const TimeOptions = ({ active, timeOptions, onSelect }) => {
+export const TimeOptions = ({ active, timeOptions, onSelect, align }) => {
   return (
     <div style={{ flex: 1 }}>
       {timeOptions.map((timeOption, index) => (
@@ -33,7 +33,7 @@ export const TimeOptions = ({ active, timeOptions, onSelect }) => {
           </span>
           Enter Custom Range
         </span>
-        <IconChevronRight />
+        {align !== "right" && <IconChevronRight />}
       </div>
     </div>
   );

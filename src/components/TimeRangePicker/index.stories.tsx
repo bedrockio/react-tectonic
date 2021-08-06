@@ -20,21 +20,27 @@ export default {
   argTypes: {},
 };
 
-const Template = (args) => {
-  const [timeRange, setTimeRange] = React.useState({
+const Template = ({ alignRight, ...args }) => {
+  const [timeRange, setTimeRange] = React.useState<{
+    from: string | Date;
+    to: string | Date;
+  }>({
     from: "now-1h/d",
     to: "now",
   });
 
   return (
     <>
-      <TimeRangePicker
-        renderButton={(text, handleOnClick) => (
-          <Button onClick={handleOnClick}>{text}</Button>
-        )}
-        timeRange={timeRange}
-        onChange={setTimeRange}
-      />
+      <div style={alignRight ? { float: "right" } : {}}>
+        <TimeRangePicker
+          renderButton={(text, handleOnClick) => (
+            <Button onClick={handleOnClick}>{text}</Button>
+          )}
+          timeRange={timeRange}
+          onChange={(timeRange) => setTimeRange(timeRange)}
+          {...(alignRight ? { align: "right" } : {})}
+        />
+      </div>
       <br />
       <div>TimeRange:</div>
       <div>
@@ -59,6 +65,10 @@ const Template = (args) => {
 
 export const WithoutProvider = (args) => <Template {...args} />;
 
+export const AlignRight = (args) => (
+  <Template alignRight align="right" {...args} />
+);
+
 const TemplateWithChart = (args) => (
   <TectonicProvider
     collection={window.sessionStorage.getItem("collection")}
@@ -73,7 +83,7 @@ const TemplateWithChart = (args) => (
     />
     <br />
     <AggregateTimeSeries operation="count">
-      <SeriesChart title="Orders Count" valueField="count" />
+      <SeriesChart valueField="count" />
     </AggregateTimeSeries>
   </TectonicProvider>
 );
