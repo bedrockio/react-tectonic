@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import {
   PieChart,
@@ -20,6 +20,7 @@ import {
   Message,
   ChartContainer as DefaultChartContainer,
   useTectonicContext,
+  TitleAlignType,
 } from "../components";
 
 const defaultProps = {
@@ -43,8 +44,10 @@ type EnabledControlType = "actions";
 
 type DonutChartProps = {
   status?: IStatus;
-  title?: JSX.Element;
+  title?: ReactNode;
+  titleAlign?: TitleAlignType;
   limit?: number;
+  height?: number;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   valueField: string;
@@ -63,6 +66,7 @@ export const DonutChart = ({
   status,
   data,
   labelField,
+  height = 400,
   labelFormatter: propsLabelFormatter,
   valueFormatter,
   valueField,
@@ -70,6 +74,7 @@ export const DonutChart = ({
   percent,
   precision,
   title,
+  titleAlign,
   enabledControls,
   chartContainer: ChartContainer,
   colors,
@@ -104,8 +109,6 @@ export const DonutChart = ({
   data.forEach((item) => {
     total += item[valueField];
   });
-
-  const height = 400;
 
   const noData = !trimmedData.length;
   if (noData) {
@@ -146,8 +149,10 @@ export const DonutChart = ({
     <ChartContainer
       title={title}
       enabledControls={enabledControls}
+      titleAlign={titleAlign}
+      height={height}
       actions={defaultActions}
-      onAction={handleAction}
+      onActionChange={handleAction}
     >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
@@ -155,7 +160,7 @@ export const DonutChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <ResponsiveContainer height={height}>
+      <ResponsiveContainer>
         <PieChart
           ref={svgChartRef}
           data={trimmedData}
@@ -164,7 +169,7 @@ export const DonutChart = ({
           <Pie
             data={trimmedData}
             innerRadius={Math.round(height * 0.2)}
-            outerRadius={Math.round(height * 0.36)}
+            outerRadius={Math.round(height * 0.3)}
             fill="#8884d8"
             paddingAngle={5}
             nameKey={labelField}
@@ -181,8 +186,7 @@ export const DonutChart = ({
               />
             ))}
           </Pie>
-
-          <Legend />
+          <Legend height={30} />
           {!noData && (
             <Tooltip
               formatter={(value, other, props) => {

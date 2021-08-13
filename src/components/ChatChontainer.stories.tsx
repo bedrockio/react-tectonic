@@ -32,5 +32,12 @@ export const Basic = Template.bind({});
 
 export const WithTitle = Template.bind({});
 WithTitle.args = {
-  title: <h3>title</h3>,
+  title: (
+    <div>
+      <b>title long title very glon</b>
+    </div>
+  ),
+  actions: [{ label: "hello", value: "value" }],
+  intervals: [{ label: "hello", value: "value" }],
+  enabledControls: ["actions", "intervals"],
 };

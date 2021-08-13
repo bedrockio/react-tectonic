@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultActions } from "../utils/visualization";
@@ -6,6 +6,7 @@ import { startCase } from "lodash";
 import {
   Message,
   ChartContainer as DefaultChartContainer,
+  TitleAlignType,
 } from "../components";
 
 import { exportToCsv } from "../utils/exporters";
@@ -41,7 +42,8 @@ type EnabledControlType = "actions";
 
 type TableProps = {
   status?: IStatus;
-  title?: JSX.Element;
+  title?: ReactNode;
+  titleAlign?: TitleAlignType;
   rowFormatter?: (item: any, label: string, value: string) => JSX.Element;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
@@ -58,6 +60,7 @@ type TableProps = {
 export const Table = ({
   status,
   title,
+  titleAlign,
   labelField,
   valueField,
   valueFieldName,
@@ -88,6 +91,7 @@ export const Table = ({
   return (
     <ChartContainer
       title={title}
+      titleAlign={titleAlign}
       height={400}
       actions={defaultActions}
       onActionChange={handleAction}

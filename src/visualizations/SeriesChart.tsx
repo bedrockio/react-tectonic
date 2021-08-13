@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 
 import { numberWithCommas } from "../utils/formatting";
@@ -17,6 +17,7 @@ import {
   Message,
   ChartContainer as DefaultChartContainer,
   useTectonicContext,
+  TitleAlignType,
 } from "../components";
 
 import {
@@ -64,7 +65,8 @@ const defaultProps = {
 type SeriesChartProps = {
   height?: number;
   interval?: IntervalType;
-  title?: JSX.Element;
+  title?: ReactNode;
+  titleAlign?: TitleAlignType;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   valueField?: string;
@@ -94,6 +96,7 @@ export const SeriesChart = ({
   labelFormatter,
   chartContainer: ChartContainer,
   title,
+  titleAlign,
   chartType: propsChartType,
   disableDot,
   onIntervalChange,
@@ -109,7 +112,9 @@ export const SeriesChart = ({
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
-  const [chartType, setChartType] = React.useState(propsChartType || "line");
+  const [chartType, setChartType] = React.useState<string>(
+    propsChartType || "line"
+  );
 
   const svgChartRef = React.useRef(null);
 
@@ -169,6 +174,8 @@ export const SeriesChart = ({
   return (
     <ChartContainer
       title={title}
+      height={height}
+      titleAlign={titleAlign}
       enabledControls={noData ? [] : enabledControls}
       intervals={intervals.map((interval) => {
         return {
@@ -180,9 +187,8 @@ export const SeriesChart = ({
       activeInterval={interval}
       chartTypes={defaultChartTypes}
       actions={defaultActions}
-      onChartTypeChange={setChartType}
+      onChartTypeChange={(chartType) => setChartType(chartType)}
       onActionChange={handleAction}
-      timeRange={timeRange}
       onIntervalChange={onIntervalChange}
     >
       {status.success && noData && (
@@ -190,7 +196,7 @@ export const SeriesChart = ({
       )}
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
-      <ResponsiveContainer height={height}>
+      <ResponsiveContainer>
         <Chart
           ref={svgChartRef}
           key={`${chartType}-${status.success}-${data.length}`}

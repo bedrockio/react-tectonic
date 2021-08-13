@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
@@ -12,6 +12,7 @@ import {
 import {
   Message,
   ChartContainer as DefaultChartContainer,
+  TitleAlignType,
 } from "../components";
 import { useTectonicContext } from "../components/TectonicProvider";
 
@@ -94,7 +95,8 @@ type MultiSeriesChartProps = {
   onIntervalChange?: (interval: IntervalType) => void;
   labels: string[];
   status?: IStatus;
-  title?: JSX.Element;
+  title?: ReactNode;
+  titleAlign?: TitleAlignType;
   legend?: boolean;
   stacked?: boolean;
   timeRange?: ITimeRange;
@@ -129,6 +131,7 @@ export const MultiSeriesChart = ({
   enabledControls,
   status,
   title,
+  titleAlign,
   chartContainer: ChartContainer,
   labels,
   exportFilename,
@@ -137,7 +140,9 @@ export const MultiSeriesChart = ({
 }: MultiSeriesChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
 
-  const [chartType, setChartType] = React.useState(propsChartType || "line");
+  const [chartType, setChartType] = React.useState<string>(
+    propsChartType || "line"
+  );
 
   let Chart;
   let ChartGraph;
@@ -200,6 +205,8 @@ export const MultiSeriesChart = ({
 
   return (
     <ChartContainer
+      height={height}
+      titleAlign={titleAlign}
       enabledControls={noData ? [] : enabledControls}
       activeInterval={interval}
       activeChartType={chartType}
@@ -222,7 +229,7 @@ export const MultiSeriesChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <ResponsiveContainer height={height}>
+      <ResponsiveContainer>
         <Chart
           key={`${chartType}-${status.success}`}
           data={fusedData}

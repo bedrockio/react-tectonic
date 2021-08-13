@@ -17,8 +17,10 @@ interface AggregateTimeSeriesProps {
   baseUrl?: string;
   token?: string;
   timeRange?: ITimeRange;
+
   children?: ReactNode;
   interval?: IntervalType;
+  field?: string;
   onIntervalChange?: (interval: IntervalType) => void;
   dateField?: string;
   collection?: string;

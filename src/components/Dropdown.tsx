@@ -1,27 +1,22 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, ElementType } from "react";
 import { Button } from "./Button";
+import { IOption } from "types";
 
 const defaultProps = {
-  onChange: (option: OptionType) => {},
+  onChange: (option: IOption) => {},
   alignMenu: "center",
   options: [],
   classNames: [],
 };
 
-type OptionType = {
-  icon?: React.ElementType;
-  value?: string;
-  label: string;
-};
-
 type DropdownType = {
-  icon?: React.ElementType;
+  icon?: ElementType;
   alignMenu?: "center" | "right" | "left";
-  onChange?: (option: OptionType) => void;
+  onChange?: (option: IOption) => void;
   title?: ReactNode;
   classNames: string[];
   value?: any;
-  options: OptionType[];
+  options: IOption[];
 };
 
 export const Dropdown = ({
@@ -30,9 +25,9 @@ export const Dropdown = ({
   title,
   value,
   options,
-  onChange,
+  onChange = () => {},
   classNames,
-}: DropdownType & typeof defaultProps): JSX.Element => {
+}: DropdownType): JSX.Element => {
   const [open, setOpen] = React.useState(false);
 
   const classes = [

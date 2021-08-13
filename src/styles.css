@@ -481,13 +481,19 @@ body {
   flex: 1;
   font-size: var(--tnic-title-font-size);
   line-height: 30px;
+  justify-content: space-evenly;
+  text-align: center;
+  min-height: 30px;
 }
 
 .tnic-chartContainer--actions {
-  flex: 1;
-  display: none;
+  flex: 0;
+  display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  position: absolute;
+  right: 15px;
+  min-height: 30px;
+  visibility: hidden;
 }
 
 .tnic-chartContainer--actions .tnic-button {
@@ -495,17 +501,5 @@ body {
 }
 
 .tnic-chartContainer:hover .tnic-chartContainer--actions {
-  display: flex;
-}
-
-.tnic-chartContainer__no-title .tnic-chartContainer--actions {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  display: none;
-  z-index: 100;
-}
-
-.tnic-chartContainer__no-title:hover .tnic-chartContainer--actions {
-  display: flex;
+  visibility: visible;
 }
