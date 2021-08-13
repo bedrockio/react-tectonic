@@ -26,7 +26,15 @@ const defaultProps = {
   primaryColor: "#77a741",
   dateField: "ingestedAt",
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  getTimeRangeFromCollectionStats: (stats) => {
+
+  getTimeRangeFromCollectionStats: (stats, mode) => {
+    if (mode === "all") {
+      return {
+        to: stats.to,
+        from: stats.from,
+      };
+    }
+
     if (stats.isHistorical) {
       return {
         to: stats.to,
@@ -56,6 +64,7 @@ const aDay = 24 * 60 * 60 * 1000;
 
 interface ITectonicProviderProps {
   disableInitialization?: boolean;
+  timeRangeMode?: "all" | "auto";
   getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange;
   children: React.ReactNode;
   token?: string;
@@ -70,6 +79,7 @@ interface ITectonicProviderProps {
 
 const TectonicProvider = ({
   disableInitialization,
+  timeRangeMode = "auto",
   getTimeRangeFromCollectionStats,
   children,
   ...props
@@ -153,7 +163,7 @@ const TectonicProvider = ({
       };
 
       setStats(stats);
-      setTimeRange(getTimeRangeFromCollectionStats(stats));
+      setTimeRange(getTimeRangeFromCollectionStats(stats, timeRangeMode));
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
