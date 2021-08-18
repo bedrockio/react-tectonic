@@ -6,10 +6,6 @@
   --tnic-title-font-size: 16px;
 }
 
-body {
-  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
-}
-
 .tnic-chart {
   position: relative;
   padding: 1em;
@@ -358,10 +354,6 @@ body {
   border-bottom-right-radius: 50% !important;
 }
 
-.tnic-dayPicker .DayPicker-Caption > div {
-  font-size: 1em;
-}
-
 /*** Dropdown ***/
 .tnic-dropdown {
   position: relative;
@@ -473,8 +465,6 @@ body {
 .tnic-chartContainer--container {
   display: flex;
   flex-direction: row;
-  margin-bottom: 0.2em;
-  margin-top: -0.3em;
 }
 
 .tnic-chartContainer--title {

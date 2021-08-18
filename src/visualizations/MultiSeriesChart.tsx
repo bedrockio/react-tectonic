@@ -165,9 +165,9 @@ export const MultiSeriesChart = ({
   const fusedData = fuse(data, valueField);
 
   const _colors =
-    (colors === defaultColors &&
-      ctx?.primaryColor && [ctx?.primaryColor, ...defaultColors]) ||
-    defaultColors;
+    colors === defaultColors
+      ? [ctx?.primaryColor, ...defaultColors].filter(Boolean)
+      : colors;
 
   const tickFormatter = formatterForDataCadence(
     data[0] || { timestamp: new Date() }
@@ -187,6 +187,7 @@ export const MultiSeriesChart = ({
 
   function handleAction(option) {
     const action = option.value;
+
     if (action === "download-image") {
       //handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {
@@ -229,9 +230,8 @@ export const MultiSeriesChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <ResponsiveContainer>
+      <ResponsiveContainer key={`${chartType}-${status.success}`}>
         <Chart
-          key={`${chartType}-${status.success}`}
           data={fusedData}
           margin={{
             top: 6,
@@ -252,6 +252,11 @@ export const MultiSeriesChart = ({
                 fill={["area", "bar"].includes(chartType) ? color : undefined}
                 fillOpacity={0.3}
                 opacity={1}
+                stackId={
+                  stacked && ["area", "bar"].includes(chartType)
+                    ? "1"
+                    : undefined
+                }
                 dot={false}
                 {...(["line", "area"].includes(chartType)
                   ? {
@@ -280,7 +285,10 @@ export const MultiSeriesChart = ({
             padding={{ bottom: 10, top: 10 }}
             mirror
           />
-          {(chartType === "bar" || legend) && <Legend iconType="circle" />}
+
+          {legend && (
+            <Legend verticalAlign="bottom" height={25} iconType="circle" />
+          )}
 
           {chartType !== "bar" && (
             <Tooltip

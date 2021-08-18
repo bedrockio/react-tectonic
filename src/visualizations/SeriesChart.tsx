@@ -196,10 +196,11 @@ export const SeriesChart = ({
       )}
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
-      <ResponsiveContainer>
+      <ResponsiveContainer
+        key={`${chartType}-${status.success}-${data.length}`}
+      >
         <Chart
           ref={svgChartRef}
-          key={`${chartType}-${status.success}-${data.length}`}
           data={data}
           margin={{
             top: 6,

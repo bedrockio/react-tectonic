@@ -121,12 +121,13 @@ export default {
   },
 };
 
-const TemplateWithProvider = (args) =>
+const TemplateWithProvider = (args) => (
   <TectonicProvider disableInitialization>
-    <MultiSeriesChart {...args} />
+    <div style={{ height: "300px", background: "red" }}>
+      <MultiSeriesChart title="With Provider" titleAlign="center" {...args} />
+    </div>
   </TectonicProvider>
-;
-
+);
 export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = {
   data: [data1, data2],
@@ -140,3 +141,10 @@ WithData.args = { data: [data1, data2], status: "success" };
 
 export const WithoutData = Template.bind({});
 WithoutData.args = { data: [], status: "success" };
+
+export const WithColorsData = Template.bind({});
+WithColorsData.args = {
+  data: [data1, data2],
+  status: "success",
+  colors: ["blue", "red", "green"],
+};

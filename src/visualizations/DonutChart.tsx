@@ -101,9 +101,9 @@ export const DonutChart = ({
   }
 
   const _colors =
-    (colors === defaultColors &&
-      ctx?.primaryColor && [ctx?.primaryColor, ...defaultColors]) ||
-    defaultColors;
+    colors === defaultColors
+      ? [ctx?.primaryColor, ...defaultColors].filter(Boolean)
+      : colors;
 
   let total = 0;
   data.forEach((item) => {
