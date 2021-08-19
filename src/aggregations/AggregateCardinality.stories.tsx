@@ -3,6 +3,10 @@ import { TectonicProvider } from "../components/TectonicProvider";
 
 import { AggregateCardinality } from "./AggregateCardinality";
 
+const baseUrl = window.sessionStorage.getItem("baseUrl");
+const collection = window.sessionStorage.getItem("collection");
+const token = window.sessionStorage.getItem("token");
+
 export default {
   title: "Aggregations/AggregateCardinality",
   component: AggregateCardinality,
@@ -14,12 +18,7 @@ const defaultArgs = {
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider
-    baseUrl={window.sessionStorage.getItem("baseUrl")}
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
-    disableInitialization
-  >
+  <TectonicProvider baseUrl={baseUrl} collection={collection} token={token}>
     <AggregateCardinality {...args}>
       {({ data = {}, status }) => {
         return (
@@ -41,6 +40,8 @@ WithProvider.args = defaultArgs;
 const TemplateAsFunction = (args) => (
   <AggregateCardinality
     token={window.sessionStorage.getItem("token")}
+    collection={collection}
+    baseUrl={baseUrl}
     {...args}
   >
     {({ data = {}, status }) => {
@@ -64,7 +65,6 @@ AsFunction.args = defaultArgs;
 export const CardinalityAsFunction = TemplateAsFunction.bind({});
 CardinalityAsFunction.args = {
   ...defaultArgs,
-  cardinality: true,
 };
 
 export const WithError = TemplateAsFunction.bind({});

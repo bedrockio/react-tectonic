@@ -3,6 +3,10 @@ import { formatDistanceStrict } from "date-fns";
 
 import "react-day-picker/lib/style.css";
 
+const baseUrl = window.sessionStorage.getItem("baseUrl");
+const collection = window.sessionStorage.getItem("collection");
+const token = window.sessionStorage.getItem("token");
+
 import { TimeRangePicker } from ".";
 import { TectonicProvider } from "../TectonicProvider";
 import { Button } from "../Button";
@@ -71,9 +75,15 @@ export const AlignRight = (args) => (
 
 const TemplateWithChart = (args) => (
   <TectonicProvider
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
     dateField="event.orderedAt"
+    timeRange={{
+      from: "now/M",
+      to: "now",
+      label: "Today",
+    }}
   >
     <TimeRangePicker
       renderButton={(text, handleOnClick) => (
@@ -92,8 +102,9 @@ export const WithProvider = TemplateWithChart.bind({});
 
 const TemplateWithMultiChart = (args) => (
   <TectonicProvider
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
     dateField="event.orderedAt"
   >
     <TimeRangePicker

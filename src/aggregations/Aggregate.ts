@@ -7,7 +7,6 @@ import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange } from "../types";
 
 const defaultProps = {
-  interval: "auto",
   onIntervalChange: () => {},
 };
 
@@ -37,6 +36,11 @@ export const Aggregate = ({
   if (!token) token = ctx.token;
   if (!timeRange) timeRange = ctx.timeRange;
 
+  if (propsInterval && type !== "time-series") {
+    console.warn("[Aggregate] interval is only supported for time-series");
+    propsInterval = undefined;
+  }
+
   const [interval, setInterval] = React.useState<IntervalType | undefined>(
     propsInterval
   );
@@ -52,7 +56,7 @@ export const Aggregate = ({
   }, [interval]);
 
   React.useEffect(() => {
-    if (timeRange?.from) {
+    if (type === "time-series" && timeRange?.from) {
       setInterval(determineInterval(timeRange));
     }
   }, [timeRange]);
@@ -77,7 +81,14 @@ export const Aggregate = ({
             token,
             body: getAnalyticsRequestBody({
               type,
-              params: { ...params, interval },
+              params: {
+                ...params,
+                interval,
+                dateField:
+                  type === "time-series"
+                    ? params.dateField || ctx.dateField
+                    : undefined,
+              },
               timeRange: timeRange,
               ctx,
             }),
@@ -87,12 +98,15 @@ export const Aggregate = ({
       setData(data.map(({ data }) => data));
       setStatus({ success: true });
     } catch (error) {
+      console.log(error);
       setStatus({ error });
     }
   }
 
   React.useEffect(() => {
-    if (isReady && interval && requests.length) {
+    const intervalCheck = type === "time-series" ? !!interval : true;
+
+    if (isReady && intervalCheck && requests.length) {
       fetchData();
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });

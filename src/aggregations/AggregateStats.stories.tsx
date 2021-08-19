@@ -3,6 +3,10 @@ import { TectonicProvider } from "../components/TectonicProvider";
 
 import { AggregateStats } from "./AggregateStats";
 
+const baseUrl = window.sessionStorage.getItem("baseUrl");
+const collection = window.sessionStorage.getItem("collection");
+const token = window.sessionStorage.getItem("token");
+
 export default {
   title: "Aggregations/AggregateStats",
   component: AggregateStats,
@@ -14,12 +18,7 @@ const defaultArgs = {
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider
-    baseUrl={window.sessionStorage.getItem("baseUrl")}
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
-    disableInitialization
-  >
+  <TectonicProvider baseUrl={baseUrl} collection={collection} token={token}>
     <AggregateStats {...args}>
       {({ data = {}, status }) => {
         return (
@@ -39,7 +38,12 @@ export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = defaultArgs;
 
 const TemplateAsFunction = (args) => (
-  <AggregateStats token={window.sessionStorage.getItem("token")} {...args}>
+  <AggregateStats
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
+    {...args}
+  >
     {({ data = {}, status }) => {
       return (
         <div>

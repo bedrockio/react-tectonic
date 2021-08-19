@@ -325,6 +325,11 @@
 
 /*** DayPicker-Day ***/
 
+.tnic-dayPicker .DayPicker-Caption > div {
+  font-size: 18.4px;
+  line-height: initial;
+}
+
 .tnic-dayPicker
   .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
   background-color: var(--tnic-primary-color);
@@ -344,7 +349,14 @@
 }
 .tnic-dayPicker .DayPicker-Day {
   border-radius: 0 !important;
+  box-sizing: initial;
+  font-size: 16px;
 }
+
+.tnic-dayPicker .DayPicker-Weekday {
+  font-size: 14px;
+}
+
 .tnic-dayPicker .DayPicker-Day--start {
   border-top-left-radius: 50% !important;
   border-bottom-left-radius: 50% !important;

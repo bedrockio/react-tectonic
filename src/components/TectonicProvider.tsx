@@ -63,7 +63,6 @@ const TectonicContext = React.createContext({} as IContextProps);
 const aDay = 24 * 60 * 60 * 1000;
 
 interface ITectonicProviderProps {
-  disableInitialization?: boolean;
   timeRangeMode?: "all" | "auto";
   getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange;
   children: React.ReactNode;
@@ -78,8 +77,7 @@ interface ITectonicProviderProps {
 }
 
 const TectonicProvider = ({
-  disableInitialization,
-  timeRangeMode = "auto",
+  timeRangeMode = "all",
   getTimeRangeFromCollectionStats,
   children,
   ...props
@@ -94,7 +92,7 @@ const TectonicProvider = ({
     isHistorical: false,
   });
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
-  const [isReady, setIsReady] = React.useState(disableInitialization || false);
+  const [isReady, setIsReady] = React.useState(false);
 
   React.useEffect(() => {
     setToken(props.token);
@@ -134,7 +132,7 @@ const TectonicProvider = ({
     if (!collection || !token) {
       // eslint-disable-next-line no-console
       console.error(
-        "[TectonicProvider] Please provide a `token` and `collection` or set `disableCollectionStats` to true"
+        "[TectonicProvider] Please provide a `token` and `collection`"
       );
       return;
     }
@@ -163,7 +161,9 @@ const TectonicProvider = ({
       };
 
       setStats(stats);
-      setTimeRange(getTimeRangeFromCollectionStats(stats, timeRangeMode));
+      if (!timeRange) {
+        setTimeRange(getTimeRangeFromCollectionStats(stats, timeRangeMode));
+      }
       setIsReady(true);
     } catch (e) {
       setIsReady(true);
@@ -197,16 +197,12 @@ const TectonicProvider = ({
   }
 
   React.useEffect(() => {
-    if (!disableInitialization) {
-      fetchTectonicVersion();
-    }
-  }, [disableInitialization]);
+    fetchTectonicVersion();
+  }, []);
 
   React.useEffect(() => {
-    if (!disableInitialization) {
-      fetchCollectionStats();
-    }
-  }, [collection, token, disableInitialization]);
+    fetchCollectionStats();
+  }, [collection, token]);
 
   const values = React.useMemo(() => {
     return {
@@ -264,7 +260,6 @@ TectonicProvider.propTypes = {
   defaultTimeRange: PropTypes.func,
   timeRange: TimeRangeType,
   getTimeRangeFromCollectionStats: PropTypes.func,
-  disableInitialization: PropTypes.bool,
   timeZone: PropTypes.string,
   children: PropTypes.node,
 };

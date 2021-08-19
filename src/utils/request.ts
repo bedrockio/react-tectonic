@@ -118,10 +118,6 @@ export function getAnalyticsRequestBody({
       collection: ctx.collection,
       dateField: type === "time-series" ? dateField : undefined,
       ...params,
-      interval:
-        type && ["stats", "cardinality"].includes(type)
-          ? undefined
-          : params.interval,
     };
   }
 

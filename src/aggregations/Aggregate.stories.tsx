@@ -5,6 +5,10 @@ import { AggregateTerms } from "./AggregateTerms";
 import { Aggregate } from "./Aggregate";
 import { MultiSeriesChart } from "../visualizations";
 
+const baseUrl = window.sessionStorage.getItem("baseUrl");
+const collection = window.sessionStorage.getItem("collection");
+const token = window.sessionStorage.getItem("token");
+
 export default {
   title: "Aggregations/Aggregate",
   component: Aggregate,
@@ -30,10 +34,10 @@ const defaultArgs = {
 
 const TemplateWithProvider = (args) => (
   <TectonicProvider
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
-    baseUrl={window.sessionStorage.getItem("baseUrl")}
-    disableInitialization
+    collection={collection}
+    timeRangeMode="all"
+    token={token}
+    baseUrl={baseUrl}
     dateField="event.orderedAt"
   >
     <Aggregate
@@ -66,8 +70,10 @@ WithProvider.args = defaultArgs;
 
 const TemplateTermsAggregated = (args) => (
   <TectonicProvider
-    token={window.sessionStorage.getItem("token")}
-    disableInitialization
+    collection={collection}
+    token={token}
+    baseUrl={baseUrl}
+    dateField="event.orderedAt"
   >
     <AggregateTerms
       collection={"bar-purchases"}
@@ -76,7 +82,7 @@ const TemplateTermsAggregated = (args) => (
       operation="sum"
       termsSize={10}
     >
-      {({ data: terms }) => {
+      {({ data: terms, status }) => {
         return (
           <Aggregate
             type="time-series"
@@ -109,3 +115,29 @@ const TemplateTermsAggregated = (args) => (
 );
 
 export const TermsAggregated = TemplateTermsAggregated.bind({});
+
+const TemplateCardinality = (args) => (
+  <TectonicProvider
+    collection={collection}
+    token={token}
+    baseUrl={baseUrl}
+    dateField="event.orderedAt"
+  >
+    <Aggregate
+      type="cardinality"
+      requests={[
+        {
+          fields: ["event.consumption.price"],
+        },
+      ]}
+      {...args}
+    >
+      {({ data, status }) => {
+        console.log(status);
+        return JSON.stringify(data);
+      }}
+    </Aggregate>
+  </TectonicProvider>
+);
+
+export const CardinalityAggregated = TemplateCardinality.bind({});

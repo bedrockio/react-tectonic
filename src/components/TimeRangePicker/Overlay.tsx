@@ -91,6 +91,7 @@ export const Overlay = ({
               float: "right",
               flex: 1,
               width: "550px",
+              height: "336px",
               ...(align === "right"
                 ? {
                     borderRight: "1px solid #ccc",

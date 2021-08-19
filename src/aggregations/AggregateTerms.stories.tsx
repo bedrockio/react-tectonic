@@ -5,6 +5,10 @@ import { Table } from "../visualizations/Table";
 import { DonutChart } from "../visualizations/DonutChart";
 import { TectonicProvider } from "../components/TectonicProvider";
 
+const baseUrl = window.sessionStorage.getItem("baseUrl");
+const collection = window.sessionStorage.getItem("collection");
+const token = window.sessionStorage.getItem("token");
+
 export default {
   title: "Aggregations/AggregateTerms",
   component: AggregateTerms,
@@ -26,12 +30,7 @@ const defaultArgsWithToken = {
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider
-    baseUrl={window.sessionStorage.getItem("baseUrl")}
-    collection={window.sessionStorage.getItem("collection")}
-    token={window.sessionStorage.getItem("token")}
-    disableInitialization
-  >
+  <TectonicProvider baseUrl={baseUrl} collection={collection} token={token}>
     <AggregateTerms {...args}>
       <Table />
     </AggregateTerms>
@@ -42,7 +41,12 @@ export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = defaultArgs;
 
 const Template = (args) => (
-  <AggregateTerms {...args}>
+  <AggregateTerms
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
+    {...args}
+  >
     <Table />
   </AggregateTerms>
 );
@@ -51,7 +55,12 @@ export const Basic = Template.bind({});
 Basic.args = defaultArgsWithToken;
 
 const TemplateAsFunction = (args) => (
-  <AggregateTerms {...args}>
+  <AggregateTerms
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
+    {...args}
+  >
     {({ data, status }) => {
       return <Table data={data} status={status} />;
     }}
@@ -68,7 +77,12 @@ WithError.args = {
 };
 
 const TemplateDonut = (args) => (
-  <AggregateTerms {...args}>
+  <AggregateTerms
+    baseUrl={baseUrl}
+    collection={collection}
+    token={token}
+    {...args}
+  >
     <DonutChart />
   </AggregateTerms>
 );
