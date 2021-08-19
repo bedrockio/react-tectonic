@@ -67,7 +67,7 @@ export const DonutChart = ({
   data,
   labelField,
   height = 400,
-  labelFormatter: propsLabelFormatter,
+  labelFormatter,
   valueFormatter,
   valueField,
   limit,
@@ -82,8 +82,6 @@ export const DonutChart = ({
   exportFilename,
 }: DonutChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
-
-  const labelFormatter = (item) => propsLabelFormatter(item[labelField]);
 
   const svgChartRef = React.useRef(null);
 
@@ -136,7 +134,7 @@ export const DonutChart = ({
       exportToCsv(
         [`Name`, "Value", "Percentage"],
         trimmedData.map((row) => [
-          labelFormatter(row),
+          labelFormatter(row[labelField]),
           getValue(row),
           `${Math.round((getValue(row) / total) * 100)}%`,
         ]),
@@ -186,21 +184,29 @@ export const DonutChart = ({
               />
             ))}
           </Pie>
-          <Legend height={30} />
+          <Legend height={30} formatter={(value) => labelFormatter(value)} />
           {!noData && (
             <Tooltip
-              formatter={(value, other, props) => {
+              formatter={(value, name, props) => {
+                let label = labelFormatter(name);
                 if (percent) {
                   if (precision) {
-                    return `${
-                      Math.round((value / total) * (10 * precision) * 100) /
-                      (10 * precision)
-                    }%`;
+                    return [
+                      `${valueFormatter(
+                        Math.round((value / total) * (10 * precision) * 100) /
+                          (10 * precision)
+                      )}%`,
+                      label,
+                    ];
                   } else {
-                    return `${Math.round((value / total) * 100)}%`;
+                    return [
+                      `${valueFormatter(Math.round((value / total) * 100))}%`,
+                      label,
+                    ];
                   }
                 }
-                return valueFormatter(value);
+
+                return [valueFormatter(value), labelFormatter(name)];
               }}
             />
           )}
@@ -218,7 +224,7 @@ DonutChart.propTypes = {
   valueFormatter: PropTypes.func,
   valueField: PropTypes.string,
   labelField: PropTypes.string,
-  procent: PropTypes.bool,
+  percent: PropTypes.bool,
   precision: PropTypes.number,
   colorFn: PropTypes.func,
   data: PropTypes.array,
