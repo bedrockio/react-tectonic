@@ -105,17 +105,19 @@ export function getAnalyticsRequestBody({
   timeRange,
   ctx,
   type,
+  collection,
 }: {
   params: any;
   type?: string;
   timeRange?: ITimeRange;
   ctx: any;
+  collection?: string;
 }) {
   const dateField = params.dateField || ctx.dateField;
 
   if (!timeRange) {
     return {
-      collection: ctx.collection,
+      collection: collection || ctx.collection,
       dateField: type === "time-series" ? dateField : undefined,
       ...params,
     };
@@ -133,7 +135,7 @@ export function getAnalyticsRequestBody({
   }
 
   return {
-    collection: ctx.collection,
+    collection: collection || ctx.collection,
     ...params,
     filter: {
       ...params.filter,

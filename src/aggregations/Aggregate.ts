@@ -18,6 +18,7 @@ interface AggregatePropType {
   type: "stats" | "time-series" | "cardinality" | "terms" | "search";
   children: ReactNode;
   interval?: IntervalType;
+  collection?: string;
   onIntervalChange?: (interval: IntervalType) => void;
 }
 
@@ -26,6 +27,7 @@ export const Aggregate = ({
   baseUrl,
   token,
   requests,
+  collection,
   interval: propsInterval,
   onIntervalChange,
   type,
@@ -84,6 +86,7 @@ export const Aggregate = ({
               params: {
                 ...params,
                 interval,
+                collection,
                 dateField:
                   type === "time-series"
                     ? params.dateField || ctx.dateField
