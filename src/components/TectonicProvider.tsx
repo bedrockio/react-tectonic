@@ -20,6 +20,7 @@ interface IContextProps {
   stats: any;
   baseUrl?: string;
   dateField: string;
+  onRequest?: (url: string, options: RequestInit) => any;
 }
 
 const defaultProps = {
@@ -74,11 +75,13 @@ interface ITectonicProviderProps {
   collection?: string;
   primaryColor?: string;
   statsFilter?: IAggregateFilterType;
+  onRequest?: (url: string, options: RequestInit) => any;
 }
 
 const TectonicProvider = ({
   timeRangeMode = "all",
   getTimeRangeFromCollectionStats,
+  onRequest,
   children,
   ...props
 }: ITectonicProviderProps & typeof defaultProps): JSX.Element => {
@@ -148,6 +151,7 @@ const TectonicProvider = ({
           filter: props.statsFilter,
           fields: [dateField],
         },
+        onRequest,
       });
 
       const from = new Date(data[dateField].min);
@@ -223,6 +227,7 @@ const TectonicProvider = ({
       setStats,
       stats,
       isReady,
+      onRequest,
     };
   }, [
     token,
@@ -242,6 +247,7 @@ const TectonicProvider = ({
     setPrimaryColor,
     timeZone,
     setTimeZone,
+    onRequest,
   ]);
 
   return (

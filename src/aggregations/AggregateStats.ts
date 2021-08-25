@@ -58,6 +58,7 @@ export const AggregateStats = ({
           timeRange,
           ctx,
         }),
+        onRequest: ctx.onRequest,
       });
       setData(data);
       setStatus({ success: true });

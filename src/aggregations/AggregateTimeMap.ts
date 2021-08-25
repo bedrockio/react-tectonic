@@ -48,6 +48,7 @@ export const AggregateTimeMap = ({
           timeRange,
           ctx,
         }),
+        onRequest: ctx.onRequest,
       });
       setData(data);
       setStatus({ success: true });

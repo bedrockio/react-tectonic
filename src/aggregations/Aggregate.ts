@@ -95,6 +95,7 @@ export const Aggregate = ({
               timeRange: timeRange,
               ctx,
             }),
+            onRequest: ctx.onRequest,
           });
         })
       );

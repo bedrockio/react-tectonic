@@ -19,7 +19,6 @@ const data = [
     ...item,
     dayOfWeek: index + 1,
     hours: [...new Array(24)].map((c, index) => {
-      console.log(index);
       return {
         hour: index,
         count: Math.floor(Math.random() * 100),

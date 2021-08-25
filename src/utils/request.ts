@@ -32,6 +32,9 @@ export const request = async (options) => {
     files,
     params,
     baseUrl = "http://0.0.0.0:3300",
+    onRequest = (url, options) => {
+      return fetch(url, options);
+    },
   } = options;
   let { body } = options;
 
@@ -65,7 +68,7 @@ export const request = async (options) => {
     headers["Content-Type"] = "application/json";
   }
 
-  const res = await fetch(url.toString(), {
+  const res = await onRequest(url.toString(), {
     method,
     headers,
     body,

@@ -85,6 +85,7 @@ export const AggregateTimeSeries = ({
           timeRange,
           ctx,
         }),
+        onRequest: ctx.onRequest,
       });
       setData(data);
       setStatus({ success: true });

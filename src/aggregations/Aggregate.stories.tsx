@@ -39,6 +39,9 @@ const TemplateWithProvider = (args) => (
     token={token}
     baseUrl={baseUrl}
     dateField="event.orderedAt"
+    onRequest={(url, options) => {
+      return fetch(url, options);
+    }}
   >
     <Aggregate
       type="time-series"
