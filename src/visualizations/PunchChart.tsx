@@ -8,7 +8,6 @@ import {
   YAxis,
   ZAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -17,11 +16,10 @@ import { IStatus } from "../types";
 import {
   Message,
   ChartContainer as DefaultChartContainer,
-  useTectonicContext,
   TitleAlignType,
 } from "../components";
 
-const parseDomain = (data = []) => [
+const parseDomain = (data = [] as any) => [
   0,
   Math.max(
     Math.max.apply(
@@ -50,7 +48,7 @@ type PunchChartProps = {
 };
 
 export const PunchChart = ({
-  status,
+  status = { success: true },
   data = [],
   valueFormatter = (value) => {
     return numberWithCommas(value);
