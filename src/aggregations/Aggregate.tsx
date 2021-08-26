@@ -86,8 +86,8 @@ export const Aggregate = ({
               type,
               params: {
                 ...params,
-                interval,
                 collection,
+                interval,
                 dateField:
                   type === "time-series"
                     ? params.dateField || ctx.dateField

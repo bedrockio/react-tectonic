@@ -108,21 +108,20 @@ export function getAnalyticsRequestBody({
   timeRange,
   ctx,
   type,
-  collection,
 }: {
   params: any;
   type?: string;
   timeRange?: ITimeRange;
   ctx: any;
-  collection?: string;
 }) {
   const dateField = params.dateField || ctx.dateField;
+  const _collection = params.collection || ctx.collection;
 
   if (!timeRange) {
     return {
-      collection: collection || ctx.collection,
-      dateField: type === "time-series" ? dateField : undefined,
       ...params,
+      collection: _collection,
+      dateField: type === "time-series" ? dateField : undefined,
     };
   }
 
@@ -138,8 +137,8 @@ export function getAnalyticsRequestBody({
   }
 
   return {
-    collection: collection || ctx.collection,
     ...params,
+    collection: _collection,
     filter: {
       ...params.filter,
       range: {
