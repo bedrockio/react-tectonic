@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
 
@@ -66,7 +67,11 @@ export const AggregateTimeMap = ({
   }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
-    return children({ data, status, timeRange });
+    try {
+      return children({ data, status });
+    } catch (error) {
+      return <ErrorBoundary error={error} />;
+    }
   }
 
   return React.Children.map(children, (child: any) =>

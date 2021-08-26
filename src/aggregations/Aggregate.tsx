@@ -5,6 +5,7 @@ import { useTectonicContext } from "../components/TectonicProvider";
 import { determineInterval, IntervalType } from "../utils/intervals";
 import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange } from "../types";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 const defaultProps = {
   onIntervalChange: () => {},
@@ -118,7 +119,11 @@ export const Aggregate = ({
   }, [token, baseUrl, isReady, timeRange, interval, type, requests]);
 
   if (typeof children === "function") {
-    return children({ data, status, timeRange, setInterval });
+    try {
+      return children({ data, status, timeRange, setInterval });
+    } catch (error) {
+      return <ErrorBoundary error={error} />;
+    }
   }
 
   return React.Children.map(children, (child: any) =>

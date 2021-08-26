@@ -1,8 +1,16 @@
-import { ReactNode, useState, useEffect, Children, cloneElement } from "react";
+import React, {
+  ReactNode,
+  useState,
+  useEffect,
+  Children,
+  cloneElement,
+} from "react";
+
 import PropTypes from "prop-types";
 import { request, getAnalyticsRequestBody } from "../utils/request";
 import { AggregateFilterType } from "../utils/propTypes";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
@@ -83,7 +91,11 @@ export const AggregateStats = ({
   ]);
 
   if (typeof children === "function") {
-    return children({ data, status });
+    try {
+      return children({ data, status });
+    } catch (error) {
+      return <ErrorBoundary error={error} />;
+    }
   }
 
   return Children.map(children, (child: any) =>

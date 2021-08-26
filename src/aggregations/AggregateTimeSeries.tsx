@@ -4,6 +4,7 @@ import { request, getAnalyticsRequestBody } from "../utils/request";
 // import { AggregateFilterType, TimeRangeType } from "../utils/propTypes";
 import { determineInterval, IntervalType } from "../utils/intervals";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
 
@@ -103,7 +104,11 @@ export const AggregateTimeSeries = ({
   }, [token, baseUrl, isReady, interval, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
-    return children({ data, status, timeRange, setInterval, interval });
+    try {
+      return children({ data, status });
+    } catch (error) {
+      return <ErrorBoundary error={error} />;
+    }
   }
 
   return React.Children.map(children, (child: any) =>

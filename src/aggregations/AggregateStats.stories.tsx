@@ -20,7 +20,9 @@ const defaultArgs = {
 const TemplateWithProvider = (args) => (
   <TectonicProvider baseUrl={baseUrl} collection={collection} token={token}>
     <AggregateStats {...args}>
-      {({ data = {}, status }) => {
+      {({ data, status }) => {
+        const x = data.event;
+        x();
         return (
           <div>
             Count: {JSON.stringify(data)}
@@ -44,7 +46,7 @@ const TemplateAsFunction = (args) => (
     token={token}
     {...args}
   >
-    {({ data = {}, status }) => {
+    {({ data, status }) => {
       return (
         <div>
           Count: {JSON.stringify(data)}

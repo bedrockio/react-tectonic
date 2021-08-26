@@ -5,3 +5,4 @@ export * from "./TimeRangePicker";
 export * from "./Dropdown";
 export * from "./Icons";
 export * from "./Button";
+export * from "./ErrorBoundary";

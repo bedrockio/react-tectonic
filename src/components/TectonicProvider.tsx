@@ -6,6 +6,7 @@ import { TimeRangeType } from "../utils/propTypes";
 import { ITimeRange } from "../types";
 import metadata from "../metadata.json";
 import { IAggregateFilterType } from "../types";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 const version = (metadata as any).version;
 
@@ -252,7 +253,7 @@ const TectonicProvider = ({
 
   return (
     <TectonicContext.Provider value={values}>
-      {children}
+      <ErrorBoundary>{children}</ErrorBoundary>
     </TectonicContext.Provider>
   );
 };
