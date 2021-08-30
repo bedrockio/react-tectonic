@@ -237,7 +237,7 @@ export const MultiSeriesChart = ({
             top: 6,
             right: 6,
             left: 6,
-            bottom: 6,
+            bottom: 0,
           }}
         >
           {data.map((_, index) => {

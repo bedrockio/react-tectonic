@@ -23,6 +23,7 @@ interface AggregateTermsProps {
   aggField: string;
   aggFieldOrder?: "desc" | "asc";
   field?: string;
+  processData?: (data: any) => Promise<any> | any;
   operation?: string;
   includeTopHit?: boolean;
   termsSize?: number;
@@ -34,6 +35,7 @@ export const AggregateTerms = ({
   token,
   timeRange,
   children,
+  processData = (data) => data,
   ...params
 }: AggregateTermsProps) => {
   let ctx = useTectonicContext();
@@ -61,7 +63,7 @@ export const AggregateTerms = ({
         }),
         onRequest: ctx.onRequest,
       });
-      setData(data);
+      setData(await processData(data));
       setStatus({ success: true });
     } catch (error) {
       setStatus({ error });

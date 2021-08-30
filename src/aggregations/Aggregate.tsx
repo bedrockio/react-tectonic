@@ -20,6 +20,7 @@ interface AggregatePropType {
   children: ReactNode;
   interval?: IntervalType;
   collection?: string;
+  processData?: (data: any[]) => Promise<any[]> | any[];
   onIntervalChange?: (interval: IntervalType) => void;
 }
 
@@ -31,6 +32,7 @@ export const Aggregate = ({
   collection,
   interval: propsInterval,
   onIntervalChange,
+  processData = (data) => data,
   type,
   children,
 }: AggregatePropType & typeof defaultProps) => {
@@ -100,7 +102,7 @@ export const Aggregate = ({
           });
         })
       );
-      setData(data.map(({ data }) => data));
+      setData(await processData(data.map(({ data }) => data)));
       setStatus({ success: true });
     } catch (error) {
       console.log(error);
