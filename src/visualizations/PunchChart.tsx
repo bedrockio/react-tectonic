@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
 import { numberWithCommas } from "../utils/formatting";
 import { startCase } from "lodash";
+import { defaultColors } from "../utils/visualization";
+import { useTectonicContext } from "../components/TectonicProvider";
 import {
   ScatterChart,
   Scatter,
@@ -42,7 +44,7 @@ type PunchChartProps = {
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   data?: any[];
-  colors?: string[];
+  color?: string;
   chartContainer?: React.ElementType;
   labels?: string[];
 };
@@ -56,6 +58,7 @@ export const PunchChart = ({
   labelFormatter = (label) => {
     return startCase(label.toString().toLowerCase());
   },
+  color,
   chartContainer: ChartContainer = DefaultChartContainer,
   title,
   titleAlign,
@@ -70,7 +73,9 @@ export const PunchChart = ({
     "Sunday",
   ],
 }: PunchChartProps): JSX.Element => {
-  const range = [16, 225];
+  const ctx = useTectonicContext();
+
+  const _color = color || ctx?.primaryColor || defaultColors[0];
 
   const noData = false;
 
@@ -148,12 +153,7 @@ export const PunchChart = ({
                     position: "insideRight",
                   }}
                 />
-                <ZAxis
-                  type="number"
-                  dataKey="count"
-                  domain={domain}
-                  range={range}
-                />
+                <ZAxis type="number" dataKey="count" domain={domain} />
                 <Tooltip
                   cursor={{ strokeDasharray: "3 3" }}
                   wrapperStyle={{ zIndex: 100 }}
@@ -170,7 +170,7 @@ export const PunchChart = ({
                     .sort((a, b) => {
                       return a.hour - b.hour;
                     })}
-                  fill="#8884d8"
+                  fill={_color}
                 />
               </ScatterChart>
             </ResponsiveContainer>
