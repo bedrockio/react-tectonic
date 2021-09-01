@@ -21,7 +21,7 @@ const data = [
     hours: [...new Array(24)].map((c, index) => {
       return {
         hour: index,
-        count: Math.floor(Math.random() * 100),
+        count: Math.floor(Math.random() * 1000),
       };
     }),
   };

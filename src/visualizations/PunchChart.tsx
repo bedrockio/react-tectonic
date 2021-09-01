@@ -75,6 +75,7 @@ export const PunchChart = ({
 }: PunchChartProps): JSX.Element => {
   const ctx = useTectonicContext();
 
+  const range = [20, 150];
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
   const noData = false;
@@ -156,7 +157,7 @@ export const PunchChart = ({
                   type="number"
                   dataKey="count"
                   domain={domain}
-                  range={domain}
+                  range={range}
                 />
                 <Tooltip
                   cursor={{ strokeDasharray: "3 3" }}
