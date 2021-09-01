@@ -123,7 +123,6 @@ export const PunchChart = ({
           return (
             <ResponsiveContainer width="100%" height={60}>
               <ScatterChart
-                width={800}
                 height={60}
                 margin={{
                   top: 10,
@@ -153,7 +152,12 @@ export const PunchChart = ({
                     position: "insideRight",
                   }}
                 />
-                <ZAxis type="number" dataKey="count" domain={domain} />
+                <ZAxis
+                  type="number"
+                  dataKey="count"
+                  domain={domain}
+                  range={domain}
+                />
                 <Tooltip
                   cursor={{ strokeDasharray: "3 3" }}
                   wrapperStyle={{ zIndex: 100 }}
