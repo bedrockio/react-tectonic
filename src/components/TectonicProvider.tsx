@@ -16,6 +16,7 @@ interface IContextProps {
   setToken: (token: string) => void;
   setBaseUrl: (url: string) => void;
   isReady: boolean;
+  debug?: boolean;
   timeRange?: ITimeRange;
   setTimeRange: (timeRange: ITimeRange) => void;
   stats: any;
@@ -68,6 +69,7 @@ interface ITectonicProviderProps {
   timeRangeMode?: "all" | "auto";
   getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange;
   children: React.ReactNode;
+  debug?: boolean;
   token?: string;
   baseUrl?: string;
   timeZone?: string;
@@ -84,6 +86,7 @@ const TectonicProvider = ({
   getTimeRangeFromCollectionStats,
   onRequest,
   children,
+  debug,
   ...props
 }: ITectonicProviderProps & typeof defaultProps): JSX.Element => {
   const [token, setToken] = React.useState(props.token);
@@ -216,6 +219,7 @@ const TectonicProvider = ({
       primaryColor,
       setPrimaryColor,
       baseUrl,
+      debug,
       token,
       setToken,
       setBaseUrl,
@@ -239,6 +243,7 @@ const TectonicProvider = ({
     setTimeRange,
     dateField,
     setDateField,
+    debug,
     collection,
     setCollection,
     setStats,

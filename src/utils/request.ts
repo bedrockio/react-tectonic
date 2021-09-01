@@ -120,6 +120,7 @@ export function getAnalyticsRequestBody({
   if (!timeRange) {
     return {
       ...params,
+      debug: ctx.debug,
       collection: _collection,
       dateField: type === "time-series" ? dateField : undefined,
     };
@@ -138,6 +139,7 @@ export function getAnalyticsRequestBody({
 
   return {
     ...params,
+    debug: ctx.debug,
     collection: _collection,
     filter: {
       ...params.filter,
