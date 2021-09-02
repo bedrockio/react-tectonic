@@ -230,7 +230,10 @@ export const MultiSeriesChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <ResponsiveContainer key={`${chartType}-${status.success}`}>
+      <ResponsiveContainer
+        debounce={10}
+        key={`${chartType}-${status.success}-${legend}`}
+      >
         <Chart
           data={fusedData}
           margin={{
@@ -276,6 +279,7 @@ export const MultiSeriesChart = ({
             axisLine={{ stroke: "#6C767B" }}
             tickMargin={8}
             padding={{ left: 20, right: 9 }}
+            height={38}
           />
           <YAxis
             tickFormatter={valueFormatter}
@@ -287,7 +291,7 @@ export const MultiSeriesChart = ({
           />
 
           {legend && (
-            <Legend verticalAlign="bottom" height={25} iconType="circle" />
+            <Legend verticalAlign="bottom" height={32} iconType="circle" />
           )}
 
           {chartType !== "bar" && (
