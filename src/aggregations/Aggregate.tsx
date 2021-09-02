@@ -12,7 +12,7 @@ const defaultProps = {
 };
 
 interface AggregatePropType {
-  timeRange?: ITimeRange;
+  timeRange?: ITimeRange | null;
   baseUrl?: string;
   token?: string;
   requests: any[];
@@ -39,7 +39,7 @@ export const Aggregate = ({
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
-  if (!timeRange) timeRange = ctx.timeRange;
+  if (timeRange !== undefined) timeRange = ctx.timeRange;
 
   if (propsInterval && type !== "time-series") {
     console.warn("[Aggregate] interval is only supported for time-series");
@@ -95,7 +95,7 @@ export const Aggregate = ({
                     ? params.dateField || ctx.dateField
                     : undefined,
               },
-              timeRange: timeRange,
+              timeRange,
               ctx,
             }),
             onRequest: ctx.onRequest,

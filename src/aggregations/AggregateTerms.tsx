@@ -27,7 +27,7 @@ interface AggregateTermsProps {
   operation?: string;
   includeTopHit?: boolean;
   termsSize?: number;
-  timeRange?: ITimeRange;
+  timeRange?: ITimeRange | null;
 }
 
 export const AggregateTerms = ({
@@ -41,7 +41,7 @@ export const AggregateTerms = ({
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
-  if (!timeRange) timeRange = ctx.timeRange;
+  if (timeRange !== undefined) timeRange = ctx.timeRange;
 
   const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 

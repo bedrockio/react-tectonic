@@ -111,7 +111,7 @@ export function getAnalyticsRequestBody({
 }: {
   params: any;
   type?: string;
-  timeRange?: ITimeRange;
+  timeRange?: ITimeRange | null;
   ctx: any;
 }) {
   const dateField = params.dateField || ctx.dateField;

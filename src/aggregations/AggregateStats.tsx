@@ -16,7 +16,7 @@ import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
 
 interface AggregateStateProps {
-  timeRange?: ITimeRange;
+  timeRange?: ITimeRange | null;
   baseUrl?: string;
   token?: string;
   /**
@@ -40,7 +40,7 @@ export const AggregateStats = ({
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
-  if (!timeRange) timeRange = ctx.timeRange;
+  if (timeRange !== undefined) timeRange = ctx.timeRange;
 
   const isReady = ctx.token ? ctx.token && ctx.isReady : token;
 
