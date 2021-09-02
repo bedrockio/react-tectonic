@@ -39,7 +39,7 @@ export const Aggregate = ({
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
-  if (timeRange !== undefined) timeRange = ctx.timeRange;
+  if (timeRange === undefined) timeRange = ctx.timeRange;
 
   if (propsInterval && type !== "time-series") {
     console.warn("[Aggregate] interval is only supported for time-series");
