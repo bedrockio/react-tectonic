@@ -6,7 +6,10 @@ import {
 
 const ONE_HOUR = 1000 * 60 * 60;
 
-export const formatterForDataCadence = (data: any[] = [], dateField="timestamp") => {
+export const formatterForDataCadence = (
+  data: any[] = [],
+  dateField = "timestamp"
+) => {
   if (!data[1]) {
     return () => "No Data";
   }
@@ -23,8 +26,8 @@ export const formatterForDataCadence = (data: any[] = [], dateField="timestamp")
     return (unixTime) => formatter.format(unixTime);
   } else if (delta > 5 * ONE_HOUR) {
     const formatter = Intl.DateTimeFormat("en-US", {
-      month: "numeric",
-      day: "numeric",
+      month: "2-digit",
+      day: "2-digit",
     });
     return (unixTime) => formatter.format(unixTime);
   } else {

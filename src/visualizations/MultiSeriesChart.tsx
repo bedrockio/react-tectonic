@@ -4,6 +4,7 @@ import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
 import { exportToCsv } from "../utils/exporters";
 import { AnnotationLine } from "./types";
+import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import {
   formatterForDataCadence,
   defaultChartTypes,
@@ -204,6 +205,9 @@ export const MultiSeriesChart = ({
     }
   }
 
+  const _valueFormatter =
+    valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
+
   return (
     <ChartContainer
       height={height}
@@ -282,7 +286,7 @@ export const MultiSeriesChart = ({
             height={38}
           />
           <YAxis
-            tickFormatter={valueFormatter}
+            tickFormatter={_valueFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ fill: "#6C767B" }}
             tickMargin={8}
@@ -296,7 +300,7 @@ export const MultiSeriesChart = ({
 
           {chartType !== "bar" && (
             <Tooltip
-              formatter={valueFormatter}
+              formatter={_valueFormatter}
               labelFormatter={labelFormatter}
             />
           )}

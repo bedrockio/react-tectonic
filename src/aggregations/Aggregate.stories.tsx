@@ -56,7 +56,6 @@ const TemplateWithProvider = (args) => (
           },
         };
       })}
-      {...args}
     >
       <MultiSeriesChart
         labels={["Wine", "Food", "Beer"]}

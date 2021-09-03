@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
-import { numberWithCommas } from "../utils/formatting";
+import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import { defaultActions } from "../utils/visualization";
 import { startCase, get } from "lodash";
 import {
@@ -23,9 +23,6 @@ const defaultProps = {
   valueField: "value",
   labelFormatter: (label) => {
     return startCase(label.toString().toLowerCase());
-  },
-  valueFormatter: (value) => {
-    return numberWithCommas(value);
   },
   rowFormatter: (item, label, value) => {
     return (
@@ -88,6 +85,9 @@ export const Table = ({
     }
   }
 
+  const _valueFormatter =
+    valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
+
   return (
     <ChartContainer
       title={title}
@@ -117,7 +117,7 @@ export const Table = ({
                 {rowFormatter(
                   item,
                   labelFormatter(get(item, labelField)),
-                  valueFormatter(get(item, valueField))
+                  _valueFormatter(get(item, valueField))
                 )}
               </tr>
             );

@@ -122,7 +122,7 @@ export default {
 };
 
 const TemplateWithProvider = (args) => (
-  <TectonicProvider disableInitialization>
+  <TectonicProvider>
     <div style={{ height: "300px", background: "red" }}>
       <MultiSeriesChart title="With Provider" titleAlign="center" {...args} />
     </div>

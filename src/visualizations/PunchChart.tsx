@@ -3,6 +3,7 @@ import { numberWithCommas } from "../utils/formatting";
 import { startCase } from "lodash";
 import { defaultColors } from "../utils/visualization";
 import { useTectonicContext } from "../components/TectonicProvider";
+import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import {
   ScatterChart,
   Scatter,
@@ -80,6 +81,9 @@ export const PunchChart = ({
 
   const noData = false;
 
+  const _valueFormatter =
+    valueFormatter || getValueFormatter(getMinMaxRange(data, "count"));
+
   function renderTooltip({ active, payload }) {
     if (active && payload && payload.length) {
       const data = payload[0] && payload[0].payload;
@@ -94,7 +98,7 @@ export const PunchChart = ({
           }}
         >
           <p>
-            Hour {labelFormatter(data.hour)}: {valueFormatter(data.count)}
+            Hour {labelFormatter(data.hour)}: {_valueFormatter(data.count)}
           </p>
         </div>
       );

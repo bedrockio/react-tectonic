@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import { exportToCsv, downloadImage } from "../utils/exporters";
 
 import { startCase, get } from "lodash";
@@ -143,6 +144,9 @@ export const DonutChart = ({
     }
   }
 
+  const _valueFormatter =
+    valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
+
   return (
     <ChartContainer
       title={title}
@@ -192,7 +196,7 @@ export const DonutChart = ({
                 if (percent) {
                   if (precision) {
                     return [
-                      `${valueFormatter(
+                      `${_valueFormatter(
                         Math.round((value / total) * (10 * precision) * 100) /
                           (10 * precision)
                       )}%`,
@@ -200,13 +204,13 @@ export const DonutChart = ({
                     ];
                   } else {
                     return [
-                      `${valueFormatter(Math.round((value / total) * 100))}%`,
+                      `${_valueFormatter(Math.round((value / total) * 100))}%`,
                       label,
                     ];
                   }
                 }
 
-                return [valueFormatter(value), labelFormatter(name)];
+                return [_valueFormatter(value), labelFormatter(name)];
               }}
             />
           )}

@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 
-import { numberWithCommas } from "../utils/formatting";
+import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
+
 import {
   formatterForDataCadence,
   defaultActions,
@@ -57,7 +58,6 @@ const defaultProps = {
   chartType: "line",
   chartContainer: DefaultChartContainer,
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
-  valueFormatter: (value) => numberWithCommas(value),
   enabledControls: ["intervals", "chartTypes", "actions"],
   axisColor: "#363B3D",
 };
@@ -171,6 +171,9 @@ export const SeriesChart = ({
     }
   }
 
+  const _valueFormatter =
+    valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
+
   return (
     <ChartContainer
       title={title}
@@ -209,7 +212,10 @@ export const SeriesChart = ({
             bottom: 6,
           }}
         >
-          <Tooltip formatter={valueFormatter} labelFormatter={labelFormatter} />
+          <Tooltip
+            formatter={_valueFormatter}
+            labelFormatter={labelFormatter}
+          />
 
           <ChartGraph
             type="monotoneX"
@@ -238,7 +244,7 @@ export const SeriesChart = ({
             padding={{ left: 20, right: 9 }}
           />
           <YAxis
-            tickFormatter={valueFormatter}
+            tickFormatter={_valueFormatter}
             tick={{ fill: axisColor, fontSize: "13" }}
             tickLine={{ fill: axisColor }}
             tickMargin={5}
