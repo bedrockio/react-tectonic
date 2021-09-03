@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultActions } from "../utils/visualization";
-import { startCase } from "lodash";
+import { startCase, get } from "lodash";
 import {
   Message,
   ChartContainer as DefaultChartContainer,
@@ -82,7 +82,7 @@ export const Table = ({
     } else if (action === "export-data") {
       exportToCsv(
         [valueFieldName, valueFieldName],
-        data.map((row) => [row[labelField], row[valueField]]),
+        data.map((row) => [get(row, labelField), row[valueField]]),
         exportFilename
       );
     }
@@ -116,8 +116,8 @@ export const Table = ({
               <tr key={item[labelField]}>
                 {rowFormatter(
                   item,
-                  labelFormatter(item[labelField]),
-                  valueFormatter(item[valueField])
+                  labelFormatter(get(item, labelField)),
+                  valueFormatter(get(item, valueField))
                 )}
               </tr>
             );

@@ -31,7 +31,10 @@ const TemplateWithProvider = (args) => (
     dateField="event.orderedAt"
   >
     <Search {...args}>
-      <Table />
+      <Table
+        labelField="_source.event.venue.name"
+        valueField="_source.event.amountPaid"
+      />
     </Search>
   </TectonicProvider>
 );

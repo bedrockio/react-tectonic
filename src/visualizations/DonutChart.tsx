@@ -11,7 +11,7 @@ import {
 
 import { exportToCsv, downloadImage } from "../utils/exporters";
 
-import { startCase } from "lodash";
+import { startCase, get } from "lodash";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors, defaultActions } from "../utils/visualization";
 import { IStatus } from "../types";
@@ -105,7 +105,7 @@ export const DonutChart = ({
 
   let total = 0;
   data.forEach((item) => {
-    total += item[valueField];
+    total += get(item, valueField);
   });
 
   const noData = !trimmedData.length;
@@ -134,7 +134,7 @@ export const DonutChart = ({
       exportToCsv(
         [`Name`, "Value", "Percentage"],
         trimmedData.map((row) => [
-          labelFormatter(row[labelField]),
+          labelFormatter(get(row, labelField)),
           getValue(row),
           `${Math.round((getValue(row) / total) * 100)}%`,
         ]),
