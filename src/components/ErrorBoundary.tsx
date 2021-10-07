@@ -21,16 +21,10 @@ export class ErrorBoundary extends React.Component<
     return { error };
   }
 
-  componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    console.error(error, errorInfo);
-  }
-
   render() {
     const { error } = this.state;
-    console.error(error);
     if (error) {
-      // You can render any custom fallback UI
+      console.error(error);
       return (
         <Message error>
           Failed to show visualization:
@@ -39,7 +33,6 @@ export class ErrorBoundary extends React.Component<
         </Message>
       );
     }
-
     return this.props.children;
   }
 }
