@@ -123,11 +123,19 @@ export default {
 
 const TemplateWithProvider = (args) => (
   <TectonicProvider>
-    <div style={{ height: "300px", background: "red" }}>
-      <MultiSeriesChart title="With Provider" titleAlign="center" {...args} />
+    <div style={{ background: "red" }}>
+      <MultiSeriesChart
+        title={<h2>With Provider</h2>}
+        titleAlign="center"
+        {...args}
+        height={350}
+        chartType="area"
+        stacked
+      />
     </div>
   </TectonicProvider>
 );
+
 export const WithProvider = TemplateWithProvider.bind({});
 WithProvider.args = {
   data: [data1, data2],

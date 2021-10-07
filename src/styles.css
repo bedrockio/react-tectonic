@@ -475,6 +475,7 @@
 }
 
 .tnic-chartContainer--container {
+  height: 30px;
   display: flex;
   flex-direction: row;
 }
@@ -507,6 +508,7 @@
 }
 
 /* legend fix for rechart */
-.tnic-chartContainer .recharts-default-legend .recharts-surface {
-  padding-bottom: 1px;
+.tnic-chartContainer .recharts-default-legend .recharts-legend-item {
+  display: inline-flex !import;
+  align-items: center;
 }

@@ -1,6 +1,6 @@
 {
   "name": "react-tectonic",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "",
   "module": "lib/index.js",
   "types": "types/index.d.ts",
@@ -65,6 +65,6 @@
   },
   "dependencies": {
     "date-fns": "^2.22.1",
-    "recharts": "^2.0.9"
+    "recharts": "^2.1.4"
   }
 }
