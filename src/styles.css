@@ -505,3 +505,8 @@
 .tnic-chartContainer:hover .tnic-chartContainer--actions {
   visibility: visible;
 }
+
+/* legend fix for rechart */
+.tnic-chartContainer .recharts-default-legend .recharts-surface {
+  padding-bottom: 1px;
+}
