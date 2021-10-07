@@ -2,30 +2,7 @@ import React from "react";
 
 import { PunchChart } from "./PunchChart";
 
-const sampleData = {
-  count: 4590,
-};
-
-const data = [
-  sampleData,
-  sampleData,
-  sampleData,
-  sampleData,
-  sampleData,
-  sampleData,
-  sampleData,
-].map((item, index) => {
-  return {
-    ...item,
-    dayOfWeek: index + 1,
-    hours: [...new Array(24)].map((c, index) => {
-      return {
-        hour: index,
-        count: Math.floor(Math.random() * 1000),
-      };
-    }),
-  };
-});
+import { data } from "../../data/punchchart.json";
 
 export default {
   title: "Visualizations/PunchChart",

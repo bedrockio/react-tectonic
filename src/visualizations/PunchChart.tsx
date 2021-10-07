@@ -126,7 +126,11 @@ export const PunchChart = ({
           const domain = parseDomain(dayData.hours);
 
           return (
-            <ResponsiveContainer width="100%" height={60}>
+            <ResponsiveContainer
+              key={dayData.dayOfWeek}
+              width="100%"
+              height={60}
+            >
               <ScatterChart
                 height={60}
                 margin={{
