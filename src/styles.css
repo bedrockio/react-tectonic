@@ -475,7 +475,7 @@
 }
 
 .tnic-chartContainer--container {
-  height: 30px;
+  height: 27px;
   display: flex;
   flex-direction: row;
 }
@@ -509,6 +509,6 @@
 
 /* legend fix for rechart */
 .tnic-chartContainer .recharts-default-legend .recharts-legend-item {
-  display: inline-flex !import;
+  display: inline-flex !important;
   align-items: center;
 }
