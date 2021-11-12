@@ -262,9 +262,7 @@ const TectonicProvider = ({
 
   return (
     <TectonicContext.Provider value={values}>
-      <>
-        <ErrorBoundary>{children}</ErrorBoundary>
-      </>
+      {children}
     </TectonicContext.Provider>
   );
 };
