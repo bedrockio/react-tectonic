@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { request } from "../utils/request";
 import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
-import { ITimeRange } from "../types";
+import { ITimeRange, IAggregateFilterType, IStats } from "../types";
 import metadata from "../metadata.json";
-import { IAggregateFilterType } from "../types";
+
 import { ErrorBoundary } from "./ErrorBoundary";
 
 const version = (metadata as any).version;
@@ -19,7 +19,7 @@ interface IContextProps {
   debug?: boolean;
   timeRange?: ITimeRange;
   setTimeRange: (timeRange: ITimeRange) => void;
-  stats: any;
+  stats: IStats | undefined;
   baseUrl?: string;
   dateField: string;
   onRequest?: (url: string, options: RequestInit) => any;
@@ -29,7 +29,7 @@ const defaultProps = {
   primaryColor: "#77a741",
   dateField: "ingestedAt",
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-
+  minEventCount: 2,
   getTimeRangeFromCollectionStats: (stats, mode) => {
     if (mode === "all") {
       return {
@@ -79,6 +79,8 @@ interface ITectonicProviderProps {
   primaryColor?: string;
   statsFilter?: IAggregateFilterType;
   onRequest?: (url: string, options: RequestInit) => any;
+  minEventsCount: number;
+  renderNoEvent?: (stats) => JSX.Element;
 }
 
 const TectonicProvider = ({
@@ -87,6 +89,7 @@ const TectonicProvider = ({
   onRequest,
   children,
   debug,
+  renderNoEvent,
   ...props
 }: ITectonicProviderProps & typeof defaultProps): JSX.Element => {
   const [token, setToken] = React.useState(props.token);
@@ -95,9 +98,7 @@ const TectonicProvider = ({
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
   const [dateField, setDateField] = React.useState(props.dateField);
   const [collection, setCollection] = React.useState(props.collection);
-  const [stats, setStats] = React.useState({
-    isHistorical: false,
-  });
+  const [stats, setStats] = React.useState<IStats>();
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
   const [isReady, setIsReady] = React.useState(false);
 
@@ -166,6 +167,7 @@ const TectonicProvider = ({
         isHistorical,
         from,
         to,
+        count: data[dateField].count,
       };
 
       setStats(stats);
@@ -177,7 +179,9 @@ const TectonicProvider = ({
       setIsReady(true);
       // eslint-disable-next-line no-console
       console.error(
-        `["TectonicProvider"] Failed to look up collection (${collection}) stats ${e.message}`
+        `["TectonicProvider"] Failed to look up collection (${collection}) stats ${
+          (e as Error).message
+        }`
       );
       console.error(e);
     }
@@ -258,7 +262,9 @@ const TectonicProvider = ({
 
   return (
     <TectonicContext.Provider value={values}>
-      <ErrorBoundary>{children}</ErrorBoundary>
+      <>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </>
     </TectonicContext.Provider>
   );
 };

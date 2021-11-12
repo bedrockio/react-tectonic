@@ -19,10 +19,6 @@ interface AggregateStateProps {
   timeRange?: ITimeRange | null;
   baseUrl?: string;
   token?: string;
-  /**
-   * @deprecated Use AggregateCardinality instead of AggregateStats
-   */
-  cardinality?: boolean;
   children: ReactNode;
   collection?: string;
   fields: string[];
@@ -33,7 +29,6 @@ export const AggregateStats = ({
   baseUrl,
   token,
   timeRange,
-  cardinality,
   children,
   ...params
 }: AggregateStateProps) => {
@@ -47,18 +42,12 @@ export const AggregateStats = ({
   const [data, setData] = useState({});
   const [status, setStatus] = useState<IStatus>({ loading: true });
 
-  if (cardinality) {
-    console.warn(
-      "The cardinality option is deprecated use AggregateCardinality instead of AggregateStats"
-    );
-  }
-
   async function fetchData() {
     setStatus({ loading: true });
     try {
       const { data } = await request({
         method: "POST",
-        path: cardinality ? "/1/analytics/cardinality" : "/1/analytics/stats",
+        path: "/1/analytics/stats",
         baseUrl,
         token,
         body: getAnalyticsRequestBody({
@@ -71,7 +60,7 @@ export const AggregateStats = ({
       setData(data);
       setStatus({ success: true });
     } catch (error) {
-      setStatus({ error });
+      setStatus({ error: error as Error });
     }
   }
 
@@ -81,20 +70,13 @@ export const AggregateStats = ({
     } else if (!token) {
       setStatus({ error: new Error("Token not provided") });
     }
-  }, [
-    token,
-    baseUrl,
-    isReady,
-    cardinality,
-    timeRange,
-    ...Object.values(params),
-  ]);
+  }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {
     try {
       return children({ data, status });
     } catch (error) {
-      return <ErrorBoundary error={error} />;
+      return <ErrorBoundary error={error as Error} />;
     }
   }
 

@@ -12,6 +12,7 @@ export const Overlay = ({
   align,
   stats,
   timeRange,
+  allowedTimeRange,
   ...props
 }) => {
   const [optionValue, setOptionValue] = React.useState();
@@ -67,7 +68,6 @@ export const Overlay = ({
           display: "flex",
           flexDirection: align === "right" ? "row-reverse" : "row",
           justifyContent: "space-between",
-
           flex: 1,
         }}
       >
@@ -103,8 +103,10 @@ export const Overlay = ({
           >
             <Calendar
               timeRange={timeRange}
-              minDate={stats.from}
-              maxDate={stats.isHistorical ? stats.to : undefined}
+              minDate={allowedTimeRange.from || stats.from}
+              maxDate={
+                allowedTimeRange.to || stats.isHistorical ? stats.to : undefined
+              }
               numberOfMonths={2}
               onChange={(range) => {
                 setOption({

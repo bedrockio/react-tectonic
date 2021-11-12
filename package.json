@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/bedrockio/react-tectonic#readme",
   "peerDependencies": {
-    "date-fns": "^2.10.0",
+    "date-fns": ">=2",
     "lodash": ">=4",
     "react": ">=16 <18",
     "react-day-picker": "7.*",
