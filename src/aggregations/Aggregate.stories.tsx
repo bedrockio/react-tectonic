@@ -35,7 +35,6 @@ const defaultArgs = {
 const TemplateWithProvider = (args) => (
   <TectonicProvider
     collection={collection}
-    timeRangeMode="all"
     token={token}
     baseUrl={baseUrl}
     dateField="event.orderedAt"
@@ -135,7 +134,6 @@ const TemplateCardinality = (args) => (
       {...args}
     >
       {({ data, status }) => {
-        console.log(status);
         return JSON.stringify(data);
       }}
     </Aggregate>

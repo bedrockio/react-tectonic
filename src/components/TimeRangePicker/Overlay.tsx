@@ -103,10 +103,8 @@ export const Overlay = ({
           >
             <Calendar
               timeRange={timeRange}
-              minDate={allowedTimeRange.from || stats.from}
-              maxDate={
-                allowedTimeRange.to || stats.isHistorical ? stats.to : undefined
-              }
+              minDate={allowedTimeRange?.from || stats.from}
+              maxDate={allowedTimeRange?.to || stats.to}
               numberOfMonths={2}
               onChange={(range) => {
                 setOption({

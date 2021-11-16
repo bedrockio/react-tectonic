@@ -14,7 +14,6 @@ export interface IStatus {
 }
 
 export interface IStats {
-  isHistorical: boolean;
   from: Date;
   to: Date;
   count: Number;

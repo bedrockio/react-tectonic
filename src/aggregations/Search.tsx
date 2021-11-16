@@ -60,7 +60,7 @@ export const Search = ({
       setData(await processData(data));
       setStatus({ success: true });
     } catch (error) {
-      setStatus({ error });
+      setStatus({ error: error as Error });
     }
   }
 
@@ -76,7 +76,7 @@ export const Search = ({
     try {
       return children({ data, status });
     } catch (error) {
-      return <ErrorBoundary error={error} />;
+      return <ErrorBoundary centered error={error as Error} />;
     }
   }
 

@@ -112,13 +112,17 @@ export const TimeRangePicker = ({
   const classes = ["tnic-timeRP", ...classNames].filter(Boolean);
   const [open, setOpen] = React.useState(false);
 
-  const timeRange = props.timeRange ||
-    ctx.timeRange || { to: new Date(), from: new Date() };
+  const timeRange = props.timeRange || ctx.timeRange;
+
+  if (!timeRange || !timeRange.to) {
+    return <div></div>;
+  }
 
   return (
     <div className={classes.join(" ")}>
-      {renderButton(getTimeRangeForLabel(timeRange, timeOptions), () =>
-        setOpen(!open)
+      {renderButton(
+        getTimeRangeForLabel(timeRange as ITimeRange, timeOptions),
+        () => setOpen(!open)
       )}
       {open && (
         <Overlay

@@ -90,7 +90,7 @@ export const AggregateTimeSeries = ({
       setData(data);
       setStatus({ success: true });
     } catch (error) {
-      setStatus({ error });
+      setStatus({ error: error as Error });
     }
   }
 
@@ -106,7 +106,7 @@ export const AggregateTimeSeries = ({
     try {
       return children({ data, status });
     } catch (error) {
-      return <ErrorBoundary error={error} />;
+      return <ErrorBoundary centered error={error as Error} />;
     }
   }
 

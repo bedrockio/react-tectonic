@@ -152,3 +152,18 @@ const TemplateWithMultiChart = (args) => (
 );
 
 export const WithMultiChartProvider = TemplateWithMultiChart.bind({});
+
+const AllowedRangeTemplate = (args) => (
+  <TimeRangePicker
+    allowedTimeRange={{
+      from: new Date(2000, 0),
+      to: new Date(2010, 0),
+    }}
+    renderButton={(text, handleOnClick) => (
+      <Button onClick={handleOnClick}>{text}</Button>
+    )}
+    {...args}
+  />
+);
+
+export const AllowedRange = AllowedRangeTemplate.bind({});

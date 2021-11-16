@@ -1,14 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { request } from "../utils/request";
-import { sub, startOfDay } from "date-fns";
 import { TimeRangeType } from "../utils/propTypes";
 import { ITimeRange, IAggregateFilterType, IStats } from "../types";
-import metadata from "../metadata.json";
+// import metadata from "../metadata.json";
 
-import { ErrorBoundary } from "./ErrorBoundary";
-
-const version = (metadata as any).version;
+// const version = (metadata as any).version;
 
 interface IContextProps {
   primaryColor: string;
@@ -30,43 +27,17 @@ const defaultProps = {
   dateField: "ingestedAt",
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   minEventCount: 2,
-  getTimeRangeFromCollectionStats: (stats, mode) => {
-    if (mode === "all") {
-      return {
-        to: stats.to,
-        from: stats.from,
-      };
-    }
-
-    if (stats.isHistorical) {
-      return {
-        to: stats.to,
-        from: startOfDay(
-          new Date(
-            Math.max(
-              stats.from.valueOf(),
-              sub(stats.to, { hours: 12 }).valueOf()
-            )
-          )
-        ),
-      };
-    }
-    const hours = stats.to - stats.from / 1000 / 60 / 60;
-    const timeRange = {
-      to: "now",
-      from: hours > 48 ? "now-1h/d" : stats.from,
+  getTimeRangeFromCollectionStats: (stats) => {
+    return {
+      to: stats.to,
+      from: stats.from,
     };
-
-    return timeRange;
   },
 };
 
 const TectonicContext = React.createContext({} as IContextProps);
 
-const aDay = 24 * 60 * 60 * 1000;
-
 interface ITectonicProviderProps {
-  timeRangeMode?: "all" | "auto";
   getTimeRangeFromCollectionStats?: (stats: any) => ITimeRange;
   children: React.ReactNode;
   debug?: boolean;
@@ -79,12 +50,10 @@ interface ITectonicProviderProps {
   primaryColor?: string;
   statsFilter?: IAggregateFilterType;
   onRequest?: (url: string, options: RequestInit) => any;
-  minEventsCount: number;
   renderNoEvent?: (stats) => JSX.Element;
 }
 
 const TectonicProvider = ({
-  timeRangeMode = "all",
   getTimeRangeFromCollectionStats,
   onRequest,
   children,
@@ -161,18 +130,16 @@ const TectonicProvider = ({
 
       const from = new Date(data[dateField].min);
       const to = new Date(data[dateField].max);
-      const isHistorical = to.valueOf() < Date.now() - aDay - 20;
 
       const stats = {
-        isHistorical,
         from,
         to,
         count: data[dateField].count,
       };
 
       setStats(stats);
-      if (!timeRange) {
-        setTimeRange(getTimeRangeFromCollectionStats(stats, timeRangeMode));
+      if (!timeRange && data[dateField].min) {
+        setTimeRange(getTimeRangeFromCollectionStats(stats));
       }
       setIsReady(true);
     } catch (e) {
@@ -187,6 +154,7 @@ const TectonicProvider = ({
     }
   }
 
+  /*
   async function fetchTectonicVersion() {
     try {
       const data = await request({
@@ -211,6 +179,7 @@ const TectonicProvider = ({
   React.useEffect(() => {
     fetchTectonicVersion();
   }, []);
+  */
 
   React.useEffect(() => {
     fetchCollectionStats();
@@ -292,4 +261,4 @@ const useTectonicContext = () => {
   return context;
 };
 
-export { TectonicProvider, useTectonicContext };
+export { TectonicProvider, useTectonicContext, TectonicContext, IContextProps };

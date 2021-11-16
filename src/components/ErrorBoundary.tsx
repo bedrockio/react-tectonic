@@ -2,17 +2,20 @@ import React from "react";
 
 import { Message } from "./Message";
 import { IStats } from "../types";
+import { TectonicContext } from "./TectonicProvider";
 
-type ErrorBoundaryProps = {
+interface ErrorBoundaryProps {
   error?: Error;
   stats?: IStats;
-  minEventCount?: number;
+  minEventCount: number;
   minEventError: string;
-};
+  className?: string;
+  centered?: boolean;
+}
 
-type ErrorBoundaryState = {
+interface ErrorBoundaryState {
   error?: Error;
-};
+}
 
 export class ErrorBoundary extends React.Component<
   ErrorBoundaryProps,
@@ -20,8 +23,10 @@ export class ErrorBoundary extends React.Component<
 > {
   static defaultProps = {
     minEventCount: 2,
-    minEventError: "Not enough events",
+    minEventError: "No data available for this time period",
   };
+
+  static contextType = TectonicContext;
 
   state = { error: this.props.error };
 
@@ -32,21 +37,32 @@ export class ErrorBoundary extends React.Component<
 
   render() {
     const { error } = this.state;
-    const { stats, minEventCount, minEventError } = this.props;
+    const {
+      minEventCount,
+      minEventError,
+      className,
+      centered = false,
+    } = this.props;
+    const { stats } = this.context;
 
     if (error) {
       console.error(error);
+
       return (
-        <Message error>
-          Failed to show visualization:
+        <Message error centered={centered} className={className}>
+          Failed to show visualizations:
           <br />
           {error.message}
         </Message>
       );
     }
 
-    if (stats?.count < minEventCount) {
-      return <Message error>{minEventError}</Message>;
+    if (stats && stats.count < minEventCount) {
+      return (
+        <Message error centered={centered} className={className}>
+          {minEventError}
+        </Message>
+      );
     }
 
     return this.props.children;

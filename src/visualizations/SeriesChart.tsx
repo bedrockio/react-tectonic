@@ -138,7 +138,8 @@ export const SeriesChart = ({
 
   const tickFormatter = formatterForDataCadence(data);
 
-  const noData = !data || !data.length;
+  // should have atleast 2 date point to render meaningful line
+  const noData = !data || data.length < 2;
 
   const intervals =
     validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];

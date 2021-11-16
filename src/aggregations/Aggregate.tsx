@@ -105,8 +105,7 @@ export const Aggregate = ({
       setData(await processData(data.map(({ data }) => data)));
       setStatus({ success: true });
     } catch (error) {
-      console.log(error);
-      setStatus({ error });
+      setStatus({ error: error as Error });
     }
   }
 
@@ -124,7 +123,7 @@ export const Aggregate = ({
     try {
       return children({ data, status, timeRange, setInterval });
     } catch (error) {
-      return <ErrorBoundary error={error} />;
+      return <ErrorBoundary centered error={error as Error} />;
     }
   }
 

@@ -4,15 +4,20 @@ import PropTypes from "prop-types";
 export const Message = ({
   children,
   error,
-  classNames = [],
+  className,
+  centered,
 }: {
   children: React.ReactNode;
+  centered?: boolean;
   error?: boolean;
-  classNames?: string[];
+  className?: string;
 }): JSX.Element => {
-  const classes = ["tnic-message", error && "error", ...classNames].filter(
-    Boolean
-  );
+  const classes = [
+    "tnic-message",
+    error && "error",
+    centered !== false && "centered",
+    className,
+  ].filter(Boolean);
 
   return (
     <div className={classes.join(" ")}>

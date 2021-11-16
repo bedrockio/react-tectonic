@@ -76,7 +76,7 @@ export const AggregateStats = ({
     try {
       return children({ data, status });
     } catch (error) {
-      return <ErrorBoundary error={error as Error} />;
+      return <ErrorBoundary centered error={error as Error} />;
     }
   }
 

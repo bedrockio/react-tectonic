@@ -157,10 +157,14 @@ export const DonutChart = ({
       onActionChange={handleAction}
     >
       {status.success && noData && (
-        <Message>No data available for this time period</Message>
+        <Message centered>No data available for this time period</Message>
       )}
-      {status.loading && <Message>Loading...</Message>}
-      {status.error && <Message error>{status.error.message}</Message>}
+      {status.loading && <Message centered>Loading...</Message>}
+      {status.error && (
+        <Message error centered>
+          {status.error.message}
+        </Message>
+      )}
 
       <ResponsiveContainer>
         <PieChart
