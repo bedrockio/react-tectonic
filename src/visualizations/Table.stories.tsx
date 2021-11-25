@@ -12,6 +12,12 @@ const data = [
   { key: "Amersfoort", value: 163 },
   { key: "Tilburg", value: 158 },
   { key: "Arnhem", value: 157 },
+  { key: "Amersfoort", value: 163 },
+  { key: "Tilburg", value: 158 },
+  { key: "Flevoland", value: 154 },
+  { key: "Biddinghuizen", value: 151 },
+  { key: "Emmeloord", value: 100 },
+  { key: "Lelystad", value: 99 },
 ];
 
 export default {

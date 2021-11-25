@@ -21,6 +21,7 @@ const defaultProps = {
   labelFieldName: "Name",
   labelField: "key",
   valueField: "value",
+  height: 400,
   labelFormatter: (label) => {
     return startCase(label.toString().toLowerCase());
   },
@@ -62,6 +63,7 @@ export const Table = ({
   valueField,
   valueFieldName,
   labelFieldName,
+  height,
   data,
   labelFormatter,
   valueFormatter,
@@ -73,10 +75,8 @@ export const Table = ({
   const noData = !data || !data.length;
 
   function handleAction(option) {
-    const action = option.value;
-    if (action === "download-image") {
-      // handleDownloadImage(svgChartRef.current);
-    } else if (action === "export-data") {
+    const action = option;
+    if (action === "export-data") {
       exportToCsv(
         [valueFieldName, valueFieldName],
         data.map((row) => [get(row, labelField), row[valueField]]),
@@ -92,7 +92,7 @@ export const Table = ({
     <ChartContainer
       title={title}
       titleAlign={titleAlign}
-      height={400}
+      height={height}
       actions={defaultActions}
       onActionChange={handleAction}
       enabledControls={enabledControls}
@@ -103,14 +103,15 @@ export const Table = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <table width={"100%"} className="tnic-table">
+      <table className="tnic-table header-fixed">
         <thead>
           <tr>
-            <th style={{ width: "62.5%" }}>{labelFieldName}</th>
+            <th>{labelFieldName}</th>
             <th>{valueFieldName}</th>
           </tr>
         </thead>
-        <tbody>
+
+        <tbody style={{ maxHeight: `${height - 50}px` }}>
           {data.map((item) => {
             return (
               <tr key={item[labelField]}>

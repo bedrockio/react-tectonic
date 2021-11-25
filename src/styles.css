@@ -47,6 +47,16 @@
 
 /*** Table ***/
 
+/*Set your columns to where you want them to be, skip the one that you can have resize to any width*/
+th:nth-child(1),
+td:nth-child(1) {
+  width: 62%;
+}
+th:nth-child(2),
+td:nth-child(2) {
+  width: auto;
+}
+
 .tnic-table {
   text-align: left;
   color: rgba(0, 0, 0, 0.87);
@@ -54,6 +64,27 @@
   border-spacing: 0;
   font-size: var(--tnic-body-font-size);
 }
+
+/* sticky header */
+.tnic-table,
+.tnic-table tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tnic-table tbody {
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.tnic-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* sticky header end */
 
 .tnic-table thead th {
   cursor: auto;
