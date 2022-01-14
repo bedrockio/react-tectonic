@@ -23,6 +23,7 @@ interface AggregateStateProps {
   collection?: string;
   fields: string[];
   filter?: IAggregateFilterType;
+  timeRangeDateField?: string;
 }
 
 export const AggregateStats = ({
@@ -30,6 +31,7 @@ export const AggregateStats = ({
   token,
   timeRange,
   children,
+  timeRangeDateField,
   ...params
 }: AggregateStateProps) => {
   let ctx = useTectonicContext();
@@ -54,6 +56,7 @@ export const AggregateStats = ({
           params,
           timeRange,
           ctx,
+          timeRangeDateField,
         }),
         onRequest: ctx.onRequest,
       });

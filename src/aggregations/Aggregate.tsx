@@ -22,6 +22,7 @@ interface AggregatePropType {
   collection?: string;
   processData?: (data: any[]) => Promise<any[]> | any[];
   onIntervalChange?: (interval: IntervalType) => void;
+  timeRangeDateField?: string;
 }
 
 export const Aggregate = ({
@@ -35,6 +36,7 @@ export const Aggregate = ({
   processData = (data) => data,
   type,
   children,
+  timeRangeDateField,
 }: AggregatePropType & typeof defaultProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
@@ -97,6 +99,7 @@ export const Aggregate = ({
               },
               timeRange,
               ctx,
+              timeRangeDateField,
             }),
             onRequest: ctx.onRequest,
           });

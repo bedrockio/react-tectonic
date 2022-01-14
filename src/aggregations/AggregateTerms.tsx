@@ -28,6 +28,7 @@ interface AggregateTermsProps {
   includeTopHit?: boolean;
   termsSize?: number;
   timeRange?: ITimeRange | null;
+  timeRangeDateField?: string;
 }
 
 export const AggregateTerms = ({
@@ -36,6 +37,7 @@ export const AggregateTerms = ({
   timeRange,
   children,
   processData = (data) => data,
+  timeRangeDateField,
   ...params
 }: AggregateTermsProps) => {
   let ctx = useTectonicContext();
@@ -60,6 +62,7 @@ export const AggregateTerms = ({
           params,
           timeRange,
           ctx,
+          timeRangeDateField,
         }),
         onRequest: ctx.onRequest,
       });

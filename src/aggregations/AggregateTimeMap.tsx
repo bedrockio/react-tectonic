@@ -20,6 +20,7 @@ export const AggregateTimeMap = ({
   token,
   timeRange,
   children,
+
   ...params
 }: AggregateTimeMapProps) => {
   let ctx = useTectonicContext();

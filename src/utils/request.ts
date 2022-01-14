@@ -1,6 +1,5 @@
 import { ITimeRange } from "../types";
 import metadata from "../metadata.json";
-import { omit } from "lodash";
 const version = (metadata as any).version;
 
 class CustomError extends Error {
@@ -104,23 +103,18 @@ export const request = async (options) => {
   }
 };
 
-const getParams = (params, type) => {
-  if (type === "cardinality") {
-    return omit(params, ["dateField"]);
-  }
-  return params;
-};
-
 export function getAnalyticsRequestBody({
   params,
   timeRange,
   ctx,
   type,
+  timeRangeDateField,
 }: {
   params: any;
   type?: string;
   timeRange?: ITimeRange | null;
   ctx: any;
+  timeRangeDateField?: string;
 }) {
   const dateField = params.dateField || ctx.dateField;
   const _collection = params.collection || ctx.collection;
@@ -146,13 +140,13 @@ export function getAnalyticsRequestBody({
   }
 
   return {
-    ...getParams(params, type),
+    ...params,
     debug: ctx.debug,
     collection: _collection,
     filter: {
       ...params.filter,
       range: {
-        [dateField]: {
+        [timeRangeDateField || dateField]: {
           gte: timeRange.from,
           lt: to,
           time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,

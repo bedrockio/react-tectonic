@@ -23,6 +23,7 @@ interface AggregateCardinalityProps {
   collection?: string;
   fields: string[];
   filter?: IAggregateFilterType;
+  timeRangeDateField?: string;
 }
 
 export const AggregateCardinality = ({
@@ -30,6 +31,7 @@ export const AggregateCardinality = ({
   token,
   timeRange,
   children,
+  timeRangeDateField,
   ...params
 }: AggregateCardinalityProps) => {
   let ctx = useTectonicContext();
@@ -54,7 +56,7 @@ export const AggregateCardinality = ({
           params,
           timeRange,
           ctx,
-          type: "cardinality",
+          timeRangeDateField,
         }),
         onRequest: ctx.onRequest,
       });
