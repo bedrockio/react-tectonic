@@ -1,5 +1,6 @@
 import { ITimeRange } from "../types";
 import metadata from "../metadata.json";
+import { omit } from "lodash";
 const version = (metadata as any).version;
 
 class CustomError extends Error {
@@ -103,6 +104,13 @@ export const request = async (options) => {
   }
 };
 
+const getParams = (params, type) => {
+  if (type === "cardinality") {
+    return omit(params, ["dateField"]);
+  }
+  return params;
+};
+
 export function getAnalyticsRequestBody({
   params,
   timeRange,
@@ -138,7 +146,7 @@ export function getAnalyticsRequestBody({
   }
 
   return {
-    ...params,
+    ...getParams(params, type),
     debug: ctx.debug,
     collection: _collection,
     filter: {

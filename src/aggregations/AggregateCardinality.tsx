@@ -54,6 +54,7 @@ export const AggregateCardinality = ({
           params,
           timeRange,
           ctx,
+          type: "cardinality",
         }),
         onRequest: ctx.onRequest,
       });
