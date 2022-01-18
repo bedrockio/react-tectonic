@@ -12,7 +12,6 @@ import {
 import { exportToCsv, downloadImage } from "../utils/exporters";
 import { toCsvDateFormat } from "../utils/date";
 import { TimeRangeType } from "../utils/propTypes";
-import { AnnotationLine } from "./types";
 
 import {
   Message,
@@ -39,7 +38,6 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts";
 
 import { IStatus, ITimeRange } from "../types";
@@ -84,7 +82,6 @@ type SeriesChartProps = {
   disableDot?: boolean;
   chartContainer?: React.ElementType;
   exportFilename?: string;
-  annotations?: AnnotationLine[];
 };
 
 export const SeriesChart = ({
@@ -107,7 +104,6 @@ export const SeriesChart = ({
   exportFilename,
   axisColor,
   height,
-  annotations = [],
 }: SeriesChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
@@ -252,15 +248,6 @@ export const SeriesChart = ({
             padding={{ bottom: 10, top: 10 }}
             mirror
           />
-          {annotations.map((annotation) => {
-            return (
-              <ReferenceLine
-                x={annotation.timestamp.valueOf()}
-                stroke={annotation.color}
-                label={annotation.label}
-              />
-            );
-          })}
         </Chart>
       </ResponsiveContainer>
     </ChartContainer>

@@ -24,7 +24,6 @@ const defaultArgsWithToken = {
 
 const TemplateWithProvider = (args) => (
   <TectonicProvider
-    timeRangeMode="all"
     baseUrl={baseUrl}
     collection={collection}
     token={token}

@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
 import { exportToCsv } from "../utils/exporters";
-import { AnnotationLine } from "./types";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import {
   formatterForDataCadence,
@@ -38,7 +37,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts";
 
 import { defaultColors } from "../utils/visualization";
@@ -113,7 +111,6 @@ type MultiSeriesChartProps = {
   enabledControls?: EnabledControlType[];
   exportFilename?: string;
   interval?: IntervalType;
-  annotations?: AnnotationLine[];
 };
 
 export const MultiSeriesChart = ({
@@ -137,7 +134,6 @@ export const MultiSeriesChart = ({
   labels,
   exportFilename,
   interval,
-  annotations = [],
 }: MultiSeriesChartProps & typeof defaultProps): JSX.Element => {
   const ctx = useTectonicContext();
 
@@ -304,15 +300,6 @@ export const MultiSeriesChart = ({
               labelFormatter={labelFormatter}
             />
           )}
-          {annotations.map((annotation) => {
-            return (
-              <ReferenceLine
-                x={annotation.timestamp.valueOf()}
-                stroke={annotation.color}
-                label={annotation.label}
-              />
-            );
-          })}
         </Chart>
       </ResponsiveContainer>
     </ChartContainer>
