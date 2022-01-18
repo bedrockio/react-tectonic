@@ -48,12 +48,13 @@
 /*** Table ***/
 
 /*Set your columns to where you want them to be, skip the one that you can have resize to any width*/
-th:nth-child(1),
-td:nth-child(1) {
+
+.tnic-table th:nth-child(1),
+.tnic-table td:nth-child(1) {
   width: 62%;
 }
-th:nth-child(2),
-td:nth-child(2) {
+.tnic-table th:nth-child(2),
+.tnic-table td:nth-child(2) {
   width: auto;
 }
 
