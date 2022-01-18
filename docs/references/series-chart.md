@@ -4,44 +4,6 @@ category: visualizations
 type: docs
 ---
 
-const defaultProps = {
-exportFilename: "export.csv",
-valueField: "value",
-valueFieldLabel: "Value",
-height: 400,
-data: [],
-status: { success: true },
-chartType: "line",
-chartContainer: DefaultChartContainer,
-labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
-enabledControls: ["intervals", "chartTypes", "actions"],
-axisColor: "#363B3D",
-};
-
-type SeriesChartProps = {
-height?: number;
-interval?: IntervalType;
-title?: ReactNode;
-titleAlign?: TitleAlignType;
-labelFormatter?: (label: string) => string;
-valueFormatter?: (value: number) => string;
-valueField?: string;
-labelField?: string;
-valueFieldLabel?: string;
-chartType?: "line" | "bar" | "area";
-status: IStatus;
-onIntervalChange?: (interval: IntervalType) => void;
-timeRange?: ITimeRange;
-enabledControls?: EnabledControlType[];
-data?: any[];
-axisColor?: string;
-color?: string;
-legend?: boolean;
-disableDot?: boolean;
-chartContainer?: React.ElementType;
-exportFilename?: string;
-};
-
 # SeriesChart
 
 SeriesChart renders a dataset as a single line path.
@@ -61,19 +23,35 @@ SeriesChart renders a dataset as a single line path.
 
 ## labelFormatter
 
+_default_: `(unixTime) => new Date(unixTime).toLocaleString()`
+
 ## valueFormatter
 
+## valueField
+
+## labelField
+
+## valueFieldLabel
+
 ## axisColor
+
+_default_ : `#363B3D`
 
 ## color
 
 ## legend
 
+`type boolean`
+
+## disableDot
+
+`type boolean`
+
 ## exportFilename
 
 ## chartType
 
-`type "line" | "bar" | "area"
+`type "line" | "bar" | "area"`
 
 _default_: `line`
 
@@ -121,6 +99,10 @@ example `title="Popularity of Dog Breeds by Percentage"`
 
 The `titleAlign` prop specifies the position of the title.
 
+## enabledControls
+
+_default_: `["intervals", "chartTypes", "actions"]`
+
 ### Advanced Props
 
 ## interval
@@ -128,3 +110,9 @@ The `titleAlign` prop specifies the position of the title.
 `type "1s" | "10s" | "1m" | "5m" | "10m" | "15m" | "30m" | "1h" | "1d" | "1w" | "1M" | "1y"`
 
 ## onIntervalChange
+
+## status
+
+_default_: `{ success: true }`
+
+## timeRange
