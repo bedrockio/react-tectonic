@@ -37,7 +37,7 @@ Table renders a array of data as table
 
 `type: element`
 
-`Table` uses the standard `containerComponent` prop. [Read about it here](/docs/guides/common-props#containercomponent)
+`Table` uses the standard `containerComponent` prop. [Read about it here](/docs/common-props#containercomponent)
 
 ```jsx
 containerComponent={<ContainerComponent/>}
