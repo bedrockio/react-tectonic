@@ -49,7 +49,8 @@ type EnabledControlType = "intervals" | "chartTypes" | "actions";
 const defaultProps = {
   exportFilename: "export.csv",
   valueField: "value",
-  valueFieldLabel: "Value",
+  valueLabel: "Value",
+  labelField: "timestamp",
   height: 400,
   data: [],
   status: { success: true },
@@ -69,7 +70,9 @@ type SeriesChartProps = {
   valueFormatter?: (value: number) => string;
   valueField?: string;
   labelField?: string;
+  /** @deprecated use valueLabel */
   valueFieldLabel?: string;
+  valueLabel?: string;
   chartType?: "line" | "bar" | "area";
   status: IStatus;
   onIntervalChange?: (interval: IntervalType) => void;
@@ -78,7 +81,6 @@ type SeriesChartProps = {
   data?: any[];
   axisColor?: string;
   color?: string;
-  legend?: boolean;
   disableDot?: boolean;
   chartContainer?: React.ElementType;
   exportFilename?: string;
@@ -88,8 +90,10 @@ export const SeriesChart = ({
   status,
   data,
   valueField,
+  valueLabel,
   valueFieldLabel,
   valueFormatter,
+  labelField,
   labelFormatter,
   chartContainer: ChartContainer,
   title,
@@ -217,7 +221,7 @@ export const SeriesChart = ({
           <ChartGraph
             type="monotoneX"
             dataKey={valueField}
-            name={valueFieldLabel}
+            name={valueFieldLabel || valueLabel}
             stroke={_color}
             strokeWidth={2}
             fill={["bar", "area"].includes(chartType) ? `${_color}` : undefined}
@@ -231,7 +235,7 @@ export const SeriesChart = ({
             dot={false}
           />
           <XAxis
-            dataKey="timestamp"
+            dataKey={labelField}
             name="Time"
             tickFormatter={tickFormatter}
             tick={{ fill: axisColor, fontSize: "13" }}
@@ -261,7 +265,8 @@ SeriesChart.propTypes = {
   valueFormatter: PropTypes.func,
   labelFormatter: PropTypes.func,
   valueField: PropTypes.string,
-  valueFieldLabel: PropTypes.string,
+  valueLabel: PropTypes.string,
+  valueDisplayName: PropTypes.string,
   chartType: PropTypes.oneOf(["line", "bar", "area"]),
   status: PropTypes.object,
   onIntervalChange: PropTypes.func,
@@ -269,17 +274,9 @@ SeriesChart.propTypes = {
   enabledControls: PropTypes.arrayOf(
     PropTypes.oneOf(["intervals", "chartTypes", "actions"])
   ),
-
-  /**
-   * Is this the principal call to action on the page?
-   */
   data: PropTypes.array,
-  /**
-   * Color of the line or bar
-   */
   color: PropTypes.string,
   axisColor: PropTypes.string,
-  legend: PropTypes.bool,
   disableDot: PropTypes.bool,
   chartContainer: PropTypes.elementType,
   exportFilename: PropTypes.string,

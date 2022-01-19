@@ -11,11 +11,11 @@ SeriesChart renders a dataset as a single line path.
 ```playground
   <SeriesChart
     data={[
-      { x: 1, y: 2 },
-      { x: 2, y: 3 },
-      { x: 3, y: 5 },
-      { x: 4, y: 4 },
-      { x: 5, y: 7 }
+      { value: 1, timestamp: 2 },
+      { value: 2, timestamp: 3 },
+      { value: 3, timestamp: 5 },
+      { value: 4, timestamp: 4 },
+      { value: 5, timestamp: 7 }
     ]}
   />
 </SeriesChart>
@@ -23,35 +23,65 @@ SeriesChart renders a dataset as a single line path.
 
 ## labelFormatter
 
-_default_: `(unixTime) => new Date(unixTime).toLocaleString()`
+`type function`
+
+The formatter function of label value which has only one parameter - the json date of the time.
+For display purposes (only in the tooltip, when hover over the line).
+
+_default_: `(jsonDate) => new Date(jsonDate).toLocaleString()`
 
 ## valueFormatter
 
+`type function`
+
+The formatter function of value which has only one parameter - the value.
+For display purposes.
+
+_default_: `(value: number) => string`
+
 ## valueField
+
+`type string`
+
+The key to group data by value.
+
+_default_: `value`
 
 ## labelField
 
-## valueFieldLabel
+`type string`
+
+The key to group data by label.
+
+_default_: `timestamp`
+
+## valueLabel
+
+`type string`
+
+Sets the label of value.
+If you were display a chart event count over time, you could set the value to "Event Count"
+
+_default_: `Value`
 
 ## axisColor
+
+`type string`
+
+Controls the color of the axis. Use #hex color.
 
 _default_ : `#363B3D`
 
 ## color
 
-## legend
-
-`type boolean`
-
-## disableDot
-
-`type boolean`
-
-## exportFilename
+Controls the color of the line. Use #hex color.
+A default is provided if nothing is set.
 
 ## chartType
 
 `type "line" | "bar" | "area"`
+
+Sets the chart type.
 
 _default_: `line`
 
@@ -102,17 +132,3 @@ The `titleAlign` prop specifies the position of the title.
 ## enabledControls
 
 _default_: `["intervals", "chartTypes", "actions"]`
-
-### Advanced Props
-
-## interval
-
-`type "1s" | "10s" | "1m" | "5m" | "10m" | "15m" | "30m" | "1h" | "1d" | "1w" | "1M" | "1y"`
-
-## onIntervalChange
-
-## status
-
-_default_: `{ success: true }`
-
-## timeRange

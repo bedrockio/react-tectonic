@@ -131,9 +131,6 @@ export const Table = ({
 
 Table.propTypes = {
   status: PropTypes.object,
-  /**
-   * Is this the principal call to action on the page?
-   */
   data: PropTypes.array,
   chartContainer: PropTypes.elementType,
   title: PropTypes.node,
