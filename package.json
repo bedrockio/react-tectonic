@@ -6,7 +6,8 @@
   "types": "types/index.d.ts",
   "files": [
     "lib",
-    "types"
+    "types",
+    "docs"
   ],
   "scripts": {
     "start": "start-storybook -p 6006",

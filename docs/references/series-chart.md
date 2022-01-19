@@ -95,21 +95,9 @@ _default_: `line`
 
 `type: number`
 
-`VictoryLine` uses the standard `height` prop. [Read about it here](/docs/common-props#height)
+`VictoryLine` uses the standard `height` prop. [Read about it here](/docs/common-props.md#height)
 
 _default (provided by default theme):_ `height={300}`
-
-```jsx
-height={400}
-```
-
-### width
-
-`type: number`
-
-`VictoryLine` uses the standard `width` prop. [Read about it here](/docs/common-props#width)
-
-_default:_ `width={100%}`
 
 ```jsx
 height={400}
