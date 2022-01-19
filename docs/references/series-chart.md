@@ -21,7 +21,7 @@ SeriesChart renders a dataset as a single line path.
 </SeriesChart>
 ```
 
-## labelFormatter
+### labelFormatter
 
 `type function`
 
@@ -30,7 +30,7 @@ For display purposes (only in the tooltip, when hover over the line).
 
 _default_: `(jsonDate) => new Date(jsonDate).toLocaleString()`
 
-## valueFormatter
+### valueFormatter
 
 `type function`
 
@@ -39,7 +39,7 @@ For display purposes.
 
 _default_: `(value: number) => string`
 
-## valueField
+### valueField
 
 `type string`
 
@@ -47,7 +47,7 @@ The key to group data by value.
 
 _default_: `value`
 
-## labelField
+### labelField
 
 `type string`
 
@@ -55,7 +55,7 @@ The key to group data by label.
 
 _default_: `timestamp`
 
-## valueLabel
+### valueLabel
 
 `type string`
 
@@ -64,7 +64,7 @@ If you were display a chart event count over time, you could set the value to "E
 
 _default_: `Value`
 
-## axisColor
+### axisColor
 
 `type string`
 
@@ -72,12 +72,12 @@ Controls the color of the axis. Use #hex color.
 
 _default_ : `#363B3D`
 
-## color
+### color
 
 Controls the color of the line. Use #hex color.
 A default is provided if nothing is set.
 
-## chartType
+### chartType
 
 `type "line" | "bar" | "area"`
 
@@ -85,13 +85,13 @@ Sets the chart type.
 
 _default_: `line`
 
-### ChartContainer Related Props
+## ChartContainer Related Props
 
-## chartContainer
+### chartContainer
 
 `type: element`
 
-## height
+### height
 
 `type: number`
 
@@ -103,7 +103,7 @@ _default (provided by default theme):_ `height={300}`
 height={400}
 ```
 
-## width
+### width
 
 `type: number`
 
@@ -115,7 +115,7 @@ _default:_ `width={100%}`
 height={400}
 ```
 
-## title
+### title
 
 `type: string`
 
@@ -123,12 +123,12 @@ The title prop specifies the title to be applied to the SVG to assist with acces
 
 example `title="Popularity of Dog Breeds by Percentage"`
 
-## titleAlign
+### titleAlign
 
 `type: "center" | "left"`
 
 The `titleAlign` prop specifies the position of the title.
 
-## enabledControls
+### enabledControls
 
 _default_: `["intervals", "chartTypes", "actions"]`
