@@ -85,11 +85,13 @@ Sets the chart type.
 
 _default_: `line`
 
-## ChartContainer Related Props
-
 ### chartContainer
 
 `type: element`
+
+Sets the ChartContainer
+
+_default_: `<ChartContainer>`
 
 ### height
 
