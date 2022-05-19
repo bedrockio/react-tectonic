@@ -29,6 +29,18 @@ const defaultProps = {
       from: "now/w",
     },
     {
+      type: "fixed",
+      label: "This Month",
+      to: "now",
+      from: "now/M",
+    },
+    {
+      type: "fixed",
+      label: "This Year",
+      to: "now",
+      from: "now/y",
+    },
+    {
       type: "input",
       unit: "hours",
       default: 24,
