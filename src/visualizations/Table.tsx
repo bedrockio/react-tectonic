@@ -111,7 +111,7 @@ export const Table = ({
           </tr>
         </thead>
 
-        <tbody style={{ maxHeight: `${height - 50}px` }}>
+        <tbody style={{ maxHeight: `${height - 80}px` }}>
           {data.map((item) => {
             return (
               <tr key={item[labelField]}>
