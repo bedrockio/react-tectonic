@@ -39,6 +39,12 @@ export const Overlay = ({
         to: "now",
         from: `now-${optionValue}${labelsToUnit[option.unit]}`,
       });
+    } else if (option.type === "absoluteInput") {
+      onChange({
+        label: `${option.label}: ${optionValue}`,
+        to: (optionValue || new Date().getFullYear()).toString(),
+        from: ((optionValue || new Date().getFullYear()) - 1).toString(),
+      });
     } else if (stats.isHistorical || option.type === "absolute") {
       const fromStr = option.from.toLocaleDateString();
       const toStr = option.to.toLocaleDateString();
