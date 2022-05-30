@@ -44,6 +44,22 @@ export const TimeOption = ({ active, onSelect, ...props }) => {
           <span className="tnic-hovertext">Click to select</span>
         </>
       )}
+      {type === "absoluteInput" && (
+        <>
+          <span>
+            {label}:
+            <input
+              className="tnic-input tnic-input-large"
+              ref={inputRef}
+              type="number"
+              value={value}
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </span>
+          <span className="tnic-hovertext">Click to select</span>
+        </>
+      )}
     </div>
   );
 };
