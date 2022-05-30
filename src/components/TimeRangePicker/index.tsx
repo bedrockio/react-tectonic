@@ -55,6 +55,12 @@ const defaultProps = {
       unit: "months",
       default: 3,
     },
+    {
+      type: "absoluteInput",
+      unit: "years",
+      label: "Year",
+      default: new Date().getFullYear() - 1,
+    },
   ],
 };
 
@@ -69,8 +75,14 @@ type FixedTimeOption = {
   to: string | Date;
   from: string | Date;
 };
+type AbsoluteInputTimeOption = {
+  type: "absoluteInput";
+  unit: "minutes" | "hours" | "days" | "weeks" | "months" | "years";
+  label: string;
+  default: number;
+};
 
-type TimeOption = InputTimeOption | FixedTimeOption;
+type TimeOption = InputTimeOption | FixedTimeOption | AbsoluteInputTimeOption;
 
 interface TimeRangePickerProps {
   renderButton: (label: string, onClick: () => void) => JSX.Element;
