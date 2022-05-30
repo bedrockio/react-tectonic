@@ -317,6 +317,10 @@
   width: 34px;
 }
 
+.tnic-timeOption .tnic-input-large {
+  width: 64px;
+}
+
 /*** Title ***/
 .tnic-title {
   font-weight: bold;
