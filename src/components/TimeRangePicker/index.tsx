@@ -56,13 +56,20 @@ const defaultProps = {
       default: 3,
     },
     {
-      type: "absoluteInput",
+      type: "AbsoluteYearInput",
       unit: "years",
       label: "Year",
       default: new Date().getFullYear() - 1,
     },
   ],
 };
+
+type AbsoluteYearTimeOption = {
+  type: "AbsoluteYearInput";
+  unit: "years";
+  label: string;
+  default: number;
+}
 
 type InputTimeOption = {
   type: "input";
@@ -75,12 +82,8 @@ type FixedTimeOption = {
   to: string | Date;
   from: string | Date;
 };
-type AbsoluteInputTimeOption = {
-  type: "absoluteInput";
-  unit: "minutes" | "hours" | "days" | "weeks" | "months" | "years";
-  label: string;
-  default: number;
-};
+
+type AbsoluteInputTimeOption = AbsoluteYearTimeOption;
 
 type TimeOption = InputTimeOption | FixedTimeOption | AbsoluteInputTimeOption;
 

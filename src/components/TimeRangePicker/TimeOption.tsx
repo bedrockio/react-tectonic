@@ -44,7 +44,7 @@ export const TimeOption = ({ active, onSelect, ...props }) => {
           <span className="tnic-hovertext">Click to select</span>
         </>
       )}
-      {type === "absoluteInput" && (
+      {type === "AbsoluteYearInput" && (
         <>
           <span>
             {label}:
