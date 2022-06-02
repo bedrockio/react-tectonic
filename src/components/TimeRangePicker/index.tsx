@@ -56,17 +56,23 @@ const defaultProps = {
       default: 3,
     },
     {
-      type: "AbsoluteYearInput",
+      type: "select",
       unit: "years",
       label: "Year",
       default: new Date().getFullYear() - 1,
     },
+    {
+      type: "select",
+      unit: "months",
+      label: "Month",
+      default: new Date().getMonth(),
+    },
   ],
 };
 
-type AbsoluteYearTimeOption = {
-  type: "AbsoluteYearInput";
-  unit: "years";
+type SelectTimeOption = {
+  type: "select";
+  unit: "years" | "months";
   label: string;
   default: number;
 }
@@ -83,9 +89,7 @@ type FixedTimeOption = {
   from: string | Date;
 };
 
-type AbsoluteInputTimeOption = AbsoluteYearTimeOption;
-
-type TimeOption = InputTimeOption | FixedTimeOption | AbsoluteInputTimeOption;
+type TimeOption = InputTimeOption | FixedTimeOption | SelectTimeOption;
 
 interface TimeRangePickerProps {
   renderButton: (label: string, onClick: () => void) => JSX.Element;
@@ -106,6 +110,8 @@ function getTimeRangeForLabel(
   timeRange: ITimeRange,
   timeOptions: TimeOption[]
 ) {
+  console.log(timeRange);
+
   if (timeRange?.label) {
     return timeRange.label;
   }
