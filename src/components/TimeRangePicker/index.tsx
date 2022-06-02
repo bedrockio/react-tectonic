@@ -110,8 +110,6 @@ function getTimeRangeForLabel(
   timeRange: ITimeRange,
   timeOptions: TimeOption[]
 ) {
-  console.log(timeRange);
-
   if (timeRange?.label) {
     return timeRange.label;
   }
