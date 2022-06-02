@@ -39,11 +39,21 @@ export const Overlay = ({
         to: "now",
         from: `now-${optionValue}${labelsToUnit[option.unit]}`,
       });
-    } else if (option.type === "absoluteInput") {
+    } else if (option.type === "select") {
+      const isYear = option.unit.includes("year");
+      const currentYear = new Date().getFullYear();
+      const currentValue = isYear ? currentYear : new Date().getMonth() + 1;
+      const newValue = optionValue || currentValue;
       onChange({
-        label: `${option.label}: ${optionValue}`,
-        to: (optionValue || new Date().getFullYear()).toString(),
-        from: ((optionValue || new Date().getFullYear()) - 1).toString(),
+        label: `${option.label}: ${isYear 
+          ? newValue 
+          : new Date(0, newValue, 0).toLocaleString("default", { month: "short" })}`,
+        to: isYear
+          ? new Date((newValue), 11, 31)
+          : new Date(currentYear, newValue, 0),
+        from: isYear
+          ? new Date(newValue, 0, 1)
+          : new Date(currentYear, newValue - 1, 0),
       });
     } else if (stats.isHistorical || option.type === "absolute") {
       const fromStr = option.from.toLocaleDateString();
