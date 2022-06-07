@@ -157,8 +157,6 @@ export const TimeRangePicker = ({
     return <div></div>;
   }
 
-  console.log(timeOptions);
-
   return (
     <div className={classes.join(" ")}>
       {renderButton(
