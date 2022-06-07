@@ -22,24 +22,29 @@ const defaultProps = {
       to: "now-1h/d",
       from: "now-1d/d",
     },
+    /*
     {
       type: "fixed",
       label: "This Week",
       to: "now",
       from: "now/w",
     },
+    */
     {
       type: "fixed",
       label: "This Month",
       to: "now",
       from: "now/M",
     },
+    /*
     {
       type: "fixed",
       label: "This Year",
       to: "now",
       from: "now/y",
     },
+    */
+
     {
       type: "input",
       unit: "hours",
@@ -50,17 +55,20 @@ const defaultProps = {
       unit: "days",
       default: 7,
     },
+    /*
     {
       type: "input",
       unit: "months",
       default: 3,
     },
+  
     {
       type: "select",
       unit: "years",
       label: "Year",
       default: new Date().getFullYear() - 1,
     },
+      */
     {
       type: "select",
       unit: "months",
@@ -75,7 +83,7 @@ type SelectTimeOption = {
   unit: "years" | "months";
   label: string;
   default: number;
-}
+};
 
 type InputTimeOption = {
   type: "input";
@@ -148,6 +156,8 @@ export const TimeRangePicker = ({
   if (!timeRange || !timeRange.to) {
     return <div></div>;
   }
+
+  console.log(timeOptions);
 
   return (
     <div className={classes.join(" ")}>
