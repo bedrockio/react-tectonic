@@ -24,7 +24,13 @@ export default {
   argTypes: {},
 };
 
-const Template = ({ alignRight, ...args }) => {
+const Template = ({
+  alignRight,
+  timeOptions,
+}: {
+  alignRight?: string;
+  timeOptions: any;
+}) => {
   const [timeRange, setTimeRange] = React.useState<{
     from: string | Date;
     to: string | Date;
@@ -32,7 +38,6 @@ const Template = ({ alignRight, ...args }) => {
     from: "now-1h/d",
     to: "now",
   });
-
   return (
     <>
       <div style={alignRight ? { float: "right" } : {}}>
@@ -43,6 +48,7 @@ const Template = ({ alignRight, ...args }) => {
           timeRange={timeRange}
           onChange={(timeRange) => setTimeRange(timeRange)}
           {...(alignRight ? { align: "right" } : {})}
+          timeOptions={timeOptions}
         />
       </div>
       <br />
@@ -167,3 +173,74 @@ const AllowedRangeTemplate = (args) => (
 );
 
 export const AllowedRange = AllowedRangeTemplate.bind({});
+
+export const AllTimeOptions = (args) => (
+  <Template
+    timeOptions={[
+      {
+        type: "fixed",
+        label: "Today",
+        to: "now",
+        from: "now-1h/d",
+      },
+      {
+        type: "fixed",
+        label: "Yesterday",
+        to: "now-1h/d",
+        from: "now-1d/d",
+      },
+      {
+        type: "fixed",
+        label: "This Week",
+        to: "now",
+        from: "now/w",
+      },
+
+      {
+        type: "fixed",
+        label: "This Month",
+        to: "now",
+        from: "now/M",
+      },
+
+      {
+        type: "fixed",
+        label: "This Year",
+        to: "now",
+        from: "now/y",
+      },
+
+      {
+        type: "input",
+        unit: "hours",
+        default: 24,
+      },
+      {
+        type: "input",
+        unit: "days",
+        default: 7,
+      },
+
+      {
+        type: "input",
+        unit: "months",
+        default: 3,
+      },
+
+      {
+        type: "select",
+        unit: "years",
+        label: "Year",
+        default: new Date().getFullYear() - 1,
+      },
+
+      {
+        type: "select",
+        unit: "months",
+        label: "Month",
+        default: new Date().getMonth(),
+      },
+    ]}
+    {...args}
+  />
+);

@@ -22,24 +22,29 @@ const defaultProps = {
       to: "now-1h/d",
       from: "now-1d/d",
     },
+    /*
     {
       type: "fixed",
       label: "This Week",
       to: "now",
       from: "now/w",
     },
+    */
     {
       type: "fixed",
       label: "This Month",
       to: "now",
       from: "now/M",
     },
+    /*
     {
       type: "fixed",
       label: "This Year",
       to: "now",
       from: "now/y",
     },
+    */
+
     {
       type: "input",
       unit: "hours",
@@ -50,12 +55,34 @@ const defaultProps = {
       unit: "days",
       default: 7,
     },
+    /*
     {
       type: "input",
       unit: "months",
       default: 3,
     },
+  
+    {
+      type: "select",
+      unit: "years",
+      label: "Year",
+      default: new Date().getFullYear() - 1,
+    },
+      */
+    {
+      type: "select",
+      unit: "months",
+      label: "Month",
+      default: new Date().getMonth(),
+    },
   ],
+};
+
+type SelectTimeOption = {
+  type: "select";
+  unit: "years" | "months";
+  label: string;
+  default: number;
 };
 
 type InputTimeOption = {
@@ -70,7 +97,7 @@ type FixedTimeOption = {
   from: string | Date;
 };
 
-type TimeOption = InputTimeOption | FixedTimeOption;
+type TimeOption = InputTimeOption | FixedTimeOption | SelectTimeOption;
 
 interface TimeRangePickerProps {
   renderButton: (label: string, onClick: () => void) => JSX.Element;

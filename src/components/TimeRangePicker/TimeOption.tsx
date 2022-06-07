@@ -4,6 +4,7 @@ export const TimeOption = ({ active, onSelect, ...props }) => {
   const [value, setValue] = React.useState(props.default);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const { type, label, unit } = props;
+  const isMonth = unit?.includes("month");
 
   React.useEffect(() => {
     if (props.default !== value) {
@@ -41,6 +42,32 @@ export const TimeOption = ({ active, onSelect, ...props }) => {
       {type === "fixed" && (
         <>
           <span>{label}</span>
+          <span className="tnic-hovertext">Click to select</span>
+        </>
+      )}
+      {type === "select" && (
+        <>
+          <span>
+            {label}:
+            <input
+              className="tnic-input tnic-input-large"
+              ref={inputRef}
+              type="number"
+              value={value}
+              max={isMonth ? 12 : undefined}
+              min="1"
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => setValue(e.target.value)}
+            />
+            {isMonth && (
+              <>
+                {new Date(0, value, 0).toLocaleString("default", {
+                  month: "short",
+                })}
+              </>
+            )}
+          </span>
+
           <span className="tnic-hovertext">Click to select</span>
         </>
       )}
