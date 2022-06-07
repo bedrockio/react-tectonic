@@ -59,9 +59,15 @@ export const TimeOption = ({ active, onSelect, ...props }) => {
               onFocus={(e) => e.target.select()}
               onChange={(e) => setValue(e.target.value)}
             />
+            {isMonth && (
+              <>
+                {new Date(0, value, 0).toLocaleString("default", {
+                  month: "short",
+                })}
+              </>
+            )}
           </span>
-          {isMonth && <span>{new Date(0, value, 0)
-            .toLocaleString("default", { month: "short" })}</span>}
+
           <span className="tnic-hovertext">Click to select</span>
         </>
       )}
