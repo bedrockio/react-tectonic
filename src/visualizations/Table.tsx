@@ -103,7 +103,7 @@ export const Table = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      <table className="tnic-table header-fixed">
+      <table className="tnic-table">
         <thead>
           <tr>
             <th>{labelFieldName}</th>
