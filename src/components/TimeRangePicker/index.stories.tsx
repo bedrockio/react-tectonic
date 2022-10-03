@@ -3,9 +3,9 @@ import { formatDistanceStrict } from "date-fns";
 
 import "react-day-picker/lib/style.css";
 
-const baseUrl = window.sessionStorage.getItem("baseUrl");
-const collection = window.sessionStorage.getItem("collection");
-const token = window.sessionStorage.getItem("token");
+const baseUrl = window.sessionStorage.getItem("baseUrl") || undefined;
+const collection = window.sessionStorage.getItem("collection") || undefined;
+const token = window.sessionStorage.getItem("token") || undefined;
 
 import { TimeRangePicker } from ".";
 import { TectonicProvider } from "../TectonicProvider";
