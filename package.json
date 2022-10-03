@@ -61,5 +61,8 @@
   "dependencies": {
     "date-fns": "^2.22.1",
     "recharts": "^2.1.4"
+  },
+  "volta": {
+    "node": "16.17.1"
   }
 }
