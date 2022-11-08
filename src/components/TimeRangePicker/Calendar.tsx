@@ -88,9 +88,15 @@ export const Calendar = ({
           justifyContent: "space-around",
           borderTop: "1px solid #ccc",
           paddingTop: "10px",
+          alignItems: "center",
         }}
       >
-        <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           From:
           <input
             value={time.from}
@@ -102,7 +108,12 @@ export const Calendar = ({
             }}
           />
         </div>
-        <div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           To:
           <input
             value={time.to}
