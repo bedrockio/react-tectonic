@@ -195,20 +195,24 @@ export const DonutChart = ({
           <Legend height={30} formatter={(value) => labelFormatter(value)} />
           {!noData && (
             <Tooltip
-              formatter={(value, name, props) => {
+              formatter={(value, name) => {
                 let label = labelFormatter(name);
                 if (percent) {
                   if (precision) {
                     return [
                       `${_valueFormatter(
-                        Math.round((value / total) * (10 * precision) * 100) /
+                        Math.round(
+                          ((value as number) / total) * (10 * precision) * 100
+                        ) /
                           (10 * precision)
                       )}%`,
                       label,
                     ];
                   } else {
                     return [
-                      `${_valueFormatter(Math.round((value / total) * 100))}%`,
+                      `${_valueFormatter(
+                        Math.round(((value as number) / total) * 100)
+                      )}%`,
                       label,
                     ];
                   }

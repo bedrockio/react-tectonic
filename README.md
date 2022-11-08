@@ -11,7 +11,7 @@ After install, import the CSS file in your app's entry file:
 
 ```js
 import "react-tectonic/lib/styles.css";
-import "react-day-picker/lib/style.css"; // required for the time picker
+import "react-day-picker/dist/style.css"; // required for the time picker
 ```
 
 ## Styling

@@ -1,7 +1,8 @@
 import React from "react";
 import { formatDistanceStrict } from "date-fns";
 
-import "react-day-picker/lib/style.css";
+import "react-day-picker/dist/style.css";
+import "../../styles.css";
 
 const baseUrl = window.sessionStorage.getItem("baseUrl") || undefined;
 const collection = window.sessionStorage.getItem("collection") || undefined;

@@ -9,27 +9,26 @@ export const getValueFormatter = (range, options = {}) => {
     const formatter = new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 3,
       ...options,
-    });
-    return (value) => formatter.format(value);
+    }) as any;
+    return (value: number) => formatter.format(value);
   } else if (range[1] < 10) {
     const formatter = new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 2,
       ...options,
     });
-    return (value) => formatter.format(value);
+    return (value: number) => formatter.format(value) as any;
   } else if (range[1] < 100) {
     const formatter = new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 1,
       ...options,
     });
-    return (value) => formatter.format(value);
-  } else {
-    const formatter = new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: 0,
-      ...options,
-    });
-    return (value) => formatter.format(value);
+    return (value: number) => formatter.format(value) as any;
   }
+  const formatter = new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+    ...options,
+  });
+  return (value: number) => formatter.format(value) as any;
 };
 
 export const getMinMaxRange = (data = [] as any, valueField) => [

@@ -1,6 +1,6 @@
 import React from "react";
 
-import DayPicker, { DateUtils } from "react-day-picker";
+import { DayPicker, DateRange } from "react-day-picker";
 import { toDate } from "../../utils/date";
 import { format } from "date-fns";
 
@@ -34,7 +34,9 @@ export const Calendar = ({
   timeRange,
 }) => {
   const convertedTimeRange = convertTimeRange(timeRange);
-  const [range, setRange] = React.useState(convertedTimeRange);
+  const [range, setRange] = React.useState<DateRange | undefined>(
+    convertedTimeRange
+  );
 
   const [time, setTime] = React.useState({
     from: format(convertedTimeRange.from, "HH:mm:ss"),
@@ -42,7 +44,11 @@ export const Calendar = ({
   });
 
   React.useEffect(() => {
-    if (range.from && range.to && range.from.valueOf() === range.to.valueOf()) {
+    if (
+      range?.from &&
+      range.to &&
+      range.from.valueOf() === range.to.valueOf()
+    ) {
       setTime({
         from: "00:00:00",
         to: "23:59:59",
@@ -51,31 +57,23 @@ export const Calendar = ({
   }, [range]);
 
   React.useEffect(() => {
-    if (range.to && range.from) {
+    if (range?.to && range.from) {
       onChange(mergeRanges(range, time));
     } else {
       onChange(undefined);
     }
   }, [range, time]);
 
-  function handleDayClick(day) {
-    setRange(DateUtils.addDayToRange(day, range));
-  }
-
-  const { from, to } = range;
-  const modifiers = { start: from, end: to };
-
   return (
     <div>
-      <div style={{ height: "288px" }}>
+      <div className="tnic-rdp" style={{ height: "270px" }}>
         <DayPicker
-          className="tnic-dayPicker"
+          mode="range"
           numberOfMonths={numberOfMonths}
-          selectedDays={[from, { from, to }]}
-          modifiers={modifiers}
-          onDayClick={handleDayClick}
-          initialMonth={range.from}
-          disabledDays={{
+          selected={range}
+          onSelect={setRange}
+          defaultMonth={range?.from}
+          disabled={{
             after: maxDate,
             before: minDate,
           }}

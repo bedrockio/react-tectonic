@@ -1,6 +1,7 @@
 :root {
   --tnic-primary-color: #77a741;
   --tnic-primary-color-hover: #77a741d9;
+  --tnic-background-color: #f5f5f5;
   --tnic-text-color-black: #2a2a2a;
   --tnic-body-font-size: 14px;
   --tnic-title-font-size: 16px;
@@ -364,45 +365,23 @@
 
 /*** DayPicker-Day ***/
 
-.tnic-dayPicker .DayPicker-Caption > div {
-  font-size: 18.4px;
-  line-height: initial;
+.tnic-rdp .rdp {
+  --rdp-cell-size: 34px;
+  --rdp-accent-color: var(--tnic-primary-color);
+  --rdp-background-color: var(--tnic-background-color);
+
+  /* Switch to dark colors for dark themes */
+  --rdp-accent-color-dark: #3003e1;
+  --rdp-background-color-dark: #180270;
+
+  /* Outline border for focused elements */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  /* Outline border for focused and selected elements */
+  --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
 }
 
-.tnic-dayPicker
-  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
-  background-color: var(--tnic-primary-color);
-  opacity: 0.8;
-}
-
-.tnic-dayPicker
-  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
-  background-color: var(--tnic-primary-color);
-}
-
-.tnic-dayPicker
-  .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-  background-color: var(--tnic-primary-color);
-  color: #fff;
-  opacity: 0.8;
-}
-.tnic-dayPicker .DayPicker-Day {
-  border-radius: 0 !important;
-  box-sizing: initial;
-  font-size: 16px;
-}
-
-.tnic-dayPicker .DayPicker-Weekday {
-  font-size: 14px;
-}
-
-.tnic-dayPicker .DayPicker-Day--start {
-  border-top-left-radius: 50% !important;
-  border-bottom-left-radius: 50% !important;
-}
-.tnic-dayPicker .DayPicker-Day--end {
-  border-top-right-radius: 50% !important;
-  border-bottom-right-radius: 50% !important;
+.tnic-rdp .rdp-caption_label {
+  font-size: var(--tnic-title-font-size);
 }
 
 /*** Dropdown ***/
