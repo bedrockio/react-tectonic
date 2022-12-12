@@ -1,10 +1,32 @@
 :root {
   --tnic-primary-color: #77a741;
   --tnic-primary-color-hover: #77a741d9;
-  --tnic-background-color: #f5f5f5;
-  --tnic-text-color-black: #2a2a2a;
+  --tnic-background-color: #f5f5f5; /* Will deprecate */
+  --tnic-text-color-black: #2a2a2a; /* Will deprecate */
+  
   --tnic-body-font-size: 14px;
   --tnic-title-font-size: 16px;
+  --tnic-border-radius: 4px;
+
+  --tnic-text-color: #2a2a2a;
+  --tnic-background: #ffffff;
+  --tnic-background-hover: #f5f5f5;
+  --tnic-border: #cccccc; /* border values hardcoded throughout code */
+  --tnic-box-shadow: rgba(34, 36, 38, 0.15);
+
+  --tnic-button-color: #ffffff; /* = var(--tnic-background) */
+
+  --tnic-table-border: rgba(34, 36, 38, 0.10); /* ~ var(--tnic-box-shadow) */
+
+  --tnic-input-background: #ffffff; /* = var(--tnic-background) */
+  --tnic-input-border: #e0e0e0;
+
+  --tnic-message-background: #f8f8f9; /* ~ var(--tcnic-background-hover) */
+  --tnic-message-border: rgba(34, 36, 38, 0.22); /* ~ var(--tnic-box-shadow) */
+
+  --tnic-error-color: #9f3a38;
+  --tnic-error-background: #fff6f6;
+  --tnic-error-border: #e0b4b4;
 }
 
 .tnic-chart {
@@ -19,14 +41,17 @@
   position: relative;
   min-height: 1em;
   margin: 1em 0;
-  background: #f8f8f9;
+  background: var(--tnic-message-background);
   padding: 1em 1.5em;
-  line-height: 1.4285em;
-  color: rgba(0, 0, 0, 0.87);
-  transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease,
+  line-height: 1.5em;
+  color: var(--tnic-text-color);
+  transition: 
+    opacity 0.1s ease, 
+    color 0.1s ease, 
+    background 0.1s ease, 
     box-shadow 0.1s ease;
-  border-radius: 0.28571429rem;
-  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.22) inset, 0 0 0 0 transparent;
+  border-radius: var(--tnic-border-radius);
+  box-shadow: 0 0 0 1px var(--tnic-message-border) inset;
 }
 
 .tnic-message.centered {
@@ -39,9 +64,9 @@
 }
 
 .tnic-message.error {
-  background-color: #fff6f6;
-  color: #9f3a38;
-  box-shadow: 0 0 0 1px #e0b4b4 inset, 0 0 0 0 transparent;
+  background-color: var(--tnic-error-background);
+  color: var(--tnic-error-color);
+  box-shadow: 0 0 0 1px var(--tnic-error-border) inset;
 }
 
 /*** Message End ***/
@@ -61,7 +86,7 @@
 
 .tnic-table {
   text-align: left;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--tnic-text-color);
   border-collapse: separate;
   border-spacing: 0;
   font-size: var(--tnic-body-font-size);
@@ -90,11 +115,11 @@
 
 .tnic-table thead th {
   cursor: auto;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--tnic-text-color);
   padding: 0.6em 0.6em;
   font-weight: bold;
   text-transform: none;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+  border-bottom: 1px solid var(--tnic-table-border);
 }
 
 .tnic-table thead tr:first-child th {
@@ -113,7 +138,7 @@
 
 .tnic-table tr td,
 .tnic-table tr th {
-  border-left: 1px solid rgba(34, 36, 38, 0.1);
+  border-left: 1px solid var(--tnic-table-border);
 }
 
 .tnic-table th {
@@ -132,11 +157,11 @@
 }
 
 .tnic-table tr td {
-  border-top: 1px solid rgba(34, 36, 38, 0.1);
+  border-top: 1px solid var(--tnic-table-border);
 }
 
 .tnic-table tbody tr {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--tnic-message-border);
 }
 
 .tnic-table td {
@@ -161,8 +186,9 @@
 .tnic-overlay {
   position: absolute;
   top: 110%;
-  box-shadow: 0px 2px 3px 0px #ccc, 0px 6px 10px 4px #ccc;
-  background-color: #fff;
+  box-shadow: 0px 2px 3px 0px var(--tnic-box-shadow), 0px 6px 10px 4px var(--tnic-box-shadow);
+  color: var(--tnic-text-color);
+  background-color: var(--tnic-background);
   z-index: 100;
 }
 
@@ -182,13 +208,18 @@
   vertical-align: middle;
 }
 
+.tnic-icon svg {
+  fill: currentColor;
+}
+
 /*** Input ***/
 
 .tnic-input {
-  border: 1px solid #e0e0e0;
+  background: var(--tnic-input-background);
+  border: 1px solid var(--tnic-input-border); /* = input border */
   height: 28px;
   line-height: 28px;
-  border-radius: 4px;
+  border-radius: var(--tnic-border-radius);
   text-align: center;
   margin-right: 5px;
   margin-left: 5px;
@@ -206,7 +237,7 @@
   border: none;
   vertical-align: baseline;
   background: var(--tnic-primary-color) none;
-  color: #ffffff;
+  color: var(--tnic-button-color);
   font-family: inherit;
   margin: 0em 0.4em 0em 0.4em;
   padding: 0.78571429em 1.5em 0.78571429em;
@@ -217,54 +248,54 @@
   font-style: normal;
   text-align: center;
   text-decoration: none;
-  border-radius: 0.21428571rem;
-  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
+  border-radius: var(--tnic-border-radius);
+  /* box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset; // USELESS */
+  box-shadow: none;
   user-select: none;
-  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
-    box-shadow 0.1s ease, background 0.1s ease;
+  transition: 
+    opacity 0.1s ease, 
+    background-color 0.1s ease, 
+    color 0.1s ease,
+    box-shadow 0.1s ease, 
+    background 0.1s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .tnic-button:hover {
   background-color: var(--tnic-primary-color-hover);
   background-image: none;
-  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
-  color: #ffffff;
+  /* box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset; // USELESS */
+  color: var(--tnic-button-color);
 }
 
 .tnic-button.tnic-button--basic {
-  background: none;
-  color: var(--tnic-text-color-black);
+  background: transparent;
+  color: var(--tnic-text-color);
   font-weight: normal;
-  border-radius: 0.21428571rem;
+  border-radius: var(--tnic-border-radius);
   text-transform: none;
   text-shadow: none;
   box-shadow: none;
 }
 
 .tnic-button.tnic-button--basic:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: rgba(0, 0, 0, 0.8) !important;
+  background-color: var(--tnic-background-hover);
+  color: var(--tnic-text-color) !important;
 }
 
 .tnic-button.tnic-button--compact {
-  padding: 0.58928571em 1.125em 0.58928571em !important;
+  padding: 0.58928571em 1.125em !important;
 }
 
 .tnic-button.tnic-button--primary:hover {
-  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
-  color: #ffffff;
-}
-
-.tnic-button.tnic-button--primary:hover {
-  box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset;
-  color: #ffffff;
+  /* box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #d1d5db inset; // USELESS */
+  color: var(--tnic-button-color);
 }
 
 .tnic-button--icon {
-  margin: 0em 0.4em 0em 0.4em;
+  margin: 0em 0.4em;
   padding: 4px;
-  border-radius: 15%;
+  border-radius: var(--tnic-border-radius);
   display: flex;
   height: 100%;
   align-items: center;
@@ -276,8 +307,7 @@
 
 .tnic-button.tnic-button--icon:hover {
   color: var(--tnic-primary-color-hover);
-  box-shadow: 0px 0px 0px 1px rgba(34, 36, 38, 35%) inset,
-    0px 0px 0px 0px #d1d5db inset;
+  box-shadow: 0 0 0 1px var(--tnic-message-border) inset;
 }
 
 .tnic-button--disabled {
@@ -304,14 +334,14 @@
 
 .tnic-timeOption.tnic-timeOption--active {
   background: var(--tnic-primary-color-hover) !important;
-  color: #fff;
+  color: var(--tnic-button-color);
   font-weight: bold;
-  fill: #fff;
+  fill: var(--tnic-button-color);
 }
 
 .tnic-timeOption:hover {
-  background: rgba(238, 238, 238, 0.577);
-  opacity: 0.8;
+  background: var(--tnic-background-hover);
+  /* opacity: 0.8; */
 }
 
 .tnic-timeOption .tnic-input {
@@ -326,12 +356,13 @@
 .tnic-title {
   font-weight: bold;
   font-size: var(--tnic-title-font-size);
+  color: var(--tnic-text-color);
   flex: 1;
 }
 
 /*** Header/Footer ***/
 .tnic-header {
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--tnic-border);
 }
 
 .tnic-header,
@@ -348,7 +379,7 @@
 .tnic-footer {
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--tnic-border);
 }
 
 .tnic-header .tnic-button {
@@ -368,7 +399,7 @@
 .tnic-rdp .rdp {
   --rdp-cell-size: 34px;
   --rdp-accent-color: var(--tnic-primary-color);
-  --rdp-background-color: var(--tnic-background-color);
+  --rdp-background-color: var(--tnic-background-hover);
 
   /* Switch to dark colors for dark themes */
   --rdp-accent-color-dark: #3003e1;
@@ -393,13 +424,13 @@
 .tnic-dropdown .tnic-button {
   padding: 0 5px;
   line-height: 30px;
-  background: none;
-  color: var(--tnic-text-color-black);
+  background: transparent;
+  color: var(--tnic-text-color); /* basic button color */
 }
 
 .tnic-dropdown .tnic-button:hover {
   box-shadow: none;
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--tnic-background-hover); /* basic button hover color */
 }
 
 .tnic-dropdown__active .tnic-dropdown--menu {
@@ -409,8 +440,8 @@
 
 .tnic-dropdown--item.tnic-dropdown__selected {
   background-color: var(--tnic-primary-color-hover);
-  fill: #fff;
-  color: #fff;
+  fill: var(--tnic-button-color);
+  color: var(--tnic-button-color);
 }
 
 .tnic-dropdown__right .tnic-dropdown--menu {
@@ -418,7 +449,7 @@
 }
 .tnic-dropdown__right .tnic-button--icon {
   margin: 0;
-  margin-right: calc(-0.5em - 2px);
+  margin-right: -9px;
 }
 
 .tnic-dropdown__left .tnic-dropdown--menu {
@@ -442,13 +473,13 @@
   min-width: max-content;
   margin: 0;
   padding: 5px 0;
-  background: #fff;
+  background: var(--tnic-background);
   font-size: var(--tnic-body-font-size);
   text-shadow: none;
   text-align: left;
-  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 15%);
-  border: 1px solid rgba(34, 36, 38, 0.15);
-  border-radius: 0.28571429rem;
+  box-shadow: 0 2px 3px 0 var(--tnic-box-shadow);
+  border: 1px solid var(--tnic-box-shadow);
+  border-radius: var(--tnic-border-radius);
   z-index: 11;
 }
 
@@ -461,20 +492,19 @@
   text-align: left;
   border-top: none;
   line-height: 1em;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--tnic-text-color);
   padding: 0.6em;
   font-size: var(--tnic-body-font-size);
   text-transform: none;
   font-weight: 400;
-  -webkit-box-shadow: none;
   box-shadow: none;
   -webkit-touch-callout: none;
 }
 
 .tnic-dropdown--item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: #000;
-  fill: #000;
+  background-color: var(--tnic-background-hover);
+  color: var(--tnic-text-color);
+  fill: var(--tnic-text-color);
 }
 
 .tnic-dropdown--item .tnic-icon {
@@ -485,8 +515,8 @@
 
 .tnic-chartContainer {
   padding: 1em;
-  background-color: #fff;
-  border-radius: 2px;
+  background-color: var(--tnic-background);
+  border-radius: var(--tnic-border-radius);
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
