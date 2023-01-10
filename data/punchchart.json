@@ -181,7 +181,7 @@
       ]
     },
     {
-      "dayOfWeek": 7,
+      "dayOfWeek": 0,
       "count": 11614,
       "hours": [
         { "hour": 15, "count": 965 },

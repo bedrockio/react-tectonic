@@ -157,7 +157,7 @@ export const PunchChart = ({
                   tickLine={false}
                   axisLine={false}
                   label={{
-                    value: labels[dayData.dayOfWeek - 1],
+                    value: labels[dayData.dayOfWeek],
                     position: "insideRight",
                   }}
                 />
