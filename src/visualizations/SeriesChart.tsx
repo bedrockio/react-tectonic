@@ -156,8 +156,7 @@ export const SeriesChart = ({
     }
   };
 
-  function handleAction(option) {
-    const action = option.value;
+  function handleAction(action: string) {
     if (action === "download-image") {
       handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {

@@ -126,9 +126,9 @@ export const DonutChart = ({
     }
   };
 
-  function handleAction(option) {
+  function handleAction(action: string) {
     const getValue = (item) => item[valueField];
-    const action = option.value;
+
     if (action === "download-image") {
       handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {

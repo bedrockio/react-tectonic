@@ -74,8 +74,7 @@ export const Table = ({
 }: TableProps & typeof defaultProps): JSX.Element => {
   const noData = !data || !data.length;
 
-  function handleAction(option) {
-    const action = option;
+  function handleAction(action: string) {
     if (action === "export-data") {
       exportToCsv(
         [valueFieldName, valueFieldName],

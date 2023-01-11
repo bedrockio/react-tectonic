@@ -1,6 +1,5 @@
 export const downloadImage = (svg, width, height, filename) => {
   return new Promise((resolve, reject) => {
-
     reject(new Error("Not Implemented"));
     /*
     let canvas = document.createElement("canvas");

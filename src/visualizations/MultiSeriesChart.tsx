@@ -186,11 +186,9 @@ export const MultiSeriesChart = ({
   const intervals =
     validIntervals(toDate(timeRange?.from), toDate(timeRange?.to)) || [];
 
-  function handleAction(option) {
-    const action = option.value;
-
+  function handleAction(action: string) {
     if (action === "download-image") {
-      //handleDownloadImage(svgChartRef.current);
+      // handleDownloadImage(svgChartRef.current);
     } else if (action === "export-data") {
       data.forEach((serie, index) =>
         exportToCsv(
