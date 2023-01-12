@@ -125,7 +125,7 @@ const TemplateWithProvider = (args) => (
   <TectonicProvider>
     <div style={{ background: "red" }}>
       <MultiSeriesChart
-        title={<h2>With Provider</h2>}
+        title={"With Provider"}
         titleAlign="center"
         {...args}
         height={350}

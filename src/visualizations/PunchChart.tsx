@@ -1,9 +1,12 @@
 import React, { ReactNode } from "react";
 import { numberWithCommas } from "../utils/formatting";
 import { startCase } from "lodash";
-import { defaultColors } from "../utils/visualization";
+import { defaultColors, defaultActions } from "../utils/visualization";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
+import { exportToCsv } from "../utils/exporters";
+import { sortBy } from "lodash";
+
 import {
   ScatterChart,
   Scatter,
@@ -22,20 +25,6 @@ import {
   TitleAlignType,
 } from "../components";
 
-const parseDomain = (data = [] as any) => [
-  0,
-  Math.max(
-    Math.max.apply(
-      null,
-      data.map((entry) => entry.count)
-    ),
-    Math.max.apply(
-      null,
-      data.map((entry) => entry.count)
-    )
-  ),
-];
-
 type PunchChartProps = {
   status?: IStatus;
   title?: ReactNode;
@@ -46,19 +35,23 @@ type PunchChartProps = {
   valueFormatter?: (value: number) => string;
   data?: any[];
   color?: string;
+  enabledControls: ["actions"];
   chartContainer?: React.ElementType;
   labels?: string[];
+  exportFilename?: string;
 };
 
 export const PunchChart = ({
   status = { success: true },
   data = [],
+  exportFilename = "export.csv",
   valueFormatter = (value) => {
     return numberWithCommas(value);
   },
   labelFormatter = (label) => {
     return startCase(label.toString().toLowerCase());
   },
+  enabledControls = ["actions"],
   color,
   chartContainer: ChartContainer = DefaultChartContainer,
   title,
@@ -79,10 +72,25 @@ export const PunchChart = ({
   const range = [20, 150];
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
-  const noData = false;
+  const dataHours = data.reduce((acc, item) => {
+    acc.push(...item.hours);
+    return acc;
+  }, []);
 
-  const _valueFormatter =
-    valueFormatter || getValueFormatter(getMinMaxRange(data, "count"));
+  const domain = getMinMaxRange(dataHours, "count");
+  const noData = !domain[0];
+
+  const _valueFormatter = valueFormatter || getValueFormatter(domain);
+
+  const parsedData = sortBy(
+    data.map((item) => {
+      return {
+        ...item,
+        hours: sortBy(item.hours, "hour"),
+      };
+    }),
+    "dayOfWeek"
+  );
 
   function renderTooltip({ active, payload }) {
     if (active && payload && payload.length) {
@@ -103,8 +111,22 @@ export const PunchChart = ({
         </div>
       );
     }
-
     return null;
+  }
+
+  function handleAction(action: string) {
+    if (action === "download-image") {
+      // handleDownloadImage(svgChartRef.current);
+    } else if (action === "export-data") {
+      exportToCsv(
+        ["Day", ...new Array(24).fill(0).map((_, i) => `Hour ${i}`)],
+        parsedData.map((row) => [
+          labels[row.dayOfWeek],
+          ...row.hours.map((item) => item.count),
+        ]),
+        exportFilename
+      );
+    }
   }
 
   return (
@@ -112,7 +134,9 @@ export const PunchChart = ({
       title={title}
       height={height}
       titleAlign={titleAlign}
-      enabledControls={[]}
+      enabledControls={enabledControls}
+      actions={defaultActions}
+      onActionChange={handleAction}
     >
       {status.success && noData && (
         <Message>No data available for this time period</Message>
@@ -120,75 +144,69 @@ export const PunchChart = ({
       {status.loading && <Message>Loading...</Message>}
       {status.error && <Message error>{status.error.message}</Message>}
 
-      {data
-        .sort((a, b) => a.dayOfWeek - b.dayOfWeek)
-        .map((dayData, index) => {
-          const domain = parseDomain(dayData.hours);
+      <div style={{ marginTop: "1em" }} />
 
-          return (
-            <ResponsiveContainer
-              key={dayData.dayOfWeek}
-              width="100%"
+      {parsedData.map((dayData, index) => {
+        return (
+          <ResponsiveContainer key={dayData.dayOfWeek} width="100%" height={60}>
+            <ScatterChart
               height={60}
+              margin={{
+                top: 10,
+                right: 0,
+                bottom: 0,
+                left: 0,
+              }}
             >
-              <ScatterChart
-                height={60}
-                margin={{
-                  top: 10,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
+              <XAxis
+                type="category"
+                dataKey="hour"
+                name="hour"
+                interval={0}
+                tick={index !== data.length - 1 ? { fontSize: 0 } : {}}
+                tickLine={{ transform: "translate(0, -6)" }}
+              />
+              <YAxis
+                type="number"
+                dataKey="index"
+                height={10}
+                width={95}
+                tick={false}
+                tickLine={false}
+                axisLine={false}
+                label={{
+                  value: labels[dayData.dayOfWeek],
+                  position: "insideRight",
                 }}
-              >
-                <XAxis
-                  type="category"
-                  dataKey="hour"
-                  name="hour"
-                  interval={0}
-                  tick={index !== data.length - 1 ? { fontSize: 0 } : {}}
-                  tickLine={{ transform: "translate(0, -6)" }}
-                />
-                <YAxis
-                  type="number"
-                  dataKey="index"
-                  height={10}
-                  width={80}
-                  tick={false}
-                  tickLine={false}
-                  axisLine={false}
-                  label={{
-                    value: labels[dayData.dayOfWeek],
-                    position: "insideRight",
-                  }}
-                />
-                <ZAxis
-                  type="number"
-                  dataKey="count"
-                  domain={domain}
-                  range={range}
-                />
-                <Tooltip
-                  cursor={{ strokeDasharray: "3 3" }}
-                  wrapperStyle={{ zIndex: 100 }}
-                  content={(props: any) => renderTooltip(props)}
-                />
-                <Scatter
-                  data={dayData.hours
-                    .map((item) => {
-                      return {
-                        ...item,
-                        index: 1,
-                      };
-                    })
-                    .sort((a, b) => {
-                      return a.hour - b.hour;
-                    })}
-                  fill={_color}
-                />
-              </ScatterChart>
-            </ResponsiveContainer>
-          );
-        })}
+              />
+              <ZAxis
+                type="number"
+                dataKey="count"
+                domain={domain}
+                range={range}
+              />
+              <Tooltip
+                cursor={{ strokeDasharray: "3 3" }}
+                wrapperStyle={{ zIndex: 100 }}
+                content={(props: any) => renderTooltip(props)}
+              />
+              <Scatter
+                data={dayData.hours
+                  .map((item) => {
+                    return {
+                      ...item,
+                      index: 1,
+                    };
+                  })
+                  .sort((a, b) => {
+                    return a.hour - b.hour;
+                  })}
+                fill={_color}
+              />
+            </ScatterChart>
+          </ResponsiveContainer>
+        );
+      })}
     </ChartContainer>
   );
 };

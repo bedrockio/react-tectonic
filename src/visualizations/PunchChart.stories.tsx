@@ -1,6 +1,7 @@
 import React from "react";
 
 import { PunchChart } from "./PunchChart";
+import { TectonicProvider } from "../components/TectonicProvider";
 
 import { data } from "../../data/punchchart.json";
 
@@ -44,5 +45,19 @@ WithData.args = {
 export const WithoutData = Template.bind({});
 WithoutData.args = {
   data: [],
+  status: "success",
+};
+
+const TemplateWithProvider = (args) => (
+  <TectonicProvider>
+    <div style={{ background: "red" }}>
+      <PunchChart title={"With Provider"} titleAlign="center" {...args} />
+    </div>
+  </TectonicProvider>
+);
+
+export const WithProvider = TemplateWithProvider.bind({});
+WithProvider.args = {
+  data,
   status: "success",
 };
