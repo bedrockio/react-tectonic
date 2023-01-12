@@ -3,7 +3,7 @@
   --tnic-primary-color-hover: #77a741d9;
   --tnic-background-color: #f5f5f5; /* Will deprecate */
   --tnic-text-color-black: #2a2a2a; /* Will deprecate */
-  
+
   --tnic-body-font-size: 14px;
   --tnic-title-font-size: 16px;
   --tnic-border-radius: 4px;
@@ -14,10 +14,10 @@
   --tnic-border: #cccccc;
   --tnic-box-shadow: rgba(34, 36, 38, 0.15);
   --tnic-button-color: #ffffff;
-  --tnic-table-border: rgba(34, 36, 38, 0.10);
+  --tnic-table-border: rgba(34, 36, 38, 0.1);
   --tnic-input-background: #ffffff;
   --tnic-input-border: #e0e0e0;
-  --tnic-message-background: #f8f8f9; 
+  --tnic-message-background: #f8f8f9;
   --tnic-message-border: rgba(34, 36, 38, 0.22);
   --tnic-error-color: #9f3a38;
   --tnic-error-background: #fff6f6;
@@ -40,10 +40,7 @@
   padding: 1em 1.5em;
   line-height: 1.5em;
   color: var(--tnic-text-color);
-  transition: 
-    opacity 0.1s ease, 
-    color 0.1s ease, 
-    background 0.1s ease, 
+  transition: opacity 0.1s ease, color 0.1s ease, background 0.1s ease,
     box-shadow 0.1s ease;
   border-radius: var(--tnic-border-radius);
   box-shadow: 0 0 0 1px var(--tnic-message-border) inset;
@@ -117,6 +114,10 @@
   border-bottom: 1px solid var(--tnic-table-border);
 }
 
+.tnic-table thead tr {
+  border-bottom: 1px solid var(--tnic-table-border);
+}
+
 .tnic-table thead tr:first-child th {
   padding-top: 0.6em;
 }
@@ -181,7 +182,8 @@
 .tnic-overlay {
   position: absolute;
   top: 110%;
-  box-shadow: 0px 2px 3px 0px var(--tnic-box-shadow), 0px 6px 10px 4px var(--tnic-box-shadow);
+  box-shadow: 0px 2px 3px 0px var(--tnic-box-shadow),
+    0px 6px 10px 4px var(--tnic-box-shadow);
   color: var(--tnic-text-color);
   background-color: var(--tnic-background);
   z-index: 100;
@@ -246,12 +248,8 @@
   border-radius: var(--tnic-border-radius);
   box-shadow: none;
   user-select: none;
-  transition: 
-    opacity 0.1s ease, 
-    background-color 0.1s ease, 
-    color 0.1s ease,
-    box-shadow 0.1s ease, 
-    background 0.1s ease;
+  transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease,
+    box-shadow 0.1s ease, background 0.1s ease;
   -webkit-tap-highlight-color: transparent;
 }
 

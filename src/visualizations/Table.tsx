@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import PropTypes from "prop-types";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
+import { getScrollbarWidth } from "../utils/dom";
 import { defaultActions } from "../utils/visualization";
 import { startCase, get } from "lodash";
 import {
@@ -55,6 +56,9 @@ type TableProps = {
   exportFilename?: string;
 };
 
+// turns out people modify the scrollbar
+const scrollbarWidth = getScrollbarWidth();
+
 export const Table = ({
   status,
   title,
@@ -104,7 +108,7 @@ export const Table = ({
 
       <table className="tnic-table">
         <thead>
-          <tr>
+          <tr style={{ paddingRight: `${scrollbarWidth}px` }}>
             <th>{labelFieldName}</th>
             <th>{valueFieldName}</th>
           </tr>
