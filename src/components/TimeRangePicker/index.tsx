@@ -106,6 +106,7 @@ interface TimeRangePickerProps {
   align?: "left" | "right";
   timeRange?: ITimeRange;
   allowedTimeRange?: ITimeRange;
+  defautTimeRange?: ITimeRange;
   onChange?: (timeRange: ITimeRange) => void;
 }
 
@@ -153,8 +154,10 @@ export const TimeRangePicker = ({
 
   const timeRange = props.timeRange || ctx.timeRange;
 
+  const defaultTimeRange = props.defautTimeRange || ctx.defaultTimeRange;
+
   if (!timeRange || !timeRange.to) {
-    return <div></div>;
+    return null;
   }
 
   return (
@@ -169,6 +172,7 @@ export const TimeRangePicker = ({
           stats={ctx.stats || {}}
           timeOptions={timeOptions}
           timeRange={timeRange}
+          defaultTimeRange={defaultTimeRange}
           allowedTimeRange={props.allowedTimeRange}
           onClose={() => setOpen(false)}
           onChange={(newTimeRange) => {

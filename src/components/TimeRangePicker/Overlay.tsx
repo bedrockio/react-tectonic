@@ -12,21 +12,17 @@ export const Overlay = ({
   align,
   stats,
   timeRange,
+  defaultTimeRange,
   allowedTimeRange,
+  timeOptions,
   ...props
 }) => {
   const [optionValue, setOptionValue] = React.useState();
   const [option, setOption] = React.useState<any>(undefined);
-  const [refreshKey, setRefreshKey] = React.useState<number>();
-
-  const [validTimeOptions, setValidTimeOptions] = React.useState(
-    props.timeOptions
-  );
 
   const handleReset = () => {
-    setOption(undefined);
-    setValidTimeOptions([...props.timeOptions]);
-    setRefreshKey(Date.now());
+    onChange(defaultTimeRange);
+    onClose();
   };
 
   const handleOnApply = () => {
@@ -45,11 +41,15 @@ export const Overlay = ({
       const currentValue = isYear ? currentYear : new Date().getMonth() + 1;
       const newValue = optionValue || currentValue;
       onChange({
-        label: `${option.label}: ${isYear 
-          ? newValue 
-          : new Date(0, newValue, 0).toLocaleString("default", { month: "short" })}`,
+        label: `${option.label}: ${
+          isYear
+            ? newValue
+            : new Date(0, newValue, 0).toLocaleString("default", {
+                month: "short",
+              })
+        }`,
         to: isYear
-          ? new Date((newValue), 11, 31)
+          ? new Date(newValue, 11, 31)
           : new Date(currentYear, newValue, 0),
         from: isYear
           ? new Date(newValue, 0, 1)
@@ -71,9 +71,11 @@ export const Overlay = ({
       <div className="tnic-header">
         <div className="tnic-title">Select time range</div>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <Button compact basic onClick={handleReset}>
-            Reset
-          </Button>
+          {defaultTimeRange && (
+            <Button compact basic onClick={handleReset}>
+              Reset
+            </Button>
+          )}
           <Button compact basic icon onClick={() => onClose()}>
             <IconClose />
           </Button>
@@ -90,9 +92,8 @@ export const Overlay = ({
         {!stats.isHistorical && (
           <div className="tnic-overlay--container">
             <TimeOptions
-              key={refreshKey}
               align={align}
-              timeOptions={validTimeOptions}
+              timeOptions={timeOptions}
               onSelect={(option, value) => {
                 setOptionValue(value);
                 setOption(option);

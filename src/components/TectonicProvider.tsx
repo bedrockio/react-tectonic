@@ -16,6 +16,8 @@ interface IContextProps {
   debug?: boolean;
   timeRange?: ITimeRange;
   setTimeRange: (timeRange: ITimeRange) => void;
+  defaultTimeRange?: ITimeRange;
+  setDefaultTimeRange: (timeRange: ITimeRange) => void;
   stats: IStats | undefined;
   baseUrl?: string;
   dateField: string;
@@ -45,6 +47,7 @@ interface ITectonicProviderProps {
   baseUrl?: string;
   timeZone?: string;
   timeRange?: ITimeRange;
+  defaultTimeRange?: ITimeRange;
   dateField?: string;
   collection?: string;
   primaryColor?: string;
@@ -65,6 +68,9 @@ const TectonicProvider = ({
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
   const [timeZone, setTimeZone] = React.useState(props.timeZone);
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
+  const [defaultTimeRange, setDefaultTimeRange] = React.useState(
+    props.defaultTimeRange || props.timeRange
+  );
   const [dateField, setDateField] = React.useState(props.dateField);
   const [collection, setCollection] = React.useState(props.collection);
   const [stats, setStats] = React.useState<IStats>();
@@ -139,7 +145,9 @@ const TectonicProvider = ({
 
       setStats(stats);
       if (!timeRange && data[dateField].min) {
-        setTimeRange(getTimeRangeFromCollectionStats(stats));
+        const timeRange = getTimeRangeFromCollectionStats(stats);
+        setTimeRange(timeRange);
+        setDefaultTimeRange(timeRange);
       }
       setIsReady(true);
     } catch (e) {
@@ -197,6 +205,8 @@ const TectonicProvider = ({
       setToken,
       setBaseUrl,
       timeRange,
+      defaultTimeRange,
+      setDefaultTimeRange,
       setTimeRange,
       dateField,
       setDateField,
@@ -242,7 +252,7 @@ TectonicProvider.propTypes = {
   collection: PropTypes.string,
   dateField: PropTypes.string,
   baseUrl: PropTypes.string,
-  defaultTimeRange: PropTypes.func,
+  defaultTimeRange: TimeRangeType,
   timeRange: TimeRangeType,
   getTimeRangeFromCollectionStats: PropTypes.func,
   timeZone: PropTypes.string,
