@@ -15,7 +15,7 @@
     "allowSyntheticDefaultImports": true,
     "outDir": "lib",
     "declarationDir": "types",
-    "lib": ["es2017", "dom"],
+    "lib": ["ES2020", "dom"],
     "allowJs": false,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,

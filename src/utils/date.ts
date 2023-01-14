@@ -25,3 +25,30 @@ export function toDate(stringOrDate) {
 export function toCsvDateFormat(date) {
   return format(date, "dd/MM/yyyy HH:mm:ss");
 }
+
+const US_FIRST_DAY_WEEK = 7;
+
+const orderByFirstDayOfWeek = (firstDayOfWeek, days) => [
+  ...days.slice(firstDayOfWeek - 1),
+  ...days.slice(0, firstDayOfWeek - 1),
+];
+
+export function getWeekdays(localeName: string, short = false): string[] {
+  const format = new Intl.DateTimeFormat(localeName, {
+    weekday: "long",
+  }).format;
+  const weekdays = [...Array(7).keys()].map((day) =>
+    format(new Date(Date.UTC(2021, 5, day)))
+  );
+
+  if (!window?.Intl?.Locale) {
+    return orderByFirstDayOfWeek(US_FIRST_DAY_WEEK, localeName);
+  }
+
+  const loc = new Intl.Locale(localeName) as any;
+  if (!loc.weekInfo) {
+    return orderByFirstDayOfWeek(US_FIRST_DAY_WEEK, localeName);
+  }
+
+  return orderByFirstDayOfWeek(loc.weekInfo.firstDay, weekdays);
+}

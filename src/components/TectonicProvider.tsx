@@ -15,6 +15,7 @@ interface IContextProps {
   isReady: boolean;
   debug?: boolean;
   timeRange?: ITimeRange;
+  localeName: string;
   setTimeRange: (timeRange: ITimeRange) => void;
   defaultTimeRange?: ITimeRange;
   setDefaultTimeRange: (timeRange: ITimeRange) => void;
@@ -45,6 +46,7 @@ interface ITectonicProviderProps {
   debug?: boolean;
   token?: string;
   baseUrl?: string;
+  localeName?: string;
   timeZone?: string;
   timeRange?: ITimeRange;
   defaultTimeRange?: ITimeRange;
@@ -76,6 +78,9 @@ const TectonicProvider = ({
   const [stats, setStats] = React.useState<IStats>();
   const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
   const [isReady, setIsReady] = React.useState(false);
+  const [localeName, setLocaleName] = React.useState(
+    props.localeName || "en-US"
+  );
 
   React.useEffect(() => {
     setToken(props.token);
@@ -204,6 +209,8 @@ const TectonicProvider = ({
       token,
       setToken,
       setBaseUrl,
+      localeName,
+      setLocaleName,
       timeRange,
       defaultTimeRange,
       setDefaultTimeRange,

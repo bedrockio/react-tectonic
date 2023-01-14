@@ -4,6 +4,7 @@ import { startCase } from "lodash";
 import { defaultColors, defaultActions } from "../utils/visualization";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
+import { getWeekdays } from "../utils/date";
 import { exportToCsv } from "../utils/exporters";
 import { sortBy } from "lodash";
 
@@ -15,6 +16,7 @@ import {
   ZAxis,
   Tooltip,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
 
 import { IStatus } from "../types";
@@ -33,11 +35,11 @@ type PunchChartProps = {
   height?: number;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
+  localeName?: string;
   data?: any[];
   color?: string;
   enabledControls: ["actions"];
   chartContainer?: React.ElementType;
-  labels?: string[];
   exportFilename?: string;
 };
 
@@ -53,23 +55,15 @@ export const PunchChart = ({
   },
   enabledControls = ["actions"],
   color,
+  localeName = "en-US",
   chartContainer: ChartContainer = DefaultChartContainer,
   title,
   titleAlign,
   height = 500,
-  labels = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ],
 }: PunchChartProps): JSX.Element => {
   const ctx = useTectonicContext();
 
-  const range = [20, 150];
+  const range = [18, 220];
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
   const dataHours = data.reduce((acc, item) => {
@@ -78,16 +72,26 @@ export const PunchChart = ({
   }, []);
 
   const domain = getMinMaxRange(dataHours, "count");
-  const noData = !domain[0];
+  const noData = !dataHours.length || !domain[1];
+
+  const weekdays = getWeekdays(localeName || ctx.localeName);
+  const usWeekdays = getWeekdays("en-US");
 
   const _valueFormatter = valueFormatter || getValueFormatter(domain);
 
   const parsedData = sortBy(
     data.map((item) => {
-      return {
-        ...item,
-        hours: sortBy(item.hours, "hour"),
-      };
+      const parsedItem = { ...item, hours: sortBy(item.hours, "hour") };
+      if (typeof item.dayOfWeek === "number") {
+        parsedItem.label = usWeekdays[item.dayOfWeek];
+      } else {
+        const index = weekdays.findIndex(
+          (weekday) => weekday.toLowerCase() === item.dayOfWeek.toLowerCase()
+        );
+        parsedItem.label = weekdays[index];
+        parsedItem.dayOfWeek = index;
+      }
+      return parsedItem;
     }),
     "dayOfWeek"
   );
@@ -95,7 +99,6 @@ export const PunchChart = ({
   function renderTooltip({ active, payload }) {
     if (active && payload && payload.length) {
       const data = payload[0] && payload[0].payload;
-
       return (
         <div
           style={{
@@ -121,7 +124,7 @@ export const PunchChart = ({
       exportToCsv(
         ["Day", ...new Array(24).fill(0).map((_, i) => `Hour ${i}`)],
         parsedData.map((row) => [
-          labels[row.dayOfWeek],
+          row.label,
           ...row.hours.map((item) => item.count),
         ]),
         exportFilename
@@ -169,14 +172,14 @@ export const PunchChart = ({
               <YAxis
                 type="number"
                 dataKey="index"
-                height={10}
                 width={95}
                 tick={false}
                 tickLine={false}
                 axisLine={false}
                 label={{
-                  value: labels[dayData.dayOfWeek],
+                  value: dayData.label,
                   position: "insideRight",
+                  offset: 4,
                 }}
               />
               <ZAxis
@@ -186,23 +189,26 @@ export const PunchChart = ({
                 range={range}
               />
               <Tooltip
-                cursor={{ strokeDasharray: "3 3" }}
+                cursor={{ strokeDasharray: "0 1" }}
                 wrapperStyle={{ zIndex: 100 }}
                 content={(props: any) => renderTooltip(props)}
               />
               <Scatter
-                data={dayData.hours
-                  .map((item) => {
-                    return {
-                      ...item,
-                      index: 1,
-                    };
-                  })
-                  .sort((a, b) => {
-                    return a.hour - b.hour;
-                  })}
+                data={dayData.hours.map((item) => {
+                  return {
+                    ...item,
+                    index: 1,
+                  };
+                })}
                 fill={_color}
-              />
+              >
+                {dayData.hours.map((hour, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={hour.count ? _color : "#cacaca"}
+                  />
+                ))}
+              </Scatter>
             </ScatterChart>
           </ResponsiveContainer>
         );
