@@ -1,7 +1,7 @@
 {
   "data": [
     {
-      "dayOfWeek": 2,
+      "dayOfWeek": "Sunday",
       "count": 25182,
       "hours": [
         { "hour": 6, "count": 4065 },
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "dayOfWeek": 3,
+      "dayOfWeek": "Monday",
       "count": 25071,
       "hours": [
         { "hour": 6, "count": 3820 },
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "dayOfWeek": 4,
+      "dayOfWeek": "Tuesday",
       "count": 24925,
       "hours": [
         { "hour": 6, "count": 3815 },
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "dayOfWeek": 5,
+      "dayOfWeek": "Wednesday",
       "count": 23914,
       "hours": [
         { "hour": 6, "count": 3349 },
@@ -121,7 +121,7 @@
       ]
     },
     {
-      "dayOfWeek": 1,
+      "dayOfWeek": "Thursday",
       "count": 23864,
       "hours": [
         { "hour": 6, "count": 4100 },
@@ -151,7 +151,7 @@
       ]
     },
     {
-      "dayOfWeek": 6,
+      "dayOfWeek": "Friday",
       "count": 13457,
       "hours": [
         { "hour": 10, "count": 1040 },
@@ -181,7 +181,7 @@
       ]
     },
     {
-      "dayOfWeek": 0,
+      "dayOfWeek": "Saturday",
       "count": 0,
       "hours": [
         { "hour": 15, "count": 0 },

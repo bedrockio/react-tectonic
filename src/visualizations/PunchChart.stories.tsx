@@ -5,6 +5,11 @@ import { TectonicProvider } from "../components/TectonicProvider";
 
 import { data } from "../../data/punchchart.json";
 
+const dataWithNumbers = data.map((item, index) => ({
+  ...item,
+  dayOfWeek: index,
+}));
+
 export default {
   title: "Visualizations/PunchChart",
   component: PunchChart,
@@ -39,6 +44,12 @@ const Template = (args) => <PunchChart {...args} />;
 export const WithData = Template.bind({});
 WithData.args = {
   data,
+  status: "success",
+};
+
+export const WithDataDayOfWeekNumbers = Template.bind({});
+WithDataDayOfWeekNumbers.args = {
+  data: dataWithNumbers,
   status: "success",
 };
 
