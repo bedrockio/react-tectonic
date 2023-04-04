@@ -38,7 +38,7 @@ describe("datemath", () => {
     });
 
     it("should convert weeks to milliseconds", () => {
-      const dateTime = new Date();
+      const dateTime = new Date("2020-01-06");
       expect(parse("now-3w", { forceNow: dateTime }).valueOf()).toBe(
         dateTime.valueOf() - 21 * 24 * 60 * 60 * 1000
       );

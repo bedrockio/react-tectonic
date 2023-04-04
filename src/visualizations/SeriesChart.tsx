@@ -6,11 +6,11 @@ import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import {
   formatterForDataCadence,
   defaultActions,
-  defaultChartTypes,
+  defaultColors,
 } from "../utils/visualization";
 
 import { exportToCsv, downloadImage } from "../utils/exporters";
-import { toCsvDateFormat } from "../utils/date";
+import { toCsvDateFormat, toDate } from "../utils/date";
 import { TimeRangeType } from "../utils/propTypes";
 import { AnnotationLine } from "./types";
 
@@ -26,7 +26,12 @@ import {
   intervalToLabel,
   IntervalType,
 } from "../utils/intervals";
-import { toDate } from "../utils/date";
+
+import {
+  IconAreaChart,
+  IconBarChart,
+  IconLineChart,
+} from "../components/Icons";
 
 import {
   AreaChart,
@@ -44,7 +49,23 @@ import {
 
 import { IStatus, ITimeRange } from "../types";
 
-import { defaultColors } from "../utils/visualization";
+const defaultChartTypes = [
+  {
+    label: "Line",
+    value: "line",
+    icon: IconLineChart,
+  },
+  {
+    label: "Bar",
+    value: "bar",
+    icon: IconBarChart,
+  },
+  {
+    label: "Area",
+    value: "area",
+    icon: IconAreaChart,
+  },
+];
 
 type EnabledControlType = "intervals" | "chartTypes" | "actions";
 
@@ -69,6 +90,7 @@ type SeriesChartProps = {
   titleAlign?: TitleAlignType;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
+  tickFormatter?: (value: Date) => string;
   valueField?: string;
   labelField?: string;
   valueFieldLabel?: string;
@@ -100,6 +122,7 @@ export const SeriesChart = ({
   chartType: propsChartType,
   disableDot,
   onIntervalChange,
+  tickFormatter,
   interval,
   timeRange,
   color,
@@ -136,7 +159,7 @@ export const SeriesChart = ({
     Chart = LineChart;
   }
 
-  const tickFormatter = formatterForDataCadence(data);
+  const defaultTickFormatter = formatterForDataCadence(data);
 
   // should have atleast 2 date point to render meaningful line
   const noData = !data || data.length < 2;
@@ -236,7 +259,7 @@ export const SeriesChart = ({
           <XAxis
             dataKey="timestamp"
             name="Time"
-            tickFormatter={tickFormatter}
+            tickFormatter={tickFormatter || defaultTickFormatter}
             tick={{ fill: axisColor, fontSize: "13" }}
             tickLine={{ stroke: axisColor }}
             axisLine={{ stroke: axisColor }}

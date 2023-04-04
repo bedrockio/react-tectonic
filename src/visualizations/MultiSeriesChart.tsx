@@ -7,8 +7,8 @@ import { AnnotationLine } from "./types";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import {
   formatterForDataCadence,
-  defaultChartTypes,
   defaultActions,
+  defaultColors,
 } from "../utils/visualization";
 
 import {
@@ -16,6 +16,7 @@ import {
   ChartContainer as DefaultChartContainer,
   TitleAlignType,
 } from "../components";
+
 import { useTectonicContext } from "../components/TectonicProvider";
 
 import {
@@ -26,6 +27,12 @@ import {
 
 import { toDate, toCsvDateFormat } from "../utils/date";
 import { IStatus, ITimeRange } from "../types";
+
+import {
+  IconAreaChart,
+  IconBarChart,
+  IconLineChart,
+} from "../components/Icons";
 
 import {
   AreaChart,
@@ -41,8 +48,6 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-
-import { defaultColors } from "../utils/visualization";
 
 const fuse = (series, valueField) => {
   const byTs = {};
@@ -74,6 +79,24 @@ const fuse = (series, valueField) => {
     };
   });
 };
+
+const defaultChartTypes = [
+  {
+    label: "Line",
+    value: "line",
+    icon: IconLineChart,
+  },
+  {
+    label: "Bar",
+    value: "bar",
+    icon: IconBarChart,
+  },
+  {
+    label: "Area",
+    value: "area",
+    icon: IconAreaChart,
+  },
+];
 
 const defaultProps = {
   exportFilename: "export.csv",
@@ -110,6 +133,7 @@ type MultiSeriesChartProps = {
   valueField?: string;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
+  tickFormatter?: (value: Date) => string;
   disableDot?: boolean;
   enabledControls?: EnabledControlType[];
   exportFilename?: string;
@@ -136,6 +160,7 @@ export const MultiSeriesChart = ({
   titleAlign,
   chartContainer: ChartContainer,
   labels,
+  tickFormatter,
   exportFilename,
   interval,
   annotations = [],
@@ -171,7 +196,7 @@ export const MultiSeriesChart = ({
       ? [ctx?.primaryColor, ...defaultColors].filter(Boolean)
       : colors;
 
-  const tickFormatter = formatterForDataCadence(
+  const defaultTickFormatter = formatterForDataCadence(
     data[0] || { timestamp: new Date() }
   );
 
@@ -276,7 +301,7 @@ export const MultiSeriesChart = ({
           <XAxis
             dataKey="timestamp"
             name="Time"
-            tickFormatter={tickFormatter}
+            tickFormatter={tickFormatter || defaultTickFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ stroke: "#6C767B" }}
             axisLine={{ stroke: "#6C767B" }}
