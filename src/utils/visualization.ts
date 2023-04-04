@@ -1,8 +1,8 @@
 const ONE_HOUR = 1000 * 60 * 60;
 
-// this should be provided from higher level
+//XXX this should be provided from higher level
 function getLanguage() {
-  return Intl.DateTimeFormat().resolvedOptions().locale;
+  return Intl.DateTimeFormat().resolvedOptions().locale || "en-US";
 }
 
 export const formatterForDataCadence = (
