@@ -60,7 +60,7 @@ const fuse = (series, valueField) => {
         if (!byTs[item.timestamp]) {
           byTs[item.timestamp] = {};
         }
-        byTs[item.timestamp][`${index}-value`] = item[valueField] || 0;
+        byTs[item.timestamp][`${index}-value`] = item[valueField];
       });
     });
   }
@@ -68,11 +68,6 @@ const fuse = (series, valueField) => {
   return timestamps.map((key) => {
     const timestamp = parseInt(key, 10);
     const values = byTs[timestamp];
-    (series || []).forEach((serie, index) => {
-      if (!values[`${index}-value`]) {
-        values[`${index}-value`] = 0;
-      }
-    });
     return {
       timestamp: timestamp,
       ...values,
@@ -134,6 +129,7 @@ type MultiSeriesChartProps = {
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   tickFormatter?: (value: Date) => string;
+  locals?: string;
   disableDot?: boolean;
   enabledControls?: EnabledControlType[];
   exportFilename?: string;
@@ -301,11 +297,12 @@ export const MultiSeriesChart = ({
           <XAxis
             dataKey="timestamp"
             name="Time"
+            minTickGap={30}
             tickFormatter={tickFormatter || defaultTickFormatter}
             tick={{ fill: "#6C767B", fontSize: "13" }}
             tickLine={{ stroke: "#6C767B" }}
             axisLine={{ stroke: "#6C767B" }}
-            tickMargin={8}
+            tickMargin={10}
             padding={{ left: 20, right: 9 }}
             height={38}
           />
