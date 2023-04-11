@@ -102,7 +102,6 @@ const defaultProps = {
   valueField: "value",
   confidenceField: "confidence",
   confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>
-  confidenceColor: "#f57f7f",
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
   stacked: true,
@@ -301,10 +300,10 @@ export const MultiSeriesChart = ({
                     type="monotoneX"
                     dataKey={`${index}-confidence`}
                     name={`${name} ${confidenceLabel}`}
-                    stroke={confidenceColor}
-                    fill={confidenceColor}
-                    fillOpacity={0.3}
-                    strokeOpacity={0.2}
+                    stroke={confidenceColor || color}
+                    fill={confidenceColor || color}
+                    fillOpacity={0.15}
+                    strokeOpacity={0.15}
                   />
                 )}
               </Fragment>
