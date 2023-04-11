@@ -34,9 +34,6 @@ import {
 } from "../components/Icons";
 
 import {
-  AreaChart,
-  LineChart,
-  BarChart,
   Area,
   Line,
   Bar,
@@ -151,7 +148,6 @@ export const SeriesChart = ({
 
   const svgChartRef = React.useRef(null);
 
-  let Chart;
   let ChartGraph;
 
   React.useEffect(() => {
@@ -159,14 +155,11 @@ export const SeriesChart = ({
   }, [propsChartType]);
 
   if (chartType == "area") {
-    Chart = AreaChart;
     ChartGraph = Area;
   } else if (chartType === "bar") {
-    Chart = BarChart;
     ChartGraph = Bar;
   } else {
     ChartGraph = Line;
-    Chart = LineChart;
   }
 
   const defaultTickFormatter = formatterForDataCadence(data);
