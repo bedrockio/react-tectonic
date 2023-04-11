@@ -101,7 +101,7 @@ const defaultProps = {
   chartContainer: DefaultChartContainer,
   valueField: "value",
   confidenceField: "confidence",
-  confidenceLabel: "Confidence",
+  confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>
   confidenceColor: "#f57f7f",
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
