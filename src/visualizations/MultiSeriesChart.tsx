@@ -44,6 +44,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   ComposedChart,
+  ErrorBar,
 } from "recharts";
 
 const fuse = (series, { valueField, confidenceField }) => {
@@ -293,6 +294,7 @@ export const MultiSeriesChart = ({
                       }
                     : {})}
                 />
+                {/* should use cancel sticks or errorbar for bar chart, but failing to make it work */}
                 {chartType !== "bar" && (
                   <Area
                     key={`${index}-confidence`}

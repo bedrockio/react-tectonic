@@ -245,7 +245,7 @@ export const SeriesChart = ({
             labelFormatter={labelFormatter}
           />
 
-          {/* its not clear to me how to express the confidence interval in bar chart */}
+          {/* should use cancel sticks or errorbar for bar chart, but failing to make it work */}
           {hasConfidence && chartType !== "bar" && (
             <Area
               type="monotoneX"
