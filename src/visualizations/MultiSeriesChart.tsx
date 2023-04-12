@@ -44,7 +44,6 @@ import {
   ResponsiveContainer,
   ReferenceLine,
   ComposedChart,
-  ErrorBar,
 } from "recharts";
 
 const fuse = (series, { valueField, confidenceField }) => {
