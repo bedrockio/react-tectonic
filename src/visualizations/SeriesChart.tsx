@@ -34,9 +34,6 @@ import {
 } from "../components/Icons";
 
 import {
-  AreaChart,
-  LineChart,
-  BarChart,
   Area,
   Line,
   Bar,
@@ -45,6 +42,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
+  ComposedChart,
 } from "recharts";
 
 import { IStatus, ITimeRange } from "../types";
@@ -73,6 +71,9 @@ const defaultProps = {
   exportFilename: "export.csv",
   valueField: "value",
   valueFieldLabel: "Value",
+  confidenceField: "confidence",
+  confidenceLabel: "Confidence",
+  confidenceColor: "#f57f7f",
   height: 400,
   data: [],
   status: { success: true },
@@ -89,8 +90,10 @@ type SeriesChartProps = {
   title?: ReactNode;
   titleAlign?: TitleAlignType;
   labelFormatter?: (label: string) => string;
-  valueFormatter?: (value: number) => string;
+  valueFormatter?: (value: number | number[]) => string;
   tickFormatter?: (value: Date) => string;
+  confidenceField?: string;
+  confidenceLabel?: string;
   valueField?: string;
   labelField?: string;
   valueFieldLabel?: string;
@@ -102,6 +105,7 @@ type SeriesChartProps = {
   data?: any[];
   axisColor?: string;
   color?: string;
+  confidenceColor?: string;
   legend?: boolean;
   disableDot?: boolean;
   chartContainer?: React.ElementType;
@@ -116,6 +120,8 @@ export const SeriesChart = ({
   valueFieldLabel,
   valueFormatter,
   labelFormatter,
+  confidenceLabel,
+  confidenceField,
   chartContainer: ChartContainer,
   title,
   titleAlign,
@@ -129,6 +135,7 @@ export const SeriesChart = ({
   enabledControls,
   exportFilename,
   axisColor,
+  confidenceColor,
   height,
   annotations = [],
 }: SeriesChartProps & typeof defaultProps): JSX.Element => {
@@ -141,7 +148,6 @@ export const SeriesChart = ({
 
   const svgChartRef = React.useRef(null);
 
-  let Chart;
   let ChartGraph;
 
   React.useEffect(() => {
@@ -149,14 +155,11 @@ export const SeriesChart = ({
   }, [propsChartType]);
 
   if (chartType == "area") {
-    Chart = AreaChart;
     ChartGraph = Area;
   } else if (chartType === "bar") {
-    Chart = BarChart;
     ChartGraph = Bar;
   } else {
     ChartGraph = Line;
-    Chart = LineChart;
   }
 
   const defaultTickFormatter = formatterForDataCadence(data);
@@ -197,6 +200,8 @@ export const SeriesChart = ({
   const _valueFormatter =
     valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
 
+  const hasConfidence = data.some((row) => row[confidenceField]);
+
   return (
     <ChartContainer
       title={title}
@@ -225,7 +230,7 @@ export const SeriesChart = ({
       <ResponsiveContainer
         key={`${chartType}-${status.success}-${data.length}`}
       >
-        <Chart
+        <ComposedChart
           ref={svgChartRef}
           data={data}
           margin={{
@@ -239,6 +244,19 @@ export const SeriesChart = ({
             formatter={_valueFormatter}
             labelFormatter={labelFormatter}
           />
+
+          {/* should use cancel sticks or errorbar for bar chart, but failing to make it work */}
+          {hasConfidence && chartType !== "bar" && (
+            <Area
+              type="monotoneX"
+              dataKey={confidenceField}
+              name={confidenceLabel}
+              stroke={confidenceColor}
+              fill={confidenceColor}
+              fillOpacity={0.3}
+              strokeOpacity={0.2}
+            />
+          )}
 
           <ChartGraph
             type="monotoneX"
@@ -274,6 +292,7 @@ export const SeriesChart = ({
             padding={{ bottom: 10, top: 10 }}
             mirror
           />
+
           {annotations.map((annotation) => {
             return (
               <ReferenceLine
@@ -283,7 +302,7 @@ export const SeriesChart = ({
               />
             );
           })}
-        </Chart>
+        </ComposedChart>
       </ResponsiveContainer>
     </ChartContainer>
   );
@@ -295,6 +314,9 @@ SeriesChart.propTypes = {
   title: PropTypes.node,
   valueFormatter: PropTypes.func,
   labelFormatter: PropTypes.func,
+  confidenceLabel: PropTypes.string,
+  confidenceColor: PropTypes.string,
+  confidenceField: PropTypes.string,
   valueField: PropTypes.string,
   valueFieldLabel: PropTypes.string,
   chartType: PropTypes.oneOf(["line", "bar", "area"]),

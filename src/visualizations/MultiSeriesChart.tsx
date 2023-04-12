@@ -1,6 +1,5 @@
-import React, { ReactNode } from "react";
+import React, { Fragment, ReactNode } from "react";
 import PropTypes from "prop-types";
-import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
 import { exportToCsv } from "../utils/exporters";
 import { AnnotationLine } from "./types";
@@ -35,9 +34,6 @@ import {
 } from "../components/Icons";
 
 import {
-  AreaChart,
-  LineChart,
-  BarChart,
   Area,
   Line,
   Bar,
@@ -47,9 +43,11 @@ import {
   Legend,
   ResponsiveContainer,
   ReferenceLine,
+  ComposedChart,
+  ErrorBar,
 } from "recharts";
 
-const fuse = (series, valueField) => {
+const fuse = (series, { valueField, confidenceField }) => {
   const byTs = {};
   if (series && series.length) {
     series[0].forEach((item) => {
@@ -61,6 +59,7 @@ const fuse = (series, valueField) => {
           byTs[item.timestamp] = {};
         }
         byTs[item.timestamp][`${index}-value`] = item[valueField];
+        byTs[item.timestamp][`${index}-confidence`] = item[confidenceField];
       });
     });
   }
@@ -101,7 +100,8 @@ const defaultProps = {
   chartType: "line",
   chartContainer: DefaultChartContainer,
   valueField: "value",
-  valueFormatter: (value) => numberWithCommas(value),
+  confidenceField: "confidence",
+  confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>
   labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
   stacked: true,
@@ -126,6 +126,9 @@ type MultiSeriesChartProps = {
   colors?: string[];
   chartContainer?: React.ElementType;
   valueField?: string;
+  confidenceField?: string;
+  confidenceLabel?: string;
+  confidenceColor?: string;
   labelFormatter?: (label: string) => string;
   valueFormatter?: (value: number) => string;
   tickFormatter?: (value: Date) => string;
@@ -143,6 +146,9 @@ export const MultiSeriesChart = ({
   chartType: propsChartType,
   onIntervalChange,
   valueField,
+  confidenceField,
+  confidenceLabel,
+  confidenceColor,
   labelFormatter,
   valueFormatter,
   legend,
@@ -167,7 +173,6 @@ export const MultiSeriesChart = ({
     propsChartType || "line"
   );
 
-  let Chart;
   let ChartGraph;
 
   React.useEffect(() => {
@@ -175,17 +180,14 @@ export const MultiSeriesChart = ({
   }, [propsChartType]);
 
   if (chartType == "area") {
-    Chart = AreaChart;
     ChartGraph = Area;
   } else if (chartType === "bar") {
-    Chart = BarChart;
     ChartGraph = Bar;
   } else {
-    Chart = LineChart;
     ChartGraph = Line;
   }
 
-  const fusedData = fuse(data, valueField);
+  const fusedData = fuse(data, { valueField, confidenceField });
 
   const _colors =
     colors === defaultColors
@@ -258,7 +260,7 @@ export const MultiSeriesChart = ({
         debounce={10}
         key={`${chartType}-${status.success}-${legend}`}
       >
-        <Chart
+        <ComposedChart
           data={fusedData}
           margin={{
             top: 6,
@@ -269,28 +271,43 @@ export const MultiSeriesChart = ({
         >
           {data.map((_, index) => {
             const color = _colors[index % _colors.length];
+            const name = labels[index] ? labels[index] : `Metric ${index + 1}`;
             return (
-              <ChartGraph
-                type="monotone"
-                key={`${index}-value`}
-                dataKey={`${index}-value`}
-                name={labels[index] ? labels[index] : `Metric ${index + 1}`}
-                stroke={color}
-                fill={["area", "bar"].includes(chartType) ? color : undefined}
-                fillOpacity={0.3}
-                opacity={1}
-                stackId={
-                  stacked && ["area", "bar"].includes(chartType)
-                    ? "1"
-                    : undefined
-                }
-                dot={false}
-                {...(["line", "area"].includes(chartType)
-                  ? {
-                      activeDot: disableDot ? { r: 0 } : { r: 6 },
-                    }
-                  : {})}
-              />
+              <Fragment key={index}>
+                <ChartGraph
+                  type="monotone"
+                  dataKey={`${index}-value`}
+                  name={name}
+                  stroke={color}
+                  fill={["area", "bar"].includes(chartType) ? color : undefined}
+                  fillOpacity={0.3}
+                  opacity={1}
+                  stackId={
+                    stacked && ["area", "bar"].includes(chartType)
+                      ? "1"
+                      : undefined
+                  }
+                  dot={false}
+                  {...(["line", "area"].includes(chartType)
+                    ? {
+                        activeDot: disableDot ? { r: 0 } : { r: 6 },
+                      }
+                    : {})}
+                />
+                {/* should use cancel sticks or errorbar for bar chart, but failing to make it work */}
+                {chartType !== "bar" && (
+                  <Area
+                    key={`${index}-confidence`}
+                    type="monotoneX"
+                    dataKey={`${index}-confidence`}
+                    name={`${name} ${confidenceLabel}`}
+                    stroke={confidenceColor || color}
+                    fill={confidenceColor || color}
+                    fillOpacity={0.15}
+                    strokeOpacity={0.15}
+                  />
+                )}
+              </Fragment>
             );
           })}
 
@@ -325,16 +342,17 @@ export const MultiSeriesChart = ({
               labelFormatter={labelFormatter}
             />
           )}
-          {annotations.map((annotation) => {
+          {annotations.map((annotation, index) => {
             return (
               <ReferenceLine
+                key={index}
                 x={annotation.timestamp.valueOf()}
                 stroke={annotation.color}
                 label={annotation.label}
               />
             );
           })}
-        </Chart>
+        </ComposedChart>
       </ResponsiveContainer>
     </ChartContainer>
   );
@@ -352,6 +370,9 @@ MultiSeriesChart.propTypes = {
   chartType: PropTypes.oneOf(["line", "bar", "area"]),
   colors: PropTypes.arrayOf(PropTypes.string),
   chartContainer: PropTypes.elementType,
+  confidenceLabel: PropTypes.string,
+  confidenceColor: PropTypes.string,
+  confidenceField: PropTypes.string,
   valueField: PropTypes.string,
   valueFormatter: PropTypes.func,
   labelFormatter: PropTypes.func,

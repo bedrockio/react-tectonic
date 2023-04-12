@@ -49,6 +49,18 @@ const data = [
   },
 ];
 
+const data2 = [...data].map((item, index) => {
+  if (index > 3 && index < 5) {
+    return {
+      ...item,
+    };
+  }
+  return {
+    ...item,
+    confidence: [item.value * 0.9, item.value * 1.1],
+  };
+});
+
 export default {
   title: "Visualizations/SeriesChart",
   component: SeriesChart,
@@ -98,6 +110,12 @@ WithData.args = {
       color: "blue",
     },
   ],
+};
+
+export const WithDataConfidence = Template.bind({});
+WithDataConfidence.args = {
+  data: data2,
+  status: "success",
 };
 
 export const WithoutData = Template.bind({});
