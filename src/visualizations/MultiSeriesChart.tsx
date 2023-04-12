@@ -1,6 +1,5 @@
 import React, { Fragment, ReactNode } from "react";
 import PropTypes from "prop-types";
-import { numberWithCommas } from "../utils/formatting";
 import { TimeRangeType } from "../utils/propTypes";
 import { exportToCsv } from "../utils/exporters";
 import { AnnotationLine } from "./types";
