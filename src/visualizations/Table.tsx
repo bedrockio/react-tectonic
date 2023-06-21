@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import { getScrollbarWidth } from "../utils/dom";
 import { defaultActions } from "../utils/visualization";
-import { startCase, get } from "lodash";
+import { startCase, get } from "lodash-es";
 import {
   Message,
   ChartContainer as DefaultChartContainer,

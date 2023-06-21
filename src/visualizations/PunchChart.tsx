@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { numberWithCommas } from "../utils/formatting";
-import { startCase } from "lodash";
+import { startCase } from "lodash-es";
 import { defaultColors, defaultActions } from "../utils/visualization";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import { getWeekdays } from "../utils/date";
 import { exportToCsv } from "../utils/exporters";
-import { sortBy } from "lodash";
+import { sortBy } from "lodash-es";
 
 import {
   ScatterChart,

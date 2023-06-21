@@ -12,7 +12,7 @@ import {
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
 import { exportToCsv, downloadImage } from "../utils/exporters";
 
-import { startCase, get } from "lodash";
+import { startCase, get } from "lodash-es";
 import { numberWithCommas } from "../utils/formatting";
 import { defaultColors, defaultActions } from "../utils/visualization";
 import { IStatus } from "../types";

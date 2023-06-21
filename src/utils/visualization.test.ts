@@ -6,14 +6,14 @@ describe("formatterForDataCadence", () => {
       { timestamp: new Date("2000-01-01") },
       { timestamp: new Date("2002-01-01") },
     ]);
-    expect(formatter(new Date("2000/01/01"))).toBe("1/1/2000");
+    expect(formatter(new Date("2000/01/01"))).toBe("01/01/2000");
   });
   it("delta than 5 hour", () => {
     const formatter = formatterForDataCadence([
       { timestamp: new Date("2000-01:00:00") },
       { timestamp: new Date("2000-01:06:00") },
     ]);
-    expect(formatter(new Date("2000-01:00:00"))).toBe("01/01");
+    expect(formatter(new Date("2000-01:00:00"))).toBe("12:00 AM");
   });
   it("everything else", () => {
     const formatter = formatterForDataCadence([

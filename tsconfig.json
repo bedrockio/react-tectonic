@@ -24,8 +24,7 @@
     "strict": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "suppressImplicitAnyIndexErrors": true
+    "noUnusedLocals": true
   },
   "include": ["./src/index.ts"]
 }
