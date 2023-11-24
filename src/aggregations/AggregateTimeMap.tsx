@@ -12,6 +12,7 @@ interface AggregateTimeMapProps {
   children?: ReactNode;
   dateField?: string;
   collection?: string;
+  timeZone?: string;
   filter?: IAggregateFilterType;
 }
 
@@ -20,7 +21,7 @@ export const AggregateTimeMap = ({
   token,
   timeRange,
   children,
-
+  timeZone,
   ...params
 }: AggregateTimeMapProps) => {
   let ctx = useTectonicContext();
@@ -45,9 +46,11 @@ export const AggregateTimeMap = ({
         body: getAnalyticsRequestBody({
           params: {
             ...params,
+            timeZone: ctx.timeZone || timeZone,
             dateField: params.dateField || ctx.dateField,
           },
           timeRange,
+
           ctx,
         }),
         onRequest: ctx.onRequest,

@@ -38,7 +38,7 @@ type PunchChartProps = {
   localeName?: string;
   data?: any[];
   color?: string;
-  enabledControls: ["actions"];
+  enabledControls?: ["actions"];
   chartContainer?: React.ElementType;
   exportFilename?: string;
 };

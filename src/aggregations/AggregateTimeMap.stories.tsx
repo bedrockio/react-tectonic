@@ -4,9 +4,9 @@ import { TectonicProvider } from "../components/TectonicProvider";
 import { AggregateTimeMap } from "./AggregateTimeMap";
 import { PunchChart } from "../visualizations/PunchChart";
 
-const baseUrl = window.sessionStorage.getItem("baseUrl");
-const collection = window.sessionStorage.getItem("collection");
-const token = window.sessionStorage.getItem("token");
+const baseUrl = window.sessionStorage.getItem("baseUrl") || undefined;
+const collection = window.sessionStorage.getItem("collection") || undefined;
+const token = window.sessionStorage.getItem("token") || undefined;
 
 export default {
   title: "Aggregations/AggregateTimeMap",
@@ -25,7 +25,6 @@ const defaultArgsWithToken = {
 
 const TemplateWithProvider = (args) => (
   <TectonicProvider
-    timeRangeMode="all"
     baseUrl={baseUrl}
     collection={collection}
     token={token}
