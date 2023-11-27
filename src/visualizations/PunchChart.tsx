@@ -74,22 +74,18 @@ export const PunchChart = ({
   const domain = getMinMaxRange(dataHours, "count");
   const noData = !dataHours.length || !domain[1];
 
-  const weekdays = getWeekdays(localeName || ctx.localeName);
   const usWeekdays = getWeekdays("en-US");
 
   const _valueFormatter = valueFormatter || getValueFormatter(domain);
 
   const parsedData = sortBy(
-    data.map((item) => {
+    data.map((item, index) => {
       const parsedItem = { ...item, hours: sortBy(item.hours, "hour") };
-      if (typeof item.dayOfWeek === "number") {
-        parsedItem.label = usWeekdays[item.dayOfWeek];
-      } else {
-        const index = weekdays.findIndex(
-          (weekday) => weekday.toLowerCase() === item.dayOfWeek.toLowerCase()
-        );
-        parsedItem.label = weekdays[index];
+      if (typeof item.day === "string") {
+        parsedItem.label = item.day;
         parsedItem.dayOfWeek = index;
+      } else {
+        parsedItem.label = usWeekdays[item.dayOfWeek];
       }
       return parsedItem;
     }),

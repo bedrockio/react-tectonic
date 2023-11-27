@@ -30,6 +30,7 @@ const defaultProps = {
   primaryColor: "#77a741",
   dateField: "ingestedAt",
   timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  localeName: navigator.language,
   minEventCount: 2,
   getTimeRangeFromCollectionStats: (stats) => {
     return {

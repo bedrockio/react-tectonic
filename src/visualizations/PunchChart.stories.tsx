@@ -8,6 +8,7 @@ import { data } from "../../data/punchchart.json";
 const dataWithNumbers = data.map((item, index) => ({
   ...item,
   dayOfWeek: index,
+  day: item.dayOfWeek,
 }));
 
 export default {
