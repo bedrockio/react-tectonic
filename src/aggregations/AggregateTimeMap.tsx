@@ -50,7 +50,6 @@ export const AggregateTimeMap = ({
             dateField: params.dateField || ctx.dateField,
           },
           timeRange,
-
           ctx,
         }),
         onRequest: ctx.onRequest,

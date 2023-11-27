@@ -15,6 +15,7 @@ interface IContextProps {
   isReady: boolean;
   debug?: boolean;
   timeRange?: ITimeRange;
+  timeZone: string;
   localeName: string;
   setTimeRange: (timeRange: ITimeRange) => void;
   defaultTimeRange?: ITimeRange;
