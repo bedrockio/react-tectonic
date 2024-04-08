@@ -1,7 +1,19 @@
 import { toDate } from "./date";
-import { ITimeRange } from '../types'
+import { ITimeRange } from "../types";
 
-export type IntervalType = "1s" | "10s" | "1m" | "5m" | "10m" | "15m" | "30m" | "1h" | "1d" | "1w" | "1M" | "1y";
+export type IntervalType =
+  | "1s"
+  | "10s"
+  | "1m"
+  | "5m"
+  | "10m"
+  | "15m"
+  | "30m"
+  | "1h"
+  | "1d"
+  | "1w"
+  | "1M"
+  | "1y";
 
 const intervals = {
   "1s": 1,
@@ -55,7 +67,7 @@ export function validIntervals(from, to): IntervalType[] {
   return validIntervals;
 }
 
-export function intervalToLabel(interval : IntervalType): string {
+export function intervalToLabel(interval: IntervalType): string {
   return intervalsLabel[interval];
 }
 

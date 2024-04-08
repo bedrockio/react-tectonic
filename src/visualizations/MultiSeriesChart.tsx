@@ -100,8 +100,7 @@ const defaultProps = {
   chartContainer: DefaultChartContainer,
   valueField: "value",
   confidenceField: "confidence",
-  confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>
-  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
+  confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>,
   enabledControls: ["intervals", "chartTypes", "actions"],
   stacked: true,
   labels: [] as string[],
@@ -128,7 +127,7 @@ type MultiSeriesChartProps = {
   confidenceField?: string;
   confidenceLabel?: string;
   confidenceColor?: string;
-  labelFormatter?: (label: string) => string;
+  labelFormatter?: (label: number) => string;
   valueFormatter?: (value: number) => string;
   tickFormatter?: (value: Date) => string;
   locals?: string;
@@ -228,6 +227,8 @@ export const MultiSeriesChart = ({
 
   const _valueFormatter =
     valueFormatter || getValueFormatter(getMinMaxRange(data, valueField));
+
+  const _labelFormatter = labelFormatter || _valueFormatter;
 
   return (
     <ChartContainer
@@ -337,8 +338,8 @@ export const MultiSeriesChart = ({
 
           {chartType !== "bar" && (
             <Tooltip
-              formatter={_valueFormatter}
-              labelFormatter={labelFormatter}
+              formatter={_labelFormatter}
+              labelFormatter={tickFormatter || defaultTickFormatter}
             />
           )}
           {annotations.map((annotation, index) => {
