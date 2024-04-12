@@ -1,6 +1,6 @@
 {
   "name": "react-tectonic",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "",
   "module": "lib/index.js",
   "types": "types/index.d.ts",
