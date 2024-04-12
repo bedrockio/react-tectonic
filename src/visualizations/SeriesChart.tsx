@@ -79,7 +79,6 @@ const defaultProps = {
   status: { success: true },
   chartType: "line",
   chartContainer: DefaultChartContainer,
-  labelFormatter: (unixTime) => new Date(unixTime).toLocaleString(),
   enabledControls: ["intervals", "chartTypes", "actions"],
   axisColor: "#363B3D",
 };
@@ -89,7 +88,7 @@ type SeriesChartProps = {
   interval?: IntervalType;
   title?: ReactNode;
   titleAlign?: TitleAlignType;
-  labelFormatter?: (label: string) => string;
+  labelFormatter?: (label: number) => string;
   valueFormatter?: (value: number | number[]) => string;
   tickFormatter?: (value: Date) => string;
   confidenceField?: string;
@@ -241,8 +240,8 @@ export const SeriesChart = ({
           }}
         >
           <Tooltip
-            formatter={_valueFormatter}
-            labelFormatter={labelFormatter}
+            formatter={labelFormatter ? labelFormatter : _valueFormatter}
+            labelFormatter={defaultTickFormatter}
           />
 
           {/* should use cancel sticks or errorbar for bar chart, but failing to make it work */}
