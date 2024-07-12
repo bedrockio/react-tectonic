@@ -43,11 +43,13 @@ export const Dropdown = ({
   }
 
   React.useEffect(() => {
-    if (open) {
-      document.addEventListener("click", listener);
-    } else {
-      document.removeEventListener("click", listener);
-    }
+    setTimeout(() => {
+      if (open) {
+        document.addEventListener("click", listener);
+      } else {
+        document.removeEventListener("click", listener);
+      }
+    }, 0);
     return () => {
       document.removeEventListener("click", listener);
     };
