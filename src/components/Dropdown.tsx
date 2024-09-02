@@ -7,7 +7,7 @@ type DropdownType = {
   alignMenu?: "center" | "right" | "left";
   onChange?: (option: IOption) => void;
   title?: ReactNode;
-  classNames: string[];
+  classNames?: string[];
   value?: any;
   options: IOption[];
 };
