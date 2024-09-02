@@ -2,13 +2,6 @@ import React, { ReactNode, ElementType } from "react";
 import { Button } from "./Button";
 import { IOption } from "types";
 
-const defaultProps = {
-  onChange: (option: IOption) => {},
-  alignMenu: "center",
-  options: [],
-  classNames: [],
-};
-
 type DropdownType = {
   icon?: ElementType;
   alignMenu?: "center" | "right" | "left";
@@ -21,12 +14,12 @@ type DropdownType = {
 
 export const Dropdown = ({
   icon: Icon,
-  alignMenu,
   title,
   value,
-  options,
-  onChange = () => {},
-  classNames,
+  onChange = (option: IOption) => {},
+  alignMenu = "center",
+  options = [],
+  classNames = [],
 }: DropdownType): JSX.Element => {
   const [open, setOpen] = React.useState(false);
 
@@ -91,5 +84,3 @@ export const Dropdown = ({
     </div>
   );
 };
-
-Dropdown.defaultProps = defaultProps;

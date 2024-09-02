@@ -13,35 +13,12 @@ import {
 import { exportToCsv } from "../utils/exporters";
 import { IStatus } from "types";
 
-const defaultProps = {
-  exportFilename: "export.csv",
-  status: { success: true },
-  data: [],
-  chartContainer: DefaultChartContainer,
-  valueFieldName: "Value",
-  labelFieldName: "Name",
-  labelField: "key",
-  valueField: "value",
-  height: 400,
-  labelFormatter: (label) => {
-    return startCase(label.toString().toLowerCase());
-  },
-  rowFormatter: (item, label, value) => {
-    return (
-      <>
-        <td>{label}</td>
-        <td>{value}</td>
-      </>
-    );
-  },
-  enabledControls: ["actions"],
-};
-
 type EnabledControlType = "actions";
 
 type TableProps = {
   status?: IStatus;
   title?: ReactNode;
+  height?: number;
   titleAlign?: TitleAlignType;
   rowFormatter?: (item: any, label: string, value: string) => JSX.Element;
   labelFormatter?: (label: string) => string;
@@ -60,22 +37,31 @@ type TableProps = {
 const scrollbarWidth = getScrollbarWidth();
 
 export const Table = ({
-  status,
   title,
   titleAlign,
-  labelField,
-  valueField,
-  valueFieldName,
-  labelFieldName,
-  height,
-  data,
-  labelFormatter,
   valueFormatter,
-  rowFormatter,
-  chartContainer: ChartContainer,
-  enabledControls,
-  exportFilename,
-}: TableProps & typeof defaultProps): JSX.Element => {
+  chartContainer: ChartContainer = DefaultChartContainer,
+  exportFilename = "export.csv",
+  status = { success: true },
+  data = [],
+  valueFieldName = "Value",
+  labelFieldName = "Name",
+  labelField = "key",
+  valueField = "value",
+  height = 400,
+  labelFormatter = (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  rowFormatter = (item, label, value) => {
+    return (
+      <>
+        <td>{label}</td>
+        <td>{value}</td>
+      </>
+    );
+  },
+  enabledControls = ["actions"],
+}: TableProps): JSX.Element => {
   const noData = !data || !data.length;
 
   function handleAction(action: string) {
@@ -149,5 +135,3 @@ Table.propTypes = {
   enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
   exportFilename: PropTypes.string,
 };
-
-Table.defaultProps = defaultProps;

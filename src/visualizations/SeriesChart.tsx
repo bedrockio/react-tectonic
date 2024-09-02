@@ -67,22 +67,6 @@ const defaultChartTypes = [
 
 type EnabledControlType = "intervals" | "chartTypes" | "actions";
 
-const defaultProps = {
-  exportFilename: "export.csv",
-  valueField: "value",
-  valueFieldLabel: "Value",
-  confidenceField: "confidence",
-  confidenceLabel: "Confidence",
-  confidenceColor: "#f57f7f",
-  height: 400,
-  data: [],
-  status: { success: true },
-  chartType: "line",
-  chartContainer: DefaultChartContainer,
-  enabledControls: ["intervals", "chartTypes", "actions"],
-  axisColor: "#363B3D",
-};
-
 type SeriesChartProps = {
   height?: number;
   interval?: IntervalType;
@@ -113,31 +97,31 @@ type SeriesChartProps = {
 };
 
 export const SeriesChart = ({
-  status,
-  data,
-  valueField,
-  valueFieldLabel,
+  exportFilename = "export.csv",
+  valueField = "value",
+  valueFieldLabel = "Value",
+  confidenceField = "confidence",
+  confidenceLabel = "Confidence",
+  confidenceColor = "#f57f7f",
+  height = 400,
+  data = [],
+  status = { success: true },
+  chartType: propsChartType = "line",
+  chartContainer: ChartContainer = DefaultChartContainer,
+  enabledControls = ["intervals", "chartTypes", "actions"],
+  axisColor = "#363B3D",
   valueFormatter,
   labelFormatter,
-  confidenceLabel,
-  confidenceField,
-  chartContainer: ChartContainer,
   title,
   titleAlign,
-  chartType: propsChartType,
   disableDot,
   onIntervalChange,
   tickFormatter,
   interval,
   timeRange,
   color,
-  enabledControls,
-  exportFilename,
-  axisColor,
-  confidenceColor,
-  height,
   annotations = [],
-}: SeriesChartProps & typeof defaultProps): JSX.Element => {
+}: SeriesChartProps): JSX.Element => {
   const ctx = useTectonicContext();
   const _color = color || ctx?.primaryColor || defaultColors[0];
 
@@ -340,5 +324,3 @@ SeriesChart.propTypes = {
   chartContainer: PropTypes.elementType,
   exportFilename: PropTypes.string,
 };
-
-SeriesChart.defaultProps = defaultProps;

@@ -27,7 +27,7 @@ function convertTimeRange(timeRange) {
 }
 
 export const Calendar = ({
-  numberOfMonths,
+  numberOfMonths = 2,
   onChange,
   minDate,
   maxDate,
@@ -150,8 +150,4 @@ export const Calendar = ({
       </div>
     </div>
   );
-};
-
-Calendar.defaultProps = {
-  numberOfMonths: 2,
 };

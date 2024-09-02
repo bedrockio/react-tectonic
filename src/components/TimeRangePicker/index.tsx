@@ -7,76 +7,73 @@ import { ITimeRange } from "../../types";
 
 import { useTectonicContext } from "../TectonicProvider";
 
-const defaultProps = {
-  classNames: [],
-  timeOptions: [
-    {
-      type: "fixed",
-      label: "Today",
-      to: "now",
-      from: "now-1h/d",
-    },
-    {
-      type: "fixed",
-      label: "Yesterday",
-      to: "now-1h/d",
-      from: "now-1d/d",
-    },
-    /*
-    {
-      type: "fixed",
-      label: "This Week",
-      to: "now",
-      from: "now/w",
-    },
-    */
-    {
-      type: "fixed",
-      label: "This Month",
-      to: "now",
-      from: "now/M",
-    },
-    /*
-    {
-      type: "fixed",
-      label: "This Year",
-      to: "now",
-      from: "now/y",
-    },
-    */
+const defaultTimeOptions: TimeOption[] = [
+  {
+    type: "fixed",
+    label: "Today",
+    to: "now",
+    from: "now-1h/d",
+  },
+  {
+    type: "fixed",
+    label: "Yesterday",
+    to: "now-1h/d",
+    from: "now-1d/d",
+  },
+  /*
+  {
+    type: "fixed",
+    label: "This Week",
+    to: "now",
+    from: "now/w",
+  },
+  */
+  {
+    type: "fixed",
+    label: "This Month",
+    to: "now",
+    from: "now/M",
+  },
+  /*
+  {
+    type: "fixed",
+    label: "This Year",
+    to: "now",
+    from: "now/y",
+  },
+  */
 
-    {
-      type: "input",
-      unit: "hours",
-      default: 24,
-    },
-    {
-      type: "input",
-      unit: "days",
-      default: 7,
-    },
-    /*
-    {
-      type: "input",
-      unit: "months",
-      default: 3,
-    },
-  
-    {
-      type: "select",
-      unit: "years",
-      label: "Year",
-      default: new Date().getFullYear() - 1,
-    },
-      */
-    {
-      type: "select",
-      unit: "months",
-      label: "Month",
-      default: new Date().getMonth(),
-    },
-  ],
-};
+  {
+    type: "input",
+    unit: "hours",
+    default: 24,
+  },
+  {
+    type: "input",
+    unit: "days",
+    default: 7,
+  },
+  /*
+  {
+    type: "input",
+    unit: "months",
+    default: 3,
+  },
+
+  {
+    type: "select",
+    unit: "years",
+    label: "Year",
+    default: new Date().getFullYear() - 1,
+  },
+    */
+  {
+    type: "select",
+    unit: "months",
+    label: "Month",
+    default: new Date().getMonth(),
+  },
+];
 
 type SelectTimeOption = {
   type: "select";
@@ -142,7 +139,7 @@ function getTimeRangeForLabel(
 export const TimeRangePicker = ({
   renderButton,
   classNames = [],
-  timeOptions = [],
+  timeOptions = defaultTimeOptions,
   align,
   onChange = () => {},
   ...props
@@ -192,5 +189,3 @@ TimeRangePicker.propTypes = {
   timeOptions: PropTypes.array,
   onChange: PropTypes.func,
 };
-
-TimeRangePicker.defaultProps = defaultProps;

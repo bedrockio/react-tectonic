@@ -34,7 +34,3 @@ Message.propTypes = {
    */
   classNames: PropTypes.arrayOf(PropTypes.string),
 };
-
-Message.defaultProps = {
-  center: true,
-};

@@ -91,22 +91,6 @@ const defaultChartTypes = [
   },
 ];
 
-const defaultProps = {
-  exportFilename: "export.csv",
-  data: [] as any[],
-  status: { success: true },
-  colors: defaultColors,
-  chartType: "line",
-  chartContainer: DefaultChartContainer,
-  valueField: "value",
-  confidenceField: "confidence",
-  confidenceLabel: "confidence", // lower casing as its <metric name> <confidenceLabel>,
-  enabledControls: ["intervals", "chartTypes", "actions"],
-  stacked: true,
-  labels: [] as string[],
-  height: 400,
-};
-
 type EnabledControlType = "intervals" | "chartTypes" | "actions";
 
 type MultiSeriesChartProps = {
@@ -139,32 +123,32 @@ type MultiSeriesChartProps = {
 };
 
 export const MultiSeriesChart = ({
-  data,
+  exportFilename = "export.csv",
+  data = [],
+  status = { success: true },
+  colors = defaultColors,
+  chartContainer: ChartContainer = DefaultChartContainer,
+  valueField = "value",
+  confidenceField = "confidence",
+  confidenceLabel = "confidence", // lower casing as its <metric name> <confidenceLabel>,
+  enabledControls = ["intervals", "chartTypes", "actions"],
+  stacked = true,
+  labels = [],
+  height = 400,
   timeRange,
-  chartType: propsChartType,
+  chartType: propsChartType = "line",
   onIntervalChange,
-  valueField,
-  confidenceField,
-  confidenceLabel,
   confidenceColor,
   labelFormatter,
   valueFormatter,
   legend,
-  height,
-  stacked,
-  colors,
   disableDot,
-  enabledControls,
-  status,
   title,
   titleAlign,
-  chartContainer: ChartContainer,
-  labels,
   tickFormatter,
-  exportFilename,
   interval,
   annotations = [],
-}: MultiSeriesChartProps & typeof defaultProps): JSX.Element => {
+}: MultiSeriesChartProps): JSX.Element => {
   const ctx = useTectonicContext();
 
   const [chartType, setChartType] = React.useState<string>(
@@ -382,5 +366,3 @@ MultiSeriesChart.propTypes = {
   ),
   exportFilename: PropTypes.string,
 };
-
-MultiSeriesChart.defaultProps = defaultProps;

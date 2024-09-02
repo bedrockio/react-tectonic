@@ -8,10 +8,6 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 
 import { IStatus, ITimeRange, IAggregateFilterType } from "../types";
 
-const defaultProps = {
-  onIntervalChange: () => {},
-};
-
 type OperationType = string;
 
 interface AggregateTimeSeriesProps {
@@ -34,9 +30,9 @@ export const AggregateTimeSeries = ({
   timeRange,
   children,
   interval: propsInterval,
-  onIntervalChange,
+  onIntervalChange = () => {},
   ...params
-}: AggregateTimeSeriesProps & typeof defaultProps) => {
+}: AggregateTimeSeriesProps) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
@@ -120,8 +116,6 @@ export const AggregateTimeSeries = ({
     })
   );
 };
-
-AggregateTimeSeries.defaultProps = defaultProps;
 
 /*
 AggregateTimeSeries.propTypes = {

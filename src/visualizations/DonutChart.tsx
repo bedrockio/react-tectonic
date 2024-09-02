@@ -24,23 +24,6 @@ import {
   TitleAlignType,
 } from "../components";
 
-const defaultProps = {
-  exportFilename: "export.csv",
-  status: { success: true },
-  data: [],
-  colors: defaultColors,
-  chartContainer: DefaultChartContainer,
-  enabledControls: ["actions"],
-  labelFormatter: (label) => {
-    return startCase(label.toString().toLowerCase());
-  },
-  valueFormatter: (value) => {
-    return numberWithCommas(value);
-  },
-  labelField: "key",
-  valueField: "count",
-};
-
 type EnabledControlType = "actions";
 
 type DonutChartProps = {
@@ -64,24 +47,28 @@ type DonutChartProps = {
 };
 
 export const DonutChart = ({
-  status,
-  data,
-  labelField,
+  exportFilename = "export.csv",
+  status = { success: true },
+  data = [],
+  colors = defaultColors,
+  chartContainer: ChartContainer = DefaultChartContainer,
+  enabledControls = ["actions"],
+  labelFormatter = (label) => {
+    return startCase(label.toString().toLowerCase());
+  },
+  valueFormatter = (value) => {
+    return numberWithCommas(value);
+  },
+  labelField = "key",
+  valueField = "count",
   height = 400,
-  labelFormatter,
-  valueFormatter,
-  valueField,
   limit,
   percent,
   precision,
   title,
   titleAlign,
-  enabledControls,
-  chartContainer: ChartContainer,
-  colors,
   colorFn,
-  exportFilename,
-}: DonutChartProps & typeof defaultProps): JSX.Element => {
+}: DonutChartProps): JSX.Element => {
   const ctx = useTectonicContext();
 
   const svgChartRef = React.useRef(null);
@@ -196,7 +183,7 @@ export const DonutChart = ({
           {!noData && (
             <Tooltip
               formatter={(value, name) => {
-                let label = labelFormatter(name);
+                let label = labelFormatter(name as string);
                 if (percent) {
                   if (precision) {
                     return [
@@ -218,7 +205,10 @@ export const DonutChart = ({
                   }
                 }
 
-                return [_valueFormatter(value), labelFormatter(name)];
+                return [
+                  _valueFormatter(value as number),
+                  labelFormatter(name as string),
+                ];
               }}
             />
           )}
@@ -245,5 +235,3 @@ DonutChart.propTypes = {
   enabledControls: PropTypes.arrayOf(PropTypes.oneOf(["actions"])),
   exportFilename: PropTypes.string,
 };
-
-DonutChart.defaultProps = defaultProps;

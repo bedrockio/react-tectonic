@@ -44,5 +44,3 @@ Button.propTypes = {
   basic: PropTypes.bool,
   compact: PropTypes.bool,
 };
-
-Button.defaultProps = {};

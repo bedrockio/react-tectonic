@@ -7,10 +7,6 @@ import { TimeRangeType } from "../utils/propTypes";
 import { IStatus, ITimeRange } from "../types";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 
-const defaultProps = {
-  onIntervalChange: () => {},
-};
-
 interface AggregatePropType {
   timeRange?: ITimeRange | null;
   baseUrl?: string;
@@ -32,12 +28,12 @@ export const Aggregate = ({
   requests,
   collection,
   interval: propsInterval,
-  onIntervalChange,
   processData = (data) => data,
   type,
   children,
   timeRangeDateField,
-}: AggregatePropType & typeof defaultProps) => {
+  onIntervalChange = () => {},
+}: AggregatePropType) => {
   let ctx = useTectonicContext();
   if (!baseUrl) baseUrl = ctx.baseUrl;
   if (!token) token = ctx.token;
@@ -148,5 +144,3 @@ Aggregate.propTypes = {
   baseUrl: PropTypes.string,
   timeRange: TimeRangeType,
 };
-
-Aggregate.defaultProps = defaultProps;

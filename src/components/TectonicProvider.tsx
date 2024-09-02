@@ -26,20 +26,6 @@ interface IContextProps {
   onRequest?: (url: string, options: RequestInit) => any;
 }
 
-const defaultProps = {
-  primaryColor: "#77a741",
-  dateField: "ingestedAt",
-  timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  localeName: navigator.language,
-  minEventCount: 2,
-  getTimeRangeFromCollectionStats: (stats) => {
-    return {
-      to: stats.to,
-      from: stats.from,
-    };
-  },
-};
-
 const TectonicContext = React.createContext({} as IContextProps);
 
 interface ITectonicProviderProps {
@@ -61,27 +47,36 @@ interface ITectonicProviderProps {
 }
 
 const TectonicProvider = ({
-  getTimeRangeFromCollectionStats,
   onRequest,
   children,
   debug,
   renderNoEvent,
+  dateField: defaultDateField = "ingestedAt",
+  primaryColor: defaultPrimaryColor = "#77a741",
+  getTimeRangeFromCollectionStats = (stats) => {
+    return {
+      to: stats.to,
+      from: stats.from,
+    };
+  },
   ...props
-}: ITectonicProviderProps & typeof defaultProps): JSX.Element => {
+}: ITectonicProviderProps): JSX.Element => {
   const [token, setToken] = React.useState(props.token);
   const [baseUrl, setBaseUrl] = React.useState(props.baseUrl);
-  const [timeZone, setTimeZone] = React.useState(props.timeZone);
+  const [timeZone, setTimeZone] = React.useState(
+    props.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone
+  );
   const [timeRange, setTimeRange] = React.useState(props.timeRange);
   const [defaultTimeRange, setDefaultTimeRange] = React.useState(
     props.defaultTimeRange || props.timeRange
   );
-  const [dateField, setDateField] = React.useState(props.dateField);
+  const [dateField, setDateField] = React.useState(defaultDateField);
   const [collection, setCollection] = React.useState(props.collection);
   const [stats, setStats] = React.useState<IStats>();
-  const [primaryColor, setPrimaryColor] = React.useState(props.primaryColor);
+  const [primaryColor, setPrimaryColor] = React.useState(defaultPrimaryColor);
   const [isReady, setIsReady] = React.useState(false);
   const [localeName, setLocaleName] = React.useState(
-    props.localeName || "en-US"
+    navigator.language || "en-US"
   );
 
   React.useEffect(() => {
@@ -93,7 +88,9 @@ const TectonicProvider = ({
   }, [props.baseUrl]);
 
   React.useEffect(() => {
-    setTimeZone(props.timeZone);
+    setTimeZone(
+      props.timeZone || Intl.DateTimeFormat().resolvedOptions().timeZone
+    );
   }, [props.timeZone]);
 
   React.useEffect(() => {
@@ -101,8 +98,8 @@ const TectonicProvider = ({
   }, [props.timeRange]);
 
   React.useEffect(() => {
-    setDateField(props.dateField);
-  }, [props.dateField]);
+    setDateField(defaultDateField);
+  }, [defaultDateField]);
 
   React.useEffect(() => {
     setCollection(props.collection);
@@ -110,13 +107,13 @@ const TectonicProvider = ({
 
   React.useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--tnic-primary-color", props.primaryColor);
+    root.style.setProperty("--tnic-primary-color", defaultPrimaryColor);
     root.style.setProperty(
       "--tnic-primary-color-hover",
-      props.primaryColor + "D9"
+      defaultPrimaryColor + "D9"
     );
     setPrimaryColor(primaryColor);
-  }, [props.primaryColor]);
+  }, [defaultPrimaryColor]);
 
   async function fetchCollectionStats() {
     if (!collection || !token) {
@@ -267,8 +264,6 @@ TectonicProvider.propTypes = {
   timeZone: PropTypes.string,
   children: PropTypes.node,
 };
-
-TectonicProvider.defaultProps = defaultProps;
 
 const useTectonicContext = () => {
   const context = React.useContext(TectonicContext);
