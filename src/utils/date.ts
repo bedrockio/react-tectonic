@@ -33,6 +33,12 @@ const orderByFirstDayOfWeek = (firstDayOfWeek, days) => [
   ...days.slice(0, firstDayOfWeek - 1),
 ];
 
+export function getLocalizedDayName(isoDayOfWeek, locale = "en-US") {
+  // Create a date object starting from the first ISO week day (Monday)
+  const date = new Date(2021, 0, isoDayOfWeek + 4); // Jan 4, 2021 is a Monday
+  return date.toLocaleDateString(locale, { weekday: "long" });
+}
+
 export function getWeekdays(localeName: string, short = false): string[] {
   const format = new Intl.DateTimeFormat(localeName, {
     weekday: "long",

@@ -4,7 +4,7 @@ import { startCase } from "lodash-es";
 import { defaultColors, defaultActions } from "../utils/visualization";
 import { useTectonicContext } from "../components/TectonicProvider";
 import { getValueFormatter, getMinMaxRange } from "../utils/formatting";
-import { getWeekdays } from "../utils/date";
+import { getWeekdays, getLocalizedDayName } from "../utils/date";
 import { exportToCsv } from "../utils/exporters";
 import { sortBy } from "lodash-es";
 
@@ -82,7 +82,8 @@ export const PunchChart = ({
     data.map((item, index) => {
       const parsedItem = { ...item, hours: sortBy(item.hours, "hour") };
       if (typeof item.day === "string") {
-        parsedItem.label = item.day;
+        parsedItem.label = getLocalizedDayName(index, localeName);
+        // isoDayOfWeek
         parsedItem.dayOfWeek = index;
       } else {
         parsedItem.label = usWeekdays[item.dayOfWeek];
