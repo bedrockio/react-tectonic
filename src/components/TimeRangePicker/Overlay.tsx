@@ -30,10 +30,11 @@ export const Overlay = ({
     if (option.type === "fixed") {
       onChange({ ...option });
     } else if (option.type === "input") {
+      const unit = labelsToUnit[option.unit];
       onChange({
         label: `Last ${optionValue} ${option.unit}`,
-        to: "now",
-        from: `now-${optionValue}${labelsToUnit[option.unit]}`,
+        to: `now/${labelsToUnit[option.unit]}`,
+        from: `now-${optionValue}${unit}/${unit}`,
       });
     } else if (option.type === "select") {
       const isYear = option.unit.includes("year");
