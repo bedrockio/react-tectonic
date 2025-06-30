@@ -2,7 +2,6 @@ import React from "react";
 
 import { DayPicker, DateRange } from "react-day-picker";
 import { toDate } from "../../utils/date";
-import { format } from "date-fns";
 
 function setTime(date, timestring) {
   const [hours, minutes, seconds] = timestring.split(":");
