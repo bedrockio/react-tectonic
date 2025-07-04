@@ -5,6 +5,7 @@ import { IconClose } from "../Icons";
 import { Button } from "../Button";
 import { TimeOptions } from "./TimeOptions";
 import { labelsToUnit } from "../../utils/date";
+import { startOfDay, endOfDay } from "date-fns";
 
 export const Overlay = ({
   onChange,
@@ -49,12 +50,16 @@ export const Overlay = ({
                 month: "short",
               })
         }`,
-        to: isYear
-          ? new Date(newValue, 11, 31)
-          : new Date(currentYear, newValue, 0),
-        from: isYear
-          ? new Date(newValue, 0, 1)
-          : new Date(currentYear, newValue - 1, 0),
+        to: endOfDay(
+          isYear
+            ? new Date(newValue, 11, 31)
+            : new Date(currentYear, newValue, 0)
+        ),
+        from: startOfDay(
+          isYear
+            ? new Date(newValue, 0, 1)
+            : new Date(currentYear, newValue - 1, 0)
+        ),
       });
     } else if (stats.isHistorical || option.type === "absolute") {
       const fromStr = option.from.toLocaleDateString();
