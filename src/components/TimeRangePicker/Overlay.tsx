@@ -58,7 +58,7 @@ export const Overlay = ({
         from: startOfDay(
           isYear
             ? new Date(newValue, 0, 1)
-            : new Date(currentYear, newValue - 1, 0)
+            : new Date(currentYear, newValue - 1, 1)
         ),
       });
     } else if (stats.isHistorical || option.type === "absolute") {
