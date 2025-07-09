@@ -1,5 +1,6 @@
 import { ITimeRange } from "../types";
 import metadata from "../metadata.json";
+
 const version = (metadata as any).version;
 
 class CustomError extends Error {
@@ -119,6 +120,11 @@ export function getAnalyticsRequestBody({
   const dateField = params.dateField || ctx.dateField;
   const _collection = params.collection || ctx.collection;
 
+  const timeZone =
+    params?.timeZone ||
+    ctx?.timeZone ||
+    Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   if (!timeRange) {
     return {
       ...params,
@@ -143,13 +149,14 @@ export function getAnalyticsRequestBody({
     ...params,
     debug: ctx.debug,
     collection: _collection,
+    timeZone: timeZone,
     filter: {
       ...params.filter,
       range: {
         [timeRangeDateField || dateField]: {
           gte: timeRange.from,
           lt: to,
-          time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          time_zone: timeZone,
         },
       },
     },
