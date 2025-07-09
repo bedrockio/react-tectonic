@@ -149,7 +149,6 @@ export function getAnalyticsRequestBody({
     ...params,
     debug: ctx.debug,
     collection: _collection,
-    timeZone: timeZone,
     filter: {
       ...params.filter,
       range: {

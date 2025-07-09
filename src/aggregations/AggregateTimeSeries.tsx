@@ -14,6 +14,7 @@ interface AggregateTimeSeriesProps {
   baseUrl?: string;
   token?: string;
   timeRange?: ITimeRange | null;
+  timeZone?: string;
   children?: ReactNode;
   interval?: IntervalType;
   field?: string;
@@ -31,6 +32,7 @@ export const AggregateTimeSeries = ({
   children,
   interval: propsInterval,
   onIntervalChange = () => {},
+  timeZone,
   ...params
 }: AggregateTimeSeriesProps) => {
   let ctx = useTectonicContext();
@@ -77,6 +79,7 @@ export const AggregateTimeSeries = ({
             ...params,
             dateField: params.dateField || ctx.dateField,
             interval: _interval,
+            timeZone: ctx?.timeZone || timeZone,
           },
           timeRange,
           ctx,
