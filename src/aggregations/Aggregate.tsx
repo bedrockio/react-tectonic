@@ -111,11 +111,14 @@ export const Aggregate = ({
   React.useEffect(() => {
     const intervalCheck = type === "time-series" ? !!interval : true;
 
-    if (isReady && intervalCheck && requests.length) {
-      fetchData();
-    } else if (!token) {
-      setStatus({ error: new Error("Token not provided") });
-    }
+    const timeoutId = setTimeout(() => {
+      if (isReady && intervalCheck && requests.length) {
+        fetchData();
+      } else if (!token) {
+        setStatus({ error: new Error("Token not provided") });
+      }
+    }, 300);
+    return () => clearTimeout(timeoutId);
   }, [token, baseUrl, isReady, timeRange, interval, type, requests]);
 
   if (typeof children === "function") {

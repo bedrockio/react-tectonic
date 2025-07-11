@@ -65,11 +65,14 @@ export const Search = ({
   }
 
   useEffect(() => {
-    if (isReady) {
-      fetchData();
-    } else if (!token) {
-      setStatus({ error: new Error("Token not provided") });
-    }
+    const timeoutId = setTimeout(() => {
+      if (isReady) {
+        fetchData();
+      } else if (!token) {
+        setStatus({ error: new Error("Token not provided") });
+      }
+    }, 300);
+    return () => clearTimeout(timeoutId);
   }, [token, baseUrl, isReady, timeRange, ...Object.values(params)]);
 
   if (typeof children === "function") {

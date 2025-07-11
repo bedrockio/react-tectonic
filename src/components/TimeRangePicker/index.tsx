@@ -173,10 +173,10 @@ export const TimeRangePicker = ({
           allowedTimeRange={props.allowedTimeRange}
           onClose={() => setOpen(false)}
           onChange={(newTimeRange) => {
-            if (ctx.setTimeRange) {
-              ctx.setTimeRange(newTimeRange);
-            } else {
+            if (onChange) {
               onChange(newTimeRange);
+            } else {
+              ctx.setTimeRange(newTimeRange);
             }
           }}
         />
