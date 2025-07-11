@@ -130,6 +130,7 @@ export const Overlay = ({
               maxDate={allowedTimeRange?.to || stats.to}
               numberOfMonths={2}
               onChange={(range) => {
+                console.log("onChange", range);
                 setOption({
                   ...option,
                   ...range,

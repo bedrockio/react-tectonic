@@ -4,14 +4,14 @@
 
 ```sh
 # latest stable
-$ npm install react-day-picker react-tectonic
+$ npm install react-day-picker lodash-es react-tectonic
 ```
 
 After install, import the CSS file in your app's entry file:
 
 ```js
 import "react-tectonic/lib/styles.css";
-import "react-day-picker/dist/style.css"; // required for the time picker
+import "react-day-picker/style.css"; // required for the time picker
 ```
 
 ## Styling

@@ -58,8 +58,6 @@ export const Calendar = ({
   React.useEffect(() => {
     if (range?.to && range.from) {
       onChange(mergeRanges(range, time));
-    } else {
-      onChange(undefined);
     }
   }, [range, time]);
 
@@ -67,6 +65,9 @@ export const Calendar = ({
     <div>
       <div className="tnic-rdp" style={{ height: "270px" }}>
         <DayPicker
+          navLayout="around"
+          hideWeekdays
+          showOutsideDays
           mode="range"
           numberOfMonths={numberOfMonths}
           selected={range}

@@ -386,10 +386,19 @@
 
 /*** DayPicker-Day ***/
 
-.tnic-rdp .rdp {
-  --rdp-cell-size: 34px;
+.tnic-rdp .rdp-root {
+  --rdp-day-height: 34px;
+  --rdp-day-width: 34px;
+  --rdp-day_button-height: 34px;
+  --rdp-day_button-width: 34px;
+
+  --rdp-nav-height: 2.5em;
   --rdp-accent-color: var(--tnic-primary-color);
   --rdp-background-color: var(--tnic-background-hover);
+
+  --rdp-disabled-opacity: 0.5;
+
+  --rdp-range_middle-background-color: var(--tnic-primary-color-hover);
 
   /* Switch to dark colors for dark themes */
   --rdp-accent-color-dark: #3003e1;
@@ -399,10 +408,27 @@
   --rdp-outline: 2px solid var(--rdp-accent-color);
   /* Outline border for focused and selected elements */
   --rdp-outline-selected: 2px solid rgba(0, 0, 0, 0.75);
+
+  --rdp-range_middle-color: var(--tnic-button-color);
+  --rdp-range_middle-color-dark: var(--tnic-button-color);
 }
 
 .tnic-rdp .rdp-caption_label {
+  padding-left: 0.6em;
   font-size: var(--tnic-title-font-size);
+}
+
+.tnic-rdp .rdp-selected {
+  font-weight: normal;
+  font-size: medium;
+}
+
+.tnic-rdp .rdp-button_next {
+  margin-top: 3px;
+}
+
+.tnic-rdp .rdp-button_previous {
+  margin-top: 3px;
 }
 
 /*** Dropdown ***/
