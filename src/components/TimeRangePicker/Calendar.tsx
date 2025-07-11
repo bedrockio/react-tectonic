@@ -62,8 +62,15 @@ export const Calendar = ({
   }, [range, time]);
 
   return (
-    <div>
-      <div className="tnic-rdp" style={{ height: "270px" }}>
+    <>
+      <div
+        className="tnic-rdp"
+        style={{
+          height: "270px",
+          display: "flex",
+          justifyContent: "space-evenly",
+        }}
+      >
         <DayPicker
           navLayout="around"
           hideWeekdays
@@ -87,7 +94,6 @@ export const Calendar = ({
           flexDirection: "row",
           justifyContent: "space-around",
           borderTop: "1px solid #ccc",
-          paddingTop: "10px",
           alignItems: "center",
         }}
       >
@@ -148,6 +154,6 @@ export const Calendar = ({
           </div>
            */}
       </div>
-    </div>
+    </>
   );
 };

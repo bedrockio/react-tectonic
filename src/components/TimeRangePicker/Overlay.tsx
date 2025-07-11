@@ -111,7 +111,8 @@ export const Overlay = ({
         {(stats.isHistorical || option?.type === "absolute") && (
           <div
             style={{
-              float: "right",
+              display: "flex",
+              flexDirection: "column",
               flex: 1,
               width: "550px",
               height: "336px",

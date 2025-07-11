@@ -55,6 +55,7 @@ export const AggregateTimeSeries = ({
 
   React.useEffect(() => {
     if (timeRange) {
+      console.log("Time range changed", timeRange);
       setInterval(determineInterval(timeRange));
     }
   }, [timeRange]);
@@ -68,6 +69,8 @@ export const AggregateTimeSeries = ({
     if (!_interval && timeRange) {
       _interval = determineInterval(timeRange);
     }
+
+    console.log("Fetching time series data", _interval);
     try {
       const { data } = await request({
         method: "POST",
