@@ -166,36 +166,10 @@ const TectonicProvider = ({
     }
   }
 
-  /*
-  async function fetchTectonicVersion() {
-    try {
-      const data = await request({
-        method: "GET",
-        path: "/",
-        baseUrl,
-      });
-
-      const majorVersion = Number(version.split(".")[0]);
-      if (majorVersion !== Number(data.version.split(".")[0])) {
-        // eslint-disable-next-line no-console
-        console.error(
-          `[TectonicProvider] The Tectonic version (${data.version}) doesn't match react-tectonic (${version})`
-        );
-      }
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(`["TectonicProvider"] Failed to look up Tectonic version`);
-    }
-  }
-
   React.useEffect(() => {
-    fetchTectonicVersion();
-  }, []);
-  */
-
-  React.useEffect(() => {
+    setIsReady(false);
     fetchCollectionStats();
-  }, [collection, token]);
+  }, [collection, token, props.statsFilter]);
 
   const values = React.useMemo(() => {
     return {
