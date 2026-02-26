@@ -173,7 +173,7 @@ export const SeriesChart = ({
         ["Date", "Value"],
         data.map((row) => [
           `"${toCsvDateFormat(new Date(row.timestamp))}"`,
-          row.value,
+          row[valueField],
         ]),
         exportFilename
       );

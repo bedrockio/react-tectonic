@@ -201,7 +201,7 @@ export const MultiSeriesChart = ({
           ["Date", "Value"],
           serie.map((row) => [
             `"${toCsvDateFormat(new Date(row.timestamp))}"`,
-            row.value,
+            row[valueField],
           ]),
           labels[index] || `metric-${index + 1}` + ".csv"
         )
